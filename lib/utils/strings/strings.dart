@@ -51,6 +51,17 @@ class TextStrings {
     'delete_sales_sub': 'Are you sure you want to delete the post?',
     'no': 'No',
     'yes': 'Yes',
-    'what_need_sub_text': 'You can add One or More'
+    'what_need_sub_text': 'You can add One or More',
+    'deals': 'Deals',
+    'chat': 'Chats',
+    'contract': 'Contracts',
+    'investment': 'Investments',
+    'share': 'Shares',
+    'update': 'Updates',
+    'profile': 'Profile',
+    'biography': 'Biography',
+    'likes': 'Likes',
+    'pitches': 'Pitches',
+    'logout': 'Log Out',
   };
 }

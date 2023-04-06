@@ -1,10 +1,6 @@
-import 'package:chewie/chewie.dart';
 import 'package:flutter/material.dart';
-import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
-import 'package:video_player/video_player.dart';
 import 'package:video_viewer/video_viewer.dart';
-import 'package:visibility_detector/visibility_detector.dart';
 
 List<VideoViewerController> videoViewerControllerList = [];
 List<VideoPlayerController> videoPlayerControllerList = [];

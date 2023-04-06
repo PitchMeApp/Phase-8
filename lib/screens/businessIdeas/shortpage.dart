@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pitch_me_app/screens/businessIdeas/businessOwerView.dart';
-import 'package:pitch_me_app/screens/businessIdeas/dashBoardScreen.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 
 import '../../utils/extras/extras.dart';
 import '../../utils/widgets/containers/containers.dart';
-import '../../utils/widgets/text/text.dart';
 
 class shortsPage extends StatefulWidget {
   const shortsPage({super.key});
@@ -61,6 +59,7 @@ class _shortsPageState extends State<shortsPage> {
                     ? AppBarIconContainer(
                         height: SizeConfig.getSize50(context: context),
                         width: SizeConfig.getSize50(context: context),
+                        colorTween: null,
                         child: Padding(
                           padding: const EdgeInsets.all(12.0),
                           child:
@@ -73,6 +72,7 @@ class _shortsPageState extends State<shortsPage> {
                         ? AppBarIconContainer(
                             height: SizeConfig.getSize50(context: context),
                             width: SizeConfig.getSize50(context: context),
+                            colorTween: null,
                             child: Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: loadSvg(image: 'assets/image/menu.svg'),
@@ -87,6 +87,7 @@ class _shortsPageState extends State<shortsPage> {
                             ? AppBarIconContainer(
                                 height: SizeConfig.getSize50(context: context),
                                 width: SizeConfig.getSize50(context: context),
+                                colorTween: null,
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: loadSvg(

@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
-import 'package:pitch_me_app/utils/strings/images.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 
 class interestedSwipe extends StatefulWidget {

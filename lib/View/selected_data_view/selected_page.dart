@@ -21,6 +21,7 @@ import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/colors/colors.dart';
 import '../../utils/styles/styles.dart';
@@ -79,7 +80,7 @@ class _SelectedPageState extends State<SelectedPage> {
                                   curve: Curves.linear);
                             },
                             child: Padding(
-                                padding: EdgeInsets.only(bottom: 10),
+                                padding: EdgeInsets.only(bottom: 10, right: 7),
                                 child: /* SvgPicture.asset(Assets.tiktokPreviousIco),*/
                                     RotatedBox(
                                   quarterTurns: 6,
@@ -244,15 +245,37 @@ class _SelectedPageState extends State<SelectedPage> {
             physics: const NeverScrollableScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 15),
             shrinkWrap: true,
-            itemCount: _addImageController.listImagePaths.length,
+            itemCount: _addImageController.listImagePaths.length + 1,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 15.0,
                 mainAxisSpacing: 15.0,
                 mainAxisExtent: 130),
             itemBuilder: (context, index) {
+              if (index == _addImageController.listImagePaths.length) {
+                return _addImageController.fileFullPath.isNotEmpty
+                    ? InkWell(
+                        onTap: () {
+                          launchUrl(Uri.parse(_addImageController.fileFullPath),
+                              mode: LaunchMode.externalApplication);
+                        },
+                        child: Container(
+                          height: 120,
+                          width: 90,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30)),
+                          padding: EdgeInsets.only(bottom: 10),
+                          child: Image.asset(
+                            'assets/images/pdf.png',
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      )
+                    : Container();
+              }
               return InkWell(
                 onTap: () {
+                  _navigationController.navigationType.value = 'Edit';
                   PageNavigateScreen()
                       .push(context, AddImagePage())
                       .then((value) {

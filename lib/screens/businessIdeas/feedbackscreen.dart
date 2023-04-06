@@ -1,15 +1,9 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Feedbackapi.dart/postapi.dart';
-import 'package:pitch_me_app/screens/businessIdeas/swipeContinue.dart';
-import 'package:pitch_me_app/utils/strings/images.dart';
-import 'package:provider/provider.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
-import 'package:swipable_stack/swipable_stack.dart';
 
 class ratingScreen extends StatefulWidget {
   ratingScreen({

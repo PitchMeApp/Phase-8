@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/controller/businessIdeas/homepagecontroller.dart';
 import 'package:pitch_me_app/models/post/postModel.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
@@ -22,6 +23,8 @@ class PostPageController extends GetxController {
       refreshed = false.obs;
   final SwipableStackController swipableStackController =
       SwipableStackController();
+  // final SwipableStackController swipableStackController2 =
+  //     SwipableStackController();
   SwipeDirection? direction;
   bool left = false, right = false;
 
@@ -95,7 +98,7 @@ class PostPageController extends GetxController {
           width: MediaQuery.of(context).size.width,
           color: Colors.white,
           child: CachedNetworkImage(
-              imageUrl: '${post.file}',
+              imageUrl: post.file,
               height: MediaQuery.of(context).size.height,
               width: MediaQuery.of(context).size.width,
               fit: BoxFit.fill,
@@ -135,6 +138,94 @@ class PostPageController extends GetxController {
           },
           child: DirectVideoViewer(
             url: post.file.replaceAll(' ', '%20'),
+            itemIndex: itemIndex,
+            currentIndex: swipableStackController.currentIndex,
+            isPlay: isPlay.value,
+            visibility: videoVisibilityPercent.value,
+          ),
+        );
+      default:
+        return Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              image: DecorationImage(
+                image: AssetImage(
+                  images[0],
+                ),
+                fit: BoxFit.cover,
+              )),
+        );
+    }
+  }
+
+  Widget getSliderWidget2(
+      {required SalesDoc post,
+      required BuildContext context,
+      required int itemIndex}) {
+    log(' Check 2 = ' + post.vid1.toString());
+    switch (post.status) {
+      case 0:
+        return Container(
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          color: Colors.white,
+          padding: EdgeInsets.only(
+              left: SizeConfig.getSize20(context: context),
+              right: SizeConfig.getSize20(context: context),
+              bottom: SizeConfig.getSize40(context: context),
+              top: SizeConfig.getSize100(context: context)),
+          child: Center(
+              child: SingleChildScrollView(
+                  child: HtmlWidget('<center>${post.title}</center>'))),
+        );
+      // case 2:
+      //   return Container(
+      //     height: MediaQuery.of(context).size.height,
+      //     width: MediaQuery.of(context).size.width,
+      //     color: Colors.white,
+      //     child: CachedNetworkImage(
+      //         imageUrl: post.img1,
+      //         height: MediaQuery.of(context).size.height,
+      //         width: MediaQuery.of(context).size.width,
+      //         fit: BoxFit.fill,
+      //         progressIndicatorBuilder: (context, url, downloadProgress) => Row(
+      //               mainAxisAlignment: MainAxisAlignment.center,
+      //               children: [
+      //                 CircularProgressIndicator(
+      //                   value: downloadProgress.progress,
+      //                 ),
+      //               ],
+      //             )),
+      //   );
+      case 2:
+        notVideo = false;
+        debugPrint(
+            "App is in background =${appIsInBackground.value} and visibility ${videoVisibilityPercent.value}");
+        return VisibilityDetector(
+          key: Key('my-widget-key'),
+          onVisibilityChanged: (visibilityInfo) {
+            var visiblePercentage = visibilityInfo.visibleFraction * 100;
+            debugPrint(
+                'Widget ${visibilityInfo.key.toString()} is ${visiblePercentage}% visible');
+
+            try {
+              videoVisibilityPercent.value = visiblePercentage;
+              if (visiblePercentage < 90) {
+                videoViewerControllerList[itemIndex].pause();
+              }
+              if (visiblePercentage > 10 &&
+                  videoViewerControllerList[itemIndex].isPlaying == false &&
+                  swipableStackController.currentIndex == itemIndex) {
+                videoViewerControllerList[itemIndex].play();
+              }
+            } catch (e) {
+              print("Error is video =  ${e.toString()}");
+            }
+          },
+          child: DirectVideoViewer(
+            url: post.vid1,
             itemIndex: itemIndex,
             currentIndex: swipableStackController.currentIndex,
             isPlay: isPlay.value,

@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
-import 'package:pitch_me_app/models/post/postModel.dart';
 import 'package:pitch_me_app/screens/businessIdeas/feedbackscreen.dart';
 import 'package:pitch_me_app/screens/businessIdeas/interestedSwipe.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
@@ -18,7 +20,7 @@ class PostPageWidget extends StatefulWidget {
   }) : super(key: key);
   final PageController controller;
   final Function(int index, String title, bool isFinish) onSwipe;
-  final PostModel postModel;
+  final SalesPitchListModel postModel;
 
   @override
   State<PostPageWidget> createState() => _PostPageWidgetState();
@@ -39,7 +41,8 @@ class _PostPageWidgetState extends State<PostPageWidget>
     videoViewerControllerList.clear();
 
     videoViewerControllerList.addAll(List.generate(
-        widget.postModel.result!.length, (index) => VideoViewerController()));
+        widget.postModel.result.docs.length,
+        (index) => VideoViewerController()));
   }
 
   @override
@@ -114,8 +117,13 @@ class _PostPageWidgetState extends State<PostPageWidget>
               if (direction == SwipeDirection.right) {
                 controller.right = !controller.right;
               }
+              if (!mounted) {
+                return;
+              }
               setState(() {
                 directionn = direction;
+                controller.updateProgressOfCard(0.0);
+                controller.updateDirectionOfCard(null);
               });
               print('index is $index, direction is $direction');
               controller.label =
@@ -125,12 +133,16 @@ class _PostPageWidgetState extends State<PostPageWidget>
                 controller.setVisibleSeen(false);
               });
               //SEND INDEX AND TITLE
-              if (index != widget.postModel.result!.length - 1) {
+              log('length = ' + widget.postModel.result.docs.length.toString());
+              log('index = ' + index.toString());
+              if (index != widget.postModel.result.docs.length) {
+                log('index1 = ' + index.toString());
                 widget.onSwipe(
                     index + 1,
-                    widget.postModel.result![index + 1].title!.toString(),
+                    widget.postModel.result.docs[index + 1].title.toString(),
                     false);
               } else {
+                log('index2 = ' + index.toString());
                 widget.onSwipe(index, "", true);
               }
 
@@ -143,41 +155,44 @@ class _PostPageWidgetState extends State<PostPageWidget>
                 controller.swipableStackController.rewind();
               }
 
-              controller.updateProgressOfCard(0.0);
-              controller.updateDirectionOfCard(null);
-              if (widget.postModel.result![index].type == 3 &&
+              if (widget.postModel.result.docs[index].status == 2 &&
                   videoViewerControllerList[index].isPlaying) {
                 videoViewerControllerList[index].pause();
+                if (!mounted) {
+                  return;
+                }
                 setState(() {});
               }
               controller.refreshed.value = false;
             },
             horizontalSwipeThreshold: 0.8,
             verticalSwipeThreshold: 0.8,
-            itemCount: widget.postModel.result!.length,
+
+            itemCount: widget.postModel.result.docs.length,
             builder: (context, properties) {
               final itemIndex =
-                  properties.index % widget.postModel.result!.length;
+                  properties.index % widget.postModel.result.docs.length;
 
-              if (this.mounted) {
+              if (mounted) {
                 controller.updateProgressOfCard(properties.swipeProgress);
                 controller.updateDirectionOfCard(properties.direction);
               }
-              print("urll2 ${widget.postModel.result![properties.index].file}");
+              print(
+                  "urll2 ${widget.postModel.result.docs[properties.index].vid1}");
 
               return Stack(
                 children: [
                   directionn == SwipeDirection.left
                       ? controller.left == false
-                          ? controller.getSliderWidget(
-                              post: widget.postModel.result![itemIndex],
+                          ? controller.getSliderWidget2(
+                              post: widget.postModel.result.docs[itemIndex],
                               context: context,
                               itemIndex: itemIndex)
                           : ratingScreen()
                       : controller.right == true
                           ? interestedSwipe()
-                          : controller.getSliderWidget(
-                              post: widget.postModel.result![itemIndex],
+                          : controller.getSliderWidget2(
+                              post: widget.postModel.result.docs[itemIndex],
                               context: context,
                               itemIndex: itemIndex)
                 ],
@@ -211,8 +226,8 @@ class _PostPageWidgetState extends State<PostPageWidget>
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding:
-                EdgeInsets.only(bottom: SizeConfig.getSize10(context: context)),
+            padding: EdgeInsets.only(
+                bottom: SizeConfig.getSize10(context: context), right: 8),
             child: GestureDetector(
               onTap: () {
                 widget.controller.nextPage(

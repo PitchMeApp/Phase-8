@@ -46,7 +46,7 @@ class Result {
   String text;
   int flag;
   DateTime createdAt;
-  dynamic? title;
+  dynamic title;
 
   factory Result.fromJson(Map<String, dynamic> json) => Result(
         id: json["_id"],

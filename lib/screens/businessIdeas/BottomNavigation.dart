@@ -2,15 +2,13 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/View/Deals%20Page/deals_page.dart';
 import 'package:pitch_me_app/View/Demo%20Video/demo_video.dart';
+import 'package:pitch_me_app/View/Profile/profile.dart';
 import 'package:pitch_me_app/controller/businessIdeas/homepagecontroller.dart';
-import 'package:pitch_me_app/screens/auth/loginScreen.dart';
 import 'package:pitch_me_app/screens/businessIdeas/VideoScreen.dart';
 import 'package:pitch_me_app/screens/businessIdeas/mainHome.dart';
-import 'package:pitch_me_app/screens/businessIdeas/shareScreen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../../controller/auth/loginController.dart';
 
 class Floatbar extends StatefulWidget {
   // const Floatbar({super.key, var index = 3});
@@ -72,7 +70,7 @@ class _FloatbarState extends State<Floatbar>
     "assets/Phase 2 icons/ic_home_24px (1).png",
     "assets/Phase 2 icons/ic_subscriptions_24px.png",
     "assets/Phase 2 icons/ic_add_24px.png",
-    "assets/Phase 2 icons/ic_reply_24px.png",
+    "assets/Phase 2 icons/equalizer_light.png",
     "assets/Phase 2 icons/ic_person_24px.png",
   ];
 
@@ -80,7 +78,7 @@ class _FloatbarState extends State<Floatbar>
     "assets/Phase 2 icons/ic_home_24px.png",
     "assets/Phase 2 icons/ic_subscriptions_24px (1).png",
     "assets/Phase 2 icons/ic_add_24px (1).png",
-    "assets/Phase 2 icons/ic_reply_24px (2).png",
+    "assets/Phase 2 icons/equalizer_dark.png",
     "assets/Phase 2 icons/ic_person_24px (1).png",
   ];
 
@@ -105,8 +103,10 @@ class _FloatbarState extends State<Floatbar>
     MainHomeScreen(),
     mainHome_Two(),
     DemoVideoPage(),
-    shareScreen(),
-    shareScreen(),
+    DealsPage(),
+    ProfilePage(),
+    //shareScreen(),
+    //shareScreen(),
   ];
 
   var ColorChangerIndex;
@@ -180,10 +180,10 @@ class _FloatbarState extends State<Floatbar>
                                 isSelectedScreen = false;
                                 controller.PageIndexData.value = index;
 
-                                controller.PageIndexData.value == 4
-                                    ? Get.offAll(() => LoginScreen(),
-                                        binding: LoginBinding())
-                                    : null;
+                                // controller.PageIndexData.value == 4
+                                //     ? Get.offAll(() => LoginScreen(),
+                                //         binding: LoginBinding())
+                                //     : null;
                               });
                             },
                             child: Container(

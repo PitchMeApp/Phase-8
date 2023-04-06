@@ -35,6 +35,7 @@ class SuccessPageController extends GetxController {
       Get.put(VideoFirstPageController());
 
   List serviceList = [];
+  List serviceDetaisList = [];
   List typeList = [];
 
   RxBool isLoading = false.obs;
@@ -42,15 +43,21 @@ class SuccessPageController extends GetxController {
   Future postSalesPitch(context) async {
     serviceList.clear();
     typeList.clear();
+    serviceDetaisList.clear();
     isLoading.value = true;
     for (var element in _needPageController.selectedNeedType.value) {
       serviceList.add(element['value']);
     }
+    if (_needPageController.searchingSelectedItems.value.isNotEmpty) {
+      for (var element in _needPageController.searchingSelectedItems.value) {
+        serviceDetaisList.add(element);
+      }
+    }
+
     for (var element in _whoNeedController.isSelectedItem.value) {
       typeList.add(element['value']);
     }
 
-    //log(_addImageController.fileFullPath.toString());
     try {
       String url = '${BASE_URL}salespitch';
       final request = http.MultipartRequest('POST', Uri.parse(url));
@@ -63,7 +70,7 @@ class SuccessPageController extends GetxController {
             : _locationPageController.selectedType.value,
         'valueamount': _fundNacessaryController.selectedValue.value,
         'services': serviceList.toString(),
-        'servicesDetail': _needPageController.textController.text,
+        'servicesDetail': serviceDetaisList.toString(),
         'description': _offerPageController.offrerTextController.text,
         'status': 1.toString(),
       });

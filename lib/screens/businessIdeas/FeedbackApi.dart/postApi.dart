@@ -44,8 +44,8 @@ Future<FeedbackModel?> postfeedback() async {
       _pageController.swipableStackController
           .next(swipeDirection: SwipeDirection.left);
       // _pageController.left = false;
-      return feedbackModelFromJson(data);
       // Navigator.pop(context);
+      return feedbackModelFromJson(data);
     } else {
       print('login failed');
       return null;

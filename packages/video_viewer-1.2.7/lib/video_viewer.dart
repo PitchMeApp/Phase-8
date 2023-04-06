@@ -2,7 +2,6 @@ library video_viewer;
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'package:video_viewer/domain/bloc/controller.dart';
 import 'package:video_viewer/domain/bloc/metadata.dart';
 import 'package:video_viewer/domain/entities/language.dart';
@@ -147,6 +146,9 @@ class VideoViewerState extends State<VideoViewer> {
     _controller.looping = widget.looping;
     _controller.isShowingThumbnail = _style.thumbnail != null;
     await _controller.initialize(widget.source, autoPlay: widget.autoPlay);
+    if (!mounted) {
+      return;
+    }
     setState(() => _initialized = true);
   }
 

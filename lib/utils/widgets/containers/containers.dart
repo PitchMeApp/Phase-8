@@ -1,10 +1,8 @@
 // import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:get/route_manager.dart';
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
-import 'package:pitch_me_app/utils/strings/images.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:pitch_me_app/utils/strings/images.dart';
 
 Widget appLogoImage({double? height, double? width, bool isDark = true}) {
   return Image.asset(
@@ -294,14 +292,15 @@ class AppBarIconContainer extends StatefulWidget {
   final double? width;
   final Widget child;
   double cornerRadius;
-
-  AppBarIconContainer(
-      {Key? key,
-      this.height,
-      this.width,
-      required this.child,
-      this.cornerRadius = 10})
-      : super(key: key);
+  Animation? colorTween;
+  AppBarIconContainer({
+    Key? key,
+    this.height,
+    this.width,
+    required this.child,
+    this.cornerRadius = 10,
+    required this.colorTween,
+  }) : super(key: key);
 
   @override
   State<AppBarIconContainer> createState() => _AppBarIconContainerState();
@@ -312,37 +311,41 @@ class _AppBarIconContainerState extends State<AppBarIconContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        isPressed = !isPressed;
-        setState(() {});
-      },
-      child: Container(
-        height: widget.height,
-        width: widget.width,
-        decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(widget.cornerRadius),
-            color: const Color(0xff377eb4),
-            boxShadow: isPressed
-                ? [
-                    BoxShadow(
-                      blurRadius: 10,
-                      color: Colors.black.withOpacity(0.3),
-                      offset: Offset(5, 5),
-                      spreadRadius: 2,
-                      inset: true,
-                    ),
-                    BoxShadow(
-                      blurRadius: 10,
-                      spreadRadius: 1,
-                      color: Colors.black.withOpacity(0.3),
-                      offset: -Offset(5, 5),
-                      inset: true,
-                    ),
-                  ]
-                : []),
-        child: widget.child,
-      ),
-    );
+    return AnimatedBuilder(
+        animation: widget.colorTween!,
+        builder: (context, child) {
+          return InkWell(
+            onTap: () {
+              isPressed = !isPressed;
+              setState(() {});
+            },
+            child: Container(
+              height: widget.height,
+              width: widget.width,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(widget.cornerRadius),
+                  color: widget.colorTween!.value,
+                  boxShadow: isPressed
+                      ? [
+                          BoxShadow(
+                            blurRadius: 10,
+                            color: Colors.black.withOpacity(0.3),
+                            offset: Offset(5, 5),
+                            spreadRadius: 2,
+                            inset: true,
+                          ),
+                          BoxShadow(
+                            blurRadius: 10,
+                            spreadRadius: 1,
+                            color: Colors.black.withOpacity(0.3),
+                            offset: -Offset(5, 5),
+                            inset: true,
+                          ),
+                        ]
+                      : []),
+              child: widget.child,
+            ),
+          );
+        });
   }
 }

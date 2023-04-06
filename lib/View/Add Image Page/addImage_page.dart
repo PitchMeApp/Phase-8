@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -39,6 +40,7 @@ class _AddImagePageState extends State<AddImagePage> {
               _addImageController.listImagePaths.isNotEmpty ||
                       _addImageController.filePath.isNotEmpty
                   ? ArrowButton(onPressed: () {
+                      log(_navigationController.navigationType.value);
                       if (_navigationController.navigationType.value ==
                           'Post') {
                         PageNavigateScreen().push(

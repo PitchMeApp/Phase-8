@@ -28,6 +28,7 @@ class _VideoPageMainState extends State<VideoPageMain> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: DynamicColor.white,
         resizeToAvoidBottomInset: false,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: NewCustomBottomBar(),
@@ -65,7 +66,9 @@ class _VideoPageMainState extends State<VideoPageMain> {
                               color: DynamicColor.blue,
                               fontWeight: FontWeight.w700),
                           textAlign: TextAlign.center,
-                          decoration: const InputDecoration(
+                          maxLength: 15,
+                          decoration: InputDecoration(
+                              counterText: '',
                               border: InputBorder.none,
                               hintText: "Enter Title",
                               hintStyle: TextStyle(
@@ -100,14 +103,11 @@ class _VideoPageMainState extends State<VideoPageMain> {
                               height: 100,
                               width: 100,
                             ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 20, top: 15),
-                              child: Image.asset(
-                                "assets/images/videoc.png",
-                                height: 40,
-                                width: 40,
-                                color: DynamicColor.white,
-                              ),
+                            Image.asset(
+                              "assets/images/videoc.png",
+                              height: 40,
+                              width: 40,
+                              color: DynamicColor.white,
                             ),
                           ],
                         ),
@@ -120,7 +120,7 @@ class _VideoPageMainState extends State<VideoPageMain> {
                     child: Padding(
                       padding: EdgeInsets.only(
                           top: SizeConfig.getSize10(context: context),
-                          right: 5),
+                          right: 7),
                       child: GestureDetector(
                         onTap: () {
                           _controller.nextPage(

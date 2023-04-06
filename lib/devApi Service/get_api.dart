@@ -35,9 +35,8 @@ class GetApiService {
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
-
-    SalesPitchListModel data =
-        salesPitchListModelFromJson(response.body.toString());
+    //log(jsonDecode(response.body).toString());
+    SalesPitchListModel data = salesPitchListModelFromJson(response.body);
 
     return data;
   }

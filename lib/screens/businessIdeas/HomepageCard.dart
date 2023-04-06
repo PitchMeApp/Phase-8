@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -72,12 +74,16 @@ class _HomePageWidgetState extends State<HomePageWidget>
                 controller.setVisibleSeen(false);
               });
               //SEND INDEX AND TITLE
+              log('length = ' + widget.postModel.result!.length.toString());
+              log('index = ' + index.toString());
               if (index != widget.postModel.result!.length - 1) {
+                log('index1 = ' + index.toString());
                 widget.onSwipe(
                     index + 1,
                     widget.postModel.result![index + 1].title!.toString(),
                     false);
               } else {
+                log('index2 = ' + index.toString());
                 widget.onSwipe(index, "", true);
               }
               controller.updateProgressOfCard(0.0);
@@ -138,8 +144,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
-            padding:
-                EdgeInsets.only(bottom: SizeConfig.getSize10(context: context)),
+            padding: EdgeInsets.only(
+                bottom: SizeConfig.getSize10(context: context), right: 8),
             child: GestureDetector(
               onTap: () {
                 widget.controller.nextPage(

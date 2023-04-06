@@ -1,11 +1,11 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
+import 'package:pitch_me_app/utils/widgets/Alert%20Box/show_image_popup.dart';
 import 'package:sizer/sizer.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/colors/colors.dart';
 import '../../utils/styles/styles.dart';
@@ -19,27 +19,35 @@ class PostDetailPage extends StatefulWidget {
 }
 
 class _PostDetailPageState extends State<PostDetailPage> {
-  final _controller = PageController();
   late SalesDoc data;
   List typeList = [];
   List serviceList = [];
+  List serviceDetailList = [];
 
   @override
   void initState() {
     data = widget.data;
     var type = data.type.replaceAll('[', '').replaceAll(']', '');
     typeList = type.split(', ');
+
     var service = data.services.replaceAll('[', '').replaceAll(']', '');
-    serviceList = service.split(', ');
-    log(serviceList.toString());
+    if (service.isNotEmpty) {
+      serviceList = service.split(', ');
+    }
+    var serviceDetail =
+        data.servicesDetail.replaceAll('[', '').replaceAll(']', '');
+    if (serviceDetail.isNotEmpty) {
+      serviceDetailList = serviceDetail.split(', ');
+    }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: bannerWidget(),
+      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: bannerWidget(),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -64,7 +72,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
                               icon: Icon(Icons.arrow_back)),
                         ),
                       ),
-                      Expanded(child: appStatistics(context: context)),
+                      Expanded(
+                          flex: 14, child: appStatistics(context: context)),
+                      Expanded(flex: 1, child: bannerWidget())
                     ],
                   ),
                 ),
@@ -90,9 +100,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
             // PageNavigateScreen().push(context, LocationPage());
           }),
           typeList.length > 0
-              ? customWidget(
-                  "assets/images/ic_local_atm_24-mdpi (1).png", typeList[0],
-                  onPressad: () {
+              ? customWidget("assets/images/ic_local_atm_24-mdpi (1).png",
+                  typeList[0].replaceAll(',', ''), onPressad: () {
                   //PageNavigateScreen().push(context, WhatNeedPage());
                 })
               : Container(),
@@ -123,12 +132,19 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     });
                   })
               : Container(),
-          data.servicesDetail.isNotEmpty
-              ? customWidget(
-                  "assets/images/ic_check_circle-mdpi.png", data.servicesDetail,
-                  onPressad: () {
-                  // PageNavigateScreen().push(context, NeedPage());
-                })
+          serviceDetailList.isNotEmpty
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  padding: EdgeInsets.only(left: 30, right: 30),
+                  itemCount: serviceDetailList.length,
+                  itemBuilder: (context, index) {
+                    return customWidget(
+                        "assets/images/ic_check_circle-mdpi.png",
+                        serviceDetailList[index], onPressad: () {
+                      //PageNavigateScreen().push(context, NeedPage());
+                    });
+                  })
               : Container(),
           customWidget("", data.description, onPressad: () {
             //PageNavigateScreen().push(context, OfferPage());
@@ -140,37 +156,81 @@ class _PostDetailPageState extends State<PostDetailPage> {
   }
 
   Widget _imagesGridView() {
-    return
-        // _addImageController.listImagePaths.isEmpty
-        //     ? Container()
-        //     :
-        GridView(
-            physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            shrinkWrap: true,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 15.0,
-                mainAxisSpacing: 15.0,
-                mainAxisExtent: 130),
-            children: [
-          data.img1.isNotEmpty ? imageWidget(data.img1) : Container(),
-          data.img2.isNotEmpty ? imageWidget(data.img2) : Container(),
-          data.img3.isNotEmpty ? imageWidget(data.img3) : Container(),
-          data.img4.isNotEmpty ? imageWidget(data.img4) : Container(),
-        ]);
+    return Align(
+      alignment: Alignment.topLeft,
+      child: Padding(
+        padding: const EdgeInsets.only(left: 25, right: 25),
+        child: Wrap(
+          runSpacing: 10,
+          children: [
+            data.img1.isNotEmpty
+                ? imageWidget(data.img1)
+                : Container(
+                    height: 0,
+                    width: 0,
+                  ),
+            data.img2.isNotEmpty
+                ? imageWidget(data.img2)
+                : Container(
+                    height: 0,
+                    width: 0,
+                  ),
+            data.img3.isNotEmpty
+                ? imageWidget(data.img3)
+                : Container(
+                    height: 0,
+                    width: 0,
+                  ),
+            data.img4.isNotEmpty
+                ? imageWidget(data.img4)
+                : Container(
+                    height: 0,
+                    width: 0,
+                  ),
+            data.file.isNotEmpty
+                ? pdfWidget(data.file)
+                : Container(
+                    height: 0,
+                    width: 0,
+                  ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget imageWidget(url) {
     return InkWell(
       onTap: () {
-        // PageNavigateScreen().push(context, AddImagePage());
+        showDialog(
+            context: context,
+            builder: (context) => ShowFullImagePopup(image_url: url));
       },
       child: Container(
+        height: 100,
+        width: 100,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
         child: Image.network(
           url,
           fit: BoxFit.contain,
+        ),
+      ),
+    );
+  }
+
+  Widget pdfWidget(url) {
+    return InkWell(
+      onTap: () {
+        launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
+      },
+      child: Container(
+        height: 120,
+        width: 90,
+        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
+        padding: EdgeInsets.only(bottom: 10),
+        child: Image.asset(
+          'assets/images/pdf.png',
+          fit: BoxFit.cover,
         ),
       ),
     );
@@ -209,6 +269,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
             title: Text(
               name,
               style: TextStyle(color: Colors.white),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             )),
       ),
     );

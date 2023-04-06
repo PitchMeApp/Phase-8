@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/controller/businessIdeas/dashBoardController.dart';
+import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
 import 'package:pitch_me_app/screens/businessIdeas/StatisticsPage_Two.dart';
 import 'package:pitch_me_app/screens/businessIdeas/postPage.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
@@ -21,17 +22,18 @@ class DashBoardScreen_Two extends StatefulWidget {
 class _DashBoardScreen_TwoState extends State<DashBoardScreen_Two> {
   final _controller = PageController();
   DashboardController controller = Get.put(DashboardController());
-
+  PostPageController postPageController = Get.put(PostPageController());
   bool ChangeButton = false;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    controller.getPost(widget.onSwipe);
+    controller.getPost2(widget.onSwipe,
+        postPageController.swipableStackController.currentIndex);
     controller.getStatic();
     _controller.addListener(() {
       widget.currentPage(_controller.page!.toInt());
+      setState(() {});
     });
   }
 
@@ -44,12 +46,12 @@ class _DashBoardScreen_TwoState extends State<DashBoardScreen_Two> {
             ClampingScrollPhysics(),
         scrollDirection: Axis.vertical,
         children: [
-          controller.isLoadingPost.value == true
+          controller.isLoadingPost2.value == true
               ? Center(child: CircularProgressIndicator())
               : controller.hasError.value
                   ? Center(
                       child: roboto(size: 20, text: 'Something went wrong'))
-                  : controller.isFinish.value
+                  : controller.isFinish2.value
                       ? Stack(
                           children: [
                             Center(
@@ -96,16 +98,17 @@ class _DashBoardScreen_TwoState extends State<DashBoardScreen_Two> {
                           controller: _controller,
                           onSwipe: (int index, String title, bool isFinish) {
                             print("Is finish is $isFinish");
-                            controller.isFinish.value = isFinish;
+                            controller.isFinish2.value = isFinish;
                             widget.onSwipe(index, title, isFinish);
                           },
-                          postModel: controller.postModel.value,
+                          postModel: controller.salespitch!,
                         ),
           controller.isLoadingStats.value == true
               ? Center(child: CircularProgressIndicator())
               : StatisticsPage_Two(
                   pagecont: _controller,
-                  statisticsModel: controller.staticModel.value,
+                  salesDoc: controller.salespitch!.result.docs[
+                      postPageController.swipableStackController.currentIndex],
                 )
         ],
       );

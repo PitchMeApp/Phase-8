@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:pitch_me_app/utils/extras/extras.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:sizer/sizer.dart';
@@ -26,7 +28,26 @@ class CustomHeaderView extends StatefulWidget {
   State<CustomHeaderView> createState() => _CustomHeaderViewState();
 }
 
-class _CustomHeaderViewState extends State<CustomHeaderView> {
+class _CustomHeaderViewState extends State<CustomHeaderView>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation _colorTween;
+
+  @override
+  void initState() {
+    _animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 5));
+    _colorTween =
+        ColorTween(begin: Color(0xff599CD0), end: Colors.white.withOpacity(0.3))
+            .animate(_animationController);
+    Future.delayed(const Duration(seconds: 0), () {
+      _animationController.status == AnimationStatus.completed
+          ? _animationController.reset()
+          : _animationController.forward();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -40,61 +61,96 @@ class _CustomHeaderViewState extends State<CustomHeaderView> {
   }
 
   Widget iconsAndTitle() {
-    return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          InkWell(
-            onTap: () {},
-            child: Container(
-              height: 5.h,
-              width: 10.w,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: DynamicColor.blue,
-                  borderRadius: BorderRadius.circular(8.0)),
-              child: const Icon(
-                Icons.notifications_outlined,
-                color: DynamicColor.white,
-              ),
+    return AnimatedBuilder(
+        animation: _colorTween,
+        builder: (context, child) {
+          return Padding(
+            padding: EdgeInsets.only(
+                top: SizeConfig.getSize15(context: context),
+                left: SizeConfig.getSize20(context: context),
+                right: SizeConfig.getSize20(context: context)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                      height: 6.h,
+                      width: 12.w,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: _colorTween.value,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Color.fromARGB(108, 148, 147, 147)
+                                  .withOpacity(0.3),
+                              blurRadius: 50.0,
+                              spreadRadius: 10,
+                              offset: Offset(
+                                20,
+                                20,
+                              ),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(10)),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: loadSvg(image: 'assets/image/notifications.svg'),
+                      )),
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.04,
+                  width: MediaQuery.of(context).size.width * 0.35,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: DynamicColor.blue,
+                      borderRadius: BorderRadius.circular(10.0)),
+                  child: Text(
+                    TextStrings.textKey['add_seles_pitch']!,
+                    style: white15TextStyle,
+                  ),
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    height: 6.h,
+                    width: 12.w,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: _colorTween.value,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromARGB(108, 148, 147, 147)
+                                .withOpacity(0.3),
+                            blurRadius: 45.0,
+                            spreadRadius: 10,
+                            offset: Offset(
+                              20,
+                              20,
+                            ),
+                          )
+                        ],
+                        borderRadius: BorderRadius.circular(10.0)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: loadSvg(image: 'assets/image/menu.svg'),
+                    ),
+                    // const Icon(
+                    //   Icons.menu,
+                    //   color: DynamicColor.white,
+                    //   size: 30,
+                    // ),
+                  ),
+                )
+              ],
             ),
-          ),
-          Container(
-            decoration: BoxDecoration(
-                color: DynamicColor.blue,
-                borderRadius: BorderRadius.circular(8.0)),
-            child: Padding(
-              padding: const EdgeInsets.all(5.0),
-              child: Text(
-                TextStrings.textKey['add_seles_pitch']!,
-                style: white15TextStyle,
-              ),
-            ),
-          ),
-          InkWell(
-            onTap: () {},
-            child: Container(
-              height: 5.h,
-              width: 10.w,
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: DynamicColor.blue,
-                  borderRadius: BorderRadius.circular(8.0)),
-              child: const Icon(
-                Icons.menu,
-                color: DynamicColor.white,
-              ),
-            ),
-          )
-        ],
-      ),
-    );
+          );
+        });
   }
 
   Widget iconAndProgressBar() {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 20, right: 20),
+      padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
       child: Column(
         //alignment: Alignment.center,
         children: [
@@ -106,26 +162,42 @@ class _CustomHeaderViewState extends State<CustomHeaderView> {
             children: [
               widget.progressPersent == 0.0
                   ? Container(
-                      height: 5.h,
-                      width: 10.w,
+                      height: 6.h,
+                      width: 12.w,
                     )
-                  : InkWell(
-                      onTap: () {
-                        Navigator.of(context).pop();
-                      },
-                      child: Container(
-                        height: 5.h,
-                        width: 10.w,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: DynamicColor.blue,
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: const Icon(
-                          Icons.arrow_back,
-                          color: DynamicColor.white,
-                        ),
-                      ),
-                    ),
+                  : AnimatedBuilder(
+                      animation: _colorTween,
+                      builder: (context, child) {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                            height: 6.h,
+                            width: 12.w,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                                color: _colorTween.value,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Color.fromARGB(108, 148, 147, 147)
+                                        .withOpacity(0.3),
+                                    blurRadius: 100.0,
+                                    spreadRadius: 10,
+                                    offset: Offset(
+                                      10,
+                                      10,
+                                    ),
+                                  )
+                                ],
+                                borderRadius: BorderRadius.circular(8.0)),
+                            child: const Icon(
+                              Icons.arrow_back,
+                              color: DynamicColor.white,
+                            ),
+                          ),
+                        );
+                      }),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -133,13 +205,14 @@ class _CustomHeaderViewState extends State<CustomHeaderView> {
                   widget.progressPersent == 0.0
                       ? Container(
                           height: 5,
-                          width: MediaQuery.of(context).size.width - 130,
+                          width: MediaQuery.of(context).size.width - 150,
+                          alignment: Alignment.center,
                           decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(5),
                               color: DynamicColor.lightGrey),
                         )
                       : LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 130,
+                          width: MediaQuery.of(context).size.width - 150,
                           lineHeight: 5.0,
                           percent: widget.progressPersent,
                           backgroundColor: DynamicColor.lightGrey,
@@ -150,7 +223,7 @@ class _CustomHeaderViewState extends State<CustomHeaderView> {
                     padding: const EdgeInsets.only(top: 10),
                     child: Container(
                       alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width - 150,
+                      width: MediaQuery.of(context).size.width - 170,
                       child: Text(
                         widget.title,
                         style: blue19,
@@ -174,8 +247,8 @@ class _CustomHeaderViewState extends State<CustomHeaderView> {
                 ],
               ),
               SizedBox(
-                height: 5.h,
-                width: 10.w,
+                height: 6.h,
+                width: 12.w,
               )
             ],
           ),
@@ -215,5 +288,11 @@ class _CustomHeaderViewState extends State<CustomHeaderView> {
         textAlign: TextAlign.start,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
   }
 }

@@ -46,7 +46,7 @@ class Custom_FloatbarState extends State<CustomFloatbar>
     "assets/Phase 2 icons/ic_home_24px (1).png",
     "assets/Phase 2 icons/ic_subscriptions_24px.png",
     "assets/Phase 2 icons/ic_add_24px.png",
-    "assets/Phase 2 icons/ic_reply_24px.png",
+    "assets/Phase 2 icons/equalizer_light.png",
     "assets/Phase 2 icons/ic_person_24px.png",
   ];
 
@@ -54,7 +54,7 @@ class Custom_FloatbarState extends State<CustomFloatbar>
     "assets/Phase 2 icons/ic_home_24px.png",
     "assets/Phase 2 icons/ic_subscriptions_24px (1).png",
     "assets/Phase 2 icons/ic_add_24px (1).png",
-    "assets/Phase 2 icons/ic_reply_24px (2).png",
+    "assets/Phase 2 icons/equalizer_dark.png",
     "assets/Phase 2 icons/ic_person_24px (1).png",
   ];
 

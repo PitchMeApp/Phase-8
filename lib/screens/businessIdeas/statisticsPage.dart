@@ -40,8 +40,10 @@ class StatisticsPage extends StatelessWidget {
                                     curve: Curves.linear);
                               },
                               child: Padding(
-                                  padding: EdgeInsets.all(
-                                      SizeConfig.getSize15(context: context)),
+                                  padding: EdgeInsets.only(
+                                      bottom: SizeConfig.getSize15(
+                                          context: context),
+                                      right: 7),
                                   child: /* SvgPicture.asset(Assets.tiktokPreviousIco),*/
                                       RotatedBox(
                                     quarterTurns: 6,

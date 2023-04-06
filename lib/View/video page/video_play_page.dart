@@ -116,7 +116,7 @@ class _VideoPageState extends State<VideoPage>
                           },
                           child: VideoPlayer(_videoPlayerController)),
                       Padding(
-                        padding: EdgeInsets.only(top: 5.h),
+                        padding: EdgeInsets.only(top: 2.h),
                         child: CustomHeaderView(
                           title: '',
                           icon: '',
@@ -179,7 +179,7 @@ class _VideoPageState extends State<VideoPage>
                         child: Padding(
                           padding: EdgeInsets.only(
                               top: SizeConfig.getSize10(context: context),
-                              right: 5),
+                              right: 7),
                           child: GestureDetector(
                             onTap: () {
                               _controller.nextPage(
