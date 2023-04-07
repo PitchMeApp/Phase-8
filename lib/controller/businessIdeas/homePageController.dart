@@ -151,7 +151,7 @@ class HomePageController extends GetxController {
                 // Center(child: Text(post.id.toString())),
 
                 DirectVideoViewer(
-              url: post.file.replaceAll(' ', '%20'),
+              url: post.file,
               itemIndex: itemIndex,
               currentIndex: swipableStackController.currentIndex,
               isPlay: isPlay.value,
