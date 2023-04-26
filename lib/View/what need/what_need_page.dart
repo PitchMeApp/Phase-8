@@ -63,7 +63,9 @@ class _WhatNeedPageState extends State<WhatNeedPage> {
                   } catch (e) {}
                 })
               : Container(),
-          NewCustomBottomBar(),
+          NewCustomBottomBar(
+            index: 2,
+          ),
         ],
       ),
       body: SafeArea(

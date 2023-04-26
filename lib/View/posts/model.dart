@@ -99,6 +99,7 @@ class SalesDoc {
     required this.description,
     required this.comment,
     required this.status,
+    this.userid,
   });
 
   String id;
@@ -118,6 +119,7 @@ class SalesDoc {
   String description;
   String comment;
   int status;
+  dynamic userid;
 
   factory SalesDoc.fromJson(Map<String, dynamic> json) => SalesDoc(
         id: json["_id"],
@@ -137,6 +139,7 @@ class SalesDoc {
         description: json["description"],
         comment: json["comment"],
         status: json["status"],
+        userid: json['userid'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -157,5 +160,6 @@ class SalesDoc {
         "description": description,
         "comment": comment,
         "status": status,
+        "userid": userid,
       };
 }

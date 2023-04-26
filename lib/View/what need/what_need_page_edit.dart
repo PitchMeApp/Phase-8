@@ -70,7 +70,9 @@ class _WhatNeedPageEditState extends State<WhatNeedPageEdit> {
                   } catch (e) {}
                 })
               : Container(),
-          NewCustomBottomBar(),
+          NewCustomBottomBar(
+            index: 2,
+          ),
         ],
       ),
       body: SafeArea(

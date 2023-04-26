@@ -1,8 +1,13 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
+import 'package:pitch_me_app/View/Feedback/feedback_detail.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/noti.dart';
 import 'package:pitch_me_app/screens/businessIdeas/dashBoardScreen.dart';
+import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
+import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:pitch_me_app/utils/widgets/text/text.dart';
 import 'package:provider/provider.dart';
@@ -29,9 +34,12 @@ class _MainHomeScreenState extends State<MainHomeScreen>
   final _controller = PageController();
   String title = '';
   int currentIndexOfDashboard = 0;
+  //int totalNotiCount = 0;
   late Widget currentScreen;
 
   int selectIndex = 0;
+
+  Timer timer = Timer(Duration(seconds: 0), () {});
 
   bool colorChnage = false;
 
@@ -57,8 +65,10 @@ class _MainHomeScreenState extends State<MainHomeScreen>
       selectIndex;
       _ContainerColor = Color.fromARGB(255, 225, 225, 225).withOpacity(0.3);
       //  });
-      final postModel = Provider.of<DataClass>(context, listen: false);
-      postModel.getPostData();
+      timer = Timer.periodic(Duration(seconds: 3), (timer) {
+        final postModel = Provider.of<DataClass>(context, listen: false);
+        postModel.getPostData();
+      });
     });
 
     super.initState();
@@ -110,145 +120,188 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     currentIndexOfDashboard == 0
-                        ? AnimatedBuilder(
-                            animation: _colorTween,
-                            builder: (context, child) {
-                              return AnimatedContainer(
-                                height: _isInitialValue
-                                    ? sizeH * 0.5
-                                    : sizeH * 0.06,
-                                width: _isInitialValue
-                                    ? sizeW * 0.65
-                                    : sizeW * 0.120,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      _isInitialValue ? 20 : 10),
-                                  color: _colorTween.value,
-                                ),
-                                duration: Duration(milliseconds: 300),
-                                child: InkWell(
-                                  onTap: () {
-                                    setState(() {
-                                      _isInitialValue = !_isInitialValue;
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.all(12),
-                                    child: _isInitialValue
-                                        ? Consumer<DataClass>(builder:
-                                            (BuildContext context, value,
-                                                Widget? child) {
-                                            return ListView.separated(
-                                              shrinkWrap: true,
-                                              padding: EdgeInsets.zero,
-                                              itemCount:
-                                                  value.post!.result!.length,
-                                              itemBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return value.loading
-                                                    ? Center(
-                                                        child:
-                                                            CircularProgressIndicator(),
-                                                      )
-                                                    : InkWell(
-                                                        onTap: () {
-                                                          print(
-                                                              "Click in notification");
-                                                          setState(() {
-                                                            _isInitialValue ==
-                                                                true;
-                                                            _isInitialValue =
-                                                                false;
-                                                          });
-                                                        },
-                                                        child: Container(
-                                                          height: sizeH * 0.06,
-                                                          width: sizeW * 0.65,
-                                                          // color: Colors.red,
-                                                          child:
-                                                              SingleChildScrollView(
-                                                            scrollDirection:
-                                                                Axis.horizontal,
-                                                            child: Row(
-                                                                children: [
-                                                                  Icon(
-                                                                      Icons
-                                                                          .notifications_active_outlined,
-                                                                      color: Color(
-                                                                          0xff000a5e)),
-                                                                  Padding(
-                                                                    padding: EdgeInsets.only(
-                                                                        left: sizeW *
-                                                                            0.03,
-                                                                        top: sizeH *
-                                                                            0.01),
-                                                                    child:
-                                                                        Column(
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
+                        ? Stack(
+                            children: [
+                              AnimatedBuilder(
+                                  animation: _colorTween,
+                                  builder: (context, child) {
+                                    return AnimatedContainer(
+                                      height: _isInitialValue
+                                          ? sizeH * 0.5
+                                          : sizeH * 0.06,
+                                      width: _isInitialValue
+                                          ? sizeW * 0.65
+                                          : sizeW * 0.120,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(
+                                              _isInitialValue ? 20 : 10),
+                                          color: _colorTween.value
+                                          //  _isInitialValue
+                                          //     ? Color(0xff377eb4)
+                                          //     : _colorTween.value,
+                                          ),
+                                      duration: Duration(milliseconds: 300),
+                                      child: InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _isInitialValue = !_isInitialValue;
+                                          });
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.all(12),
+                                          child: _isInitialValue
+                                              ? Consumer<DataClass>(builder:
+                                                  (BuildContext context, value,
+                                                      Widget? child) {
+                                                  return ListView.separated(
+                                                    shrinkWrap: true,
+                                                    padding: EdgeInsets.zero,
+                                                    itemCount: value
+                                                        .post!.result!.length,
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return value.loading
+                                                          ? Center(
+                                                              child:
+                                                                  CircularProgressIndicator(),
+                                                            )
+                                                          : InkWell(
+                                                              onTap: () {
+                                                                print(
+                                                                    "Click in notification");
+                                                                setState(() {
+                                                                  _isInitialValue ==
+                                                                      true;
+                                                                  _isInitialValue =
+                                                                      false;
+                                                                });
+                                                                PageNavigateScreen()
+                                                                    .push(
+                                                                        context,
+                                                                        FeedbackPage(
+                                                                          data: value
+                                                                              .post!
+                                                                              .result![index],
+                                                                        ))
+                                                                    .then(
+                                                                        (value) {
+                                                                  setState(
+                                                                      () {});
+                                                                });
+                                                              },
+                                                              child: Container(
+                                                                height: sizeH *
+                                                                    0.06,
+                                                                width: sizeW *
+                                                                    0.65,
+                                                                // color: Colors.red,
+                                                                child:
+                                                                    SingleChildScrollView(
+                                                                  scrollDirection:
+                                                                      Axis.horizontal,
+                                                                  child: Row(
                                                                       children: [
-                                                                        Container(
-                                                                          height:
-                                                                              sizeH * 0.02,
-                                                                          width:
-                                                                              sizeW * 0.45,
-                                                                          // color: Color
-                                                                          //     .fromARGB(
-                                                                          //         255,
-                                                                          //         39,
-                                                                          //         221,
-                                                                          //         23),
+                                                                        Icon(
+                                                                            Icons
+                                                                                .notifications_active_outlined,
+                                                                            color:
+                                                                                Color(0xff000a5e)),
+                                                                        Padding(
+                                                                          padding: EdgeInsets.only(
+                                                                              left: sizeW * 0.03,
+                                                                              top: sizeH * 0.01),
                                                                           child:
+                                                                              Column(
+                                                                            crossAxisAlignment:
+                                                                                CrossAxisAlignment.start,
+                                                                            children: [
+                                                                              Container(
+                                                                                height: sizeH * 0.02,
+                                                                                width: sizeW * 0.45,
+                                                                                // color: Color
+                                                                                //     .fromARGB(
+                                                                                //         255,
+                                                                                //         39,
+                                                                                //         221,
+                                                                                //         23),
+                                                                                child: Text(
+                                                                                  value.post?.result?[index].title.toString() ?? "",
+                                                                                  overflow: TextOverflow.ellipsis,
+                                                                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                                                                ),
+                                                                              ),
                                                                               Text(
-                                                                            value.post?.result?[index].title.toString() ??
-                                                                                "",
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            style:
-                                                                                TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                                                                                value.post?.result?[index].text!.toString() ?? "",
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10),
+                                                                              ),
+                                                                            ],
                                                                           ),
                                                                         ),
-                                                                        Text(
-                                                                          value.post?.result?[index].title!.toString() ??
-                                                                              "",
-                                                                          overflow:
-                                                                              TextOverflow.ellipsis,
-                                                                          style: TextStyle(
-                                                                              color: Colors.white,
-                                                                              fontWeight: FontWeight.bold,
-                                                                              fontSize: 10),
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                  ),
-                                                                ]),
-                                                          ),
+                                                                      ]),
+                                                                ),
+                                                              ),
+                                                            );
+                                                    },
+                                                    separatorBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      return Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                left: sizeW *
+                                                                    0.02,
+                                                                right: sizeW *
+                                                                    0.02),
+                                                        child: Divider(
+                                                          color:
+                                                              Color(0xff000a5e),
                                                         ),
                                                       );
-                                              },
-                                              separatorBuilder:
-                                                  (BuildContext context,
-                                                      int index) {
-                                                return Padding(
-                                                  padding: EdgeInsets.only(
-                                                      left: sizeW * 0.02,
-                                                      right: sizeW * 0.02),
-                                                  child: Divider(
-                                                    color: Color(0xff000a5e),
-                                                  ),
-                                                );
-                                              },
-                                            );
-                                          })
-                                        : loadSvg(
-                                            image:
-                                                'assets/image/notifications.svg'),
-                                  ),
-                                ),
-                              );
-                            })
+                                                    },
+                                                  );
+                                                })
+                                              : loadSvg(
+                                                  image:
+                                                      'assets/image/notifications.svg'),
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                              _isInitialValue == false
+                                  ? Consumer<DataClass>(builder:
+                                      (BuildContext context, value,
+                                          Widget? child) {
+                                      return Visibility(
+                                        visible: value.totalNotiCount == 0
+                                            ? false
+                                            : true,
+                                        child: Container(
+                                          height: 20,
+                                          width: 20,
+                                          margin: const EdgeInsets.only(
+                                              left: 25, bottom: 20),
+                                          padding: const EdgeInsets.only(
+                                              left: 3, right: 3),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                              color: DynamicColor.blue,
+                                              borderRadius:
+                                                  BorderRadius.circular(50)),
+                                          child: FittedBox(
+                                            child: Text(
+                                              value.totalNotiCount.toString(),
+                                              style: TextStyle(
+                                                  color: DynamicColor.white),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    })
+                                  : Container()
+                            ],
+                          )
                         : buttonContainer(
                             height: SizeConfig.getSize50(context: context),
                             width: SizeConfig.getSize50(context: context),
@@ -319,6 +372,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
 
   @override
   void dispose() {
+    timer.cancel();
     _animationController.dispose();
     super.dispose();
   }

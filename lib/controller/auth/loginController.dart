@@ -57,6 +57,7 @@ class LoginController extends GetxController {
       Get.back();
       if (result != null) {
         print("idAbc ${result.token}");
+        prefs.setString("user_id", result.user!.sId.toString());
         prefs.setString("tok", result.token.toString());
         var log =
             prefs.setString("log_type", result.user!.loginType.toString());

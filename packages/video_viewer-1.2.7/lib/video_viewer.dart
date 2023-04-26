@@ -133,6 +133,7 @@ class VideoViewerState extends State<VideoViewer> {
     _controller = widget.controller ?? VideoViewerController();
     _style = widget.style ?? VideoViewerStyle();
     _initVideoViewer();
+
     super.initState();
   }
 

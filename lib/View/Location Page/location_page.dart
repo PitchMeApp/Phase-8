@@ -167,7 +167,9 @@ class _LocationPageState extends State<LocationPage> {
                   },
                 )
               : Container(),
-          NewCustomBottomBar(),
+          NewCustomBottomBar(
+            index: 2,
+          ),
         ],
       ),
       body: ListView(

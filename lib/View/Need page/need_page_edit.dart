@@ -58,7 +58,9 @@ class _NeedPageEditState extends State<NeedPageEdit> {
                   }
                 })
               : const SizedBox(),
-          NewCustomBottomBar()
+          NewCustomBottomBar(
+            index: 2,
+          )
         ],
       ),
       body: SafeArea(

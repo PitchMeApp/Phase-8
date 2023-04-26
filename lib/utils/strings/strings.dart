@@ -49,6 +49,10 @@ class TextStrings {
     'record': 'Record Sales Pitch',
     'delete_sales': 'Delete Post',
     'delete_sales_sub': 'Are you sure you want to delete the post?',
+    'delete_pitchs': 'Delete Pitch',
+    'delete_pitchs_sub': 'Are you sure you want to delete the pitch?',
+    'delete_likes': 'Delete Like',
+    'delete_likes_sub': 'Are you sure you want to delete the like?',
     'no': 'No',
     'yes': 'Yes',
     'what_need_sub_text': 'You can add One or More',
@@ -63,5 +67,7 @@ class TextStrings {
     'likes': 'Likes',
     'pitches': 'Pitches',
     'logout': 'Log Out',
+    'log_out': 'Logout The App',
+    'log_out_sub': 'Are you sure you want to logout the app?',
   };
 }

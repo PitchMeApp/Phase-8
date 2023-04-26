@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -69,21 +67,25 @@ class _HomePageWidgetState extends State<HomePageWidget>
               }
               controller.label =
                   direction == SwipeDirection.right ? 'Saved' : 'Seen';
+              if (direction == SwipeDirection.right) {
+                controller.savedVideo(widget.postModel.result![index].id, 1);
+                // log('post id = ' + widget.postModel.result![index].id);
+              } else {
+                controller.savedVideo(widget.postModel.result![index].id, 2);
+              }
+
               controller.setVisibleSeen(true);
               Future.delayed(Duration(milliseconds: 500)).then((value) {
                 controller.setVisibleSeen(false);
               });
               //SEND INDEX AND TITLE
-              log('length = ' + widget.postModel.result!.length.toString());
-              log('index = ' + index.toString());
+
               if (index != widget.postModel.result!.length - 1) {
-                log('index1 = ' + index.toString());
                 widget.onSwipe(
                     index + 1,
                     widget.postModel.result![index + 1].title!.toString(),
                     false);
               } else {
-                log('index2 = ' + index.toString());
                 widget.onSwipe(index, "", true);
               }
               controller.updateProgressOfCard(0.0);
@@ -145,7 +147,7 @@ class _HomePageWidgetState extends State<HomePageWidget>
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: EdgeInsets.only(
-                bottom: SizeConfig.getSize10(context: context), right: 8),
+                bottom: SizeConfig.getSize5(context: context), right: 8),
             child: GestureDetector(
               onTap: () {
                 widget.controller.nextPage(

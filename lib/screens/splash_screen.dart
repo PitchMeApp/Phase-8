@@ -10,6 +10,7 @@ import 'package:pitch_me_app/utils/strings/images.dart';
 import 'package:pitch_me_app/utils/strings/keys.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:pitch_me_app/utils/widgets/extras/backgroundWidget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -19,14 +20,22 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  String userType = '';
   @override
   void initState() {
+    chackAuth();
+    super.initState();
+  }
+
+  void chackAuth() async {
+    SharedPreferences preferencesData = await SharedPreferences.getInstance();
+    userType = preferencesData.getString('log_type').toString();
+
     Future.delayed(
       const Duration(seconds: 2),
       () {
         if (pref.hasData(Keys.TOKEN)) {
-          if (pref.read(Keys.USER_TYPE) == null ||
-              pref.read(Keys.USER_TYPE) == 0) {
+          if (userType.isEmpty || userType == '0') {
             Get.offAll(() => SelectionScreen(), binding: SelectionBinding());
           } else {
             Get.offAll(() => Floatbar(0));
@@ -36,7 +45,6 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       },
     );
-    super.initState();
   }
 
   @override

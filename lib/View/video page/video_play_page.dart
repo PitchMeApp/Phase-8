@@ -86,7 +86,9 @@ class _VideoPageState extends State<VideoPage>
                   });
                 })
               : Container(),
-          NewCustomBottomBar()
+          NewCustomBottomBar(
+            index: 2,
+          )
         ],
       ),
       body: isLoading == true

@@ -25,14 +25,9 @@ class DashboardController extends GetxController {
       await businessIdeasApi.getPost().then((value) {
         if (value != null) {
           postModel.value = value;
-          //log('Video check =' + value.result!.length.toString());
           isLoadingPost.value = false;
-          //log('Video check 1 =' + postModel.value.result![0].toString());
           onSwipe(0, postModel.value.result![0].title!.toString(), false);
-          //log('Video check4 =' + value.result!.length.toString());
-          //log("PostModel in value ${postModel.value.result![0].text.toString()}");
         } else {
-          // log('Video check 2 =' + value!.result!.length.toString());
           hasError.value = true;
         }
       });
@@ -51,14 +46,9 @@ class DashboardController extends GetxController {
       await businessIdeasApi.getPost2(pageCount).then((value) {
         if (value != null) {
           salespitch = value;
-          //log('Video check =' + value.result!.length.toString());
           isLoadingPost2.value = false;
-          //log('Video check 1 =' + postModel.value.result![0].toString());
           onSwipe(0, value.result.docs[0].title, false);
-          //log('Video check4 =' + value.result!.length.toString());
-          //log("PostModel in value ${postModel.value.result![0].text.toString()}");
         } else {
-          // log('Video check 2 =' + value!.result!.length.toString());
           hasError.value = true;
         }
       });

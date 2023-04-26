@@ -53,7 +53,9 @@ class _OfferPageState extends State<OfferPage> {
                   }
                 })
               : const SizedBox(),
-          NewCustomBottomBar()
+          NewCustomBottomBar(
+            index: 2,
+          )
         ],
       ),
       body: SafeArea(

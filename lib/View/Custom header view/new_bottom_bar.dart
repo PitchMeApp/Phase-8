@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Leave%20Page/leave_page.dart';
+import 'package:pitch_me_app/screens/businessIdeas/BottomNavigation.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
 class NewCustomBottomBar extends StatefulWidget {
-  var index;
-  NewCustomBottomBar({super.key, this.index});
+  int index;
+  var isBack;
+  NewCustomBottomBar({super.key, required this.index, this.isBack});
 
   @override
   State<NewCustomBottomBar> createState() => _NewCustomBottomBarState();
@@ -17,12 +20,10 @@ class _NewCustomBottomBarState extends State<NewCustomBottomBar>
   final _controller = PageController();
 
   int selectIndex = 2;
-  int nextPage = 0;
-
-  //bool isSelectedScreen = true;
 
   @override
   void initState() {
+    selectIndex = widget.index;
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
     _colorTween =
@@ -46,8 +47,8 @@ class _NewCustomBottomBarState extends State<NewCustomBottomBar>
   List iconlist = [
     "assets/Phase 2 icons/ic_home_24px (1).png",
     "assets/Phase 2 icons/ic_subscriptions_24px.png",
-    //"assets/Phase 2 icons/ic_add_24px.png",
-    "assets/Phase 2 icons/ic_add_24px (1).png",
+    "assets/Phase 2 icons/ic_add_24px.png",
+    //"assets/Phase 2 icons/ic_add_24px (1).png",
     "assets/Phase 2 icons/equalizer_light.png",
     "assets/Phase 2 icons/ic_person_24px.png",
   ];
@@ -126,20 +127,23 @@ class _NewCustomBottomBarState extends State<NewCustomBottomBar>
 
                                     _animationController.repeat();
                                     changeColors();
-
-                                    if (index != 2) {
-                                      PageNavigateScreen().push(
-                                          context,
-                                          LeavePage(
-                                            index: index,
-                                          ));
+                                    if (widget.isBack != null) {
+                                      Get.offAll(() => Floatbar(index));
+                                    } else {
+                                      if (index != 2) {
+                                        PageNavigateScreen().push(
+                                            context,
+                                            LeavePage(
+                                              index: index,
+                                            ));
+                                      }
                                     }
                                   },
                             child: Container(
                                 height: sizeH * 0.08,
                                 width: sizeW * 0.07,
                                 child: Image.asset(
-                                  widget.index == index
+                                  selectIndex == index
                                       ? filleIcons[index]
                                       : iconlist[index],
                                 ))),

@@ -26,7 +26,7 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
   void initState() {
     salesDoc = widget.salesDoc;
     var type = salesDoc.type.replaceAll('[', '').replaceAll(']', '');
-    typeList = type.split(', ');
+    typeList = type.split(',');
 
     var service = salesDoc.services.replaceAll('[', '').replaceAll(']', '');
     if (service.isNotEmpty) {
@@ -93,10 +93,10 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
     );
   }
 
-  // Widget continentCount(BuildContext context) {
   Widget appStatistics({required BuildContext context}) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
+
     return SingleChildScrollView(
       child: Center(
           child: Column(
@@ -170,7 +170,7 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
                       )),
                 )
               : Container(),
-          typeList.length > 1
+          typeList.length > 1 && typeList[1].isNotEmpty
               ? Container(
                   margin: EdgeInsets.only(bottom: sizeH * 0.015),
                   width: sizeW * 0.85,

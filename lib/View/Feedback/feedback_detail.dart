@@ -1,39 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
-import 'package:pitch_me_app/screens/businessIdeas/Feedbackapi.dart/postapi.dart';
+import 'package:pitch_me_app/View/Feedback/controller.dart';
+import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/notification_Model.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
-class ratingScreen extends StatefulWidget {
-  String receiverid;
-  String postid;
-  ratingScreen({
+class FeedbackPage extends StatefulWidget {
+  // String receiverid;
+  // String postid;
+  NotifyResult data;
+  FeedbackPage({
     super.key,
-    required this.receiverid,
-    required this.postid,
+    // required this.receiverid,
+    // required this.postid,
+    required this.data,
   });
 
   @override
-  State<ratingScreen> createState() => _ratingScreenState();
+  State<FeedbackPage> createState() => _FeedbackPageState();
 }
 
-class _ratingScreenState extends State<ratingScreen> {
+class _FeedbackPageState extends State<FeedbackPage> {
   final formkey = GlobalKey<FormState>();
-  var rating = 0.0;
-  var rating_Two = 0.0;
-  bool selectbutton = false;
-  bool selectbutton_Two = false;
+  FeebackController feebackController = Get.put(FeebackController());
 
-  String description = '';
-
-  PostPageController _pageController = Get.put(PostPageController());
+  @override
+  void initState() {
+    feebackController.readAllNotiApi();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
-    _pageController.notVideo = true;
 
     return Scaffold(
         body: SingleChildScrollView(
@@ -58,15 +57,7 @@ class _ratingScreenState extends State<ratingScreen> {
             height: sizeH * 0.01,
           ),
           Text(
-            " Please give Feedback so that ",
-            style: TextStyle(
-                fontSize: sizeH * 0.027,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 0.5,
-                color: Color(0xff377EB4)),
-          ),
-          Text(
-            "they can improve:",
+            " Overall Rating ",
             style: TextStyle(
                 fontSize: sizeH * 0.027,
                 fontWeight: FontWeight.bold,
@@ -90,13 +81,8 @@ class _ratingScreenState extends State<ratingScreen> {
           ),
           SmoothStarRating(
               allowHalfRating: false,
-              onRatingChanged: (value) {
-                setState(() {
-                  rating = value;
-                });
-              },
               starCount: 5,
-              rating: rating,
+              rating: double.parse('${widget.data.star}'),
               size: 40.0,
               filledIconData: Icons.star,
               halfFilledIconData: Icons.star_border,
@@ -120,13 +106,8 @@ class _ratingScreenState extends State<ratingScreen> {
           ),
           SmoothStarRating(
               allowHalfRating: false,
-              onRatingChanged: (value) {
-                setState(() {
-                  rating_Two = value;
-                });
-              },
               starCount: 5,
-              rating: rating_Two,
+              rating: double.parse('${widget.data.videoStar}'),
               size: 40.0,
               filledIconData: Icons.star,
               halfFilledIconData: Icons.star_border,
@@ -140,30 +121,24 @@ class _ratingScreenState extends State<ratingScreen> {
             padding: EdgeInsets.only(left: sizeW * 0.035, right: sizeW * 0.035),
             child: TextFormField(
               autofocus: false,
+              initialValue: widget.data.text,
+              readOnly: true,
+              maxLines: 5,
+              // style: TextStyle(color: DynamicColor.black),
               decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(10),
+                    borderSide: BorderSide(
+                      color: Color(0xff377EB4),
+                      width: 1,
+                    )),
                 focusedBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10),
                     borderSide: BorderSide(
                       color: Color(0xff377EB4),
-                      width: 2,
-                    )),
-                border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    borderSide: BorderSide(
-                      color: Color(0xff377EB4),
-                      width: 2,
+                      width: 1,
                     )),
               ),
-              onChanged: (value) {
-                setState(() {
-                  description = value;
-                });
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) {
-                  return 'please give feedback';
-                }
-              },
             ),
           ),
           SizedBox(
@@ -171,42 +146,14 @@ class _ratingScreenState extends State<ratingScreen> {
           ),
           InkWell(
             onTap: () {
-              print("tapped on");
-
-              final isvalidation = formkey.currentState!.validate();
-
-              print(" rating star ${rating_Two}");
-
-              ///
-              /// Sign Up
-              ///
-
-              if (isvalidation && rating_Two != 0.0 && rating != 0.0) {
-                postfeedback(widget.receiverid, widget.postid, rating,
-                    rating_Two, description);
-                // _pageController.swipableStackController
-                //     .next(swipeDirection: SwipeDirection.left);
-                // setState(() {
-                //   _pageController.left = false;
-                // });
-              } else {
-                Fluttertoast.showToast(
-                    msg: "please give star",
-                    toastLength: Toast.LENGTH_SHORT,
-                    gravity: ToastGravity.CENTER,
-                    timeInSecForIosWeb: 1,
-                    backgroundColor: Colors.blue,
-                    textColor: Colors.white,
-                    fontSize: 16.0);
-                selectbutton = true;
-              }
+              Navigator.of(context).pop();
             },
             child: Container(
               height: sizeH * 0.045,
               width: sizeW * 0.26,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(20),
-                color: selectbutton ? Color(0xff000c61) : Color(0xff377EB4),
+                color: Color(0xff377EB4),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,

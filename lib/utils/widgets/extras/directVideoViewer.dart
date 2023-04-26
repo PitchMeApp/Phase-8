@@ -3,7 +3,6 @@ import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:video_viewer/video_viewer.dart';
 
 List<VideoViewerController> videoViewerControllerList = [];
-List<VideoPlayerController> videoPlayerControllerList = [];
 
 class DirectVideoViewer extends StatefulWidget {
   final String url;
@@ -30,9 +29,8 @@ class _DirectVideoViewerState extends State<DirectVideoViewer> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    debugPrint("Playing url is ${widget.url}");
+
     // videoViewerControllerList[widget.itemIndex].addListener(() {
     // });
     setState(() {});
@@ -85,5 +83,12 @@ class _DirectVideoViewerState extends State<DirectVideoViewer> {
         },
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    videoViewerControllerList[widget.itemIndex].pause();
+
+    super.dispose();
   }
 }

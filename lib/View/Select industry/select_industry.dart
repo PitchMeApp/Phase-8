@@ -59,7 +59,9 @@ class _SelectIndustryPageState extends State<SelectIndustryPage> {
               }
             },
           ),
-          NewCustomBottomBar(),
+          NewCustomBottomBar(
+            index: 2,
+          ),
         ],
       ),
       body: SafeArea(

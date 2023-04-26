@@ -21,7 +21,6 @@ import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:sizer/sizer.dart';
-import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/colors/colors.dart';
 import '../../utils/styles/styles.dart';
@@ -239,7 +238,8 @@ class _SelectedPageState extends State<SelectedPage> {
   }
 
   Widget _imagesGridView() {
-    return _addImageController.listImagePaths.isEmpty
+    return _addImageController.listImagePaths.isEmpty &&
+            _addImageController.fileFullPath.isEmpty
         ? Container()
         : GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
@@ -256,8 +256,12 @@ class _SelectedPageState extends State<SelectedPage> {
                 return _addImageController.fileFullPath.isNotEmpty
                     ? InkWell(
                         onTap: () {
-                          launchUrl(Uri.parse(_addImageController.fileFullPath),
-                              mode: LaunchMode.externalApplication);
+                          _navigationController.navigationType.value = 'Edit';
+                          PageNavigateScreen()
+                              .push(context, AddImagePage())
+                              .then((value) {
+                            setState(() {});
+                          });
                         },
                         child: Container(
                           height: 120,

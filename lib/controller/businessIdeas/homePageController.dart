@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/devApi%20Service/post_api.dart';
 import 'package:pitch_me_app/models/post/postModel.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/images.dart';
@@ -22,6 +23,10 @@ class HomePageController extends GetxController {
       SwipableStackController();
   SwipeDirection? direction;
   bool left = false, right = false;
+
+  //dev
+  final postserver = PostApiServer();
+
   var images = [
     Assets.dashBackgroundImage,
     Assets.postImage2,
@@ -57,6 +62,10 @@ class HomePageController extends GetxController {
 
   setVisibleSeen(bool value) {
     visibleSaveSeen.value = value;
+  }
+
+  savedVideo(postID, swipeType) {
+    postserver.savedLikeVideoApi(postID, swipeType);
   }
 
   List<String> videoUrls = [

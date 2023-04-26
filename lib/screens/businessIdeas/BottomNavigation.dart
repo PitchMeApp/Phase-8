@@ -119,11 +119,16 @@ class _FloatbarState extends State<Floatbar>
       extendBody: true,
       body: Obx(() => pages[controller.PageIndexData.value]),
       bottomNavigationBar: Padding(
+          // padding: EdgeInsets.only(
+          //     bottom: sizeH * 0.056,
+          //     left: sizeW * 0.015,
+          //     right: sizeW * 0.015,
+          //     top: sizeW * 0.035),
           padding: EdgeInsets.only(
-              bottom: sizeH * 0.056,
+              bottom: sizeH * 0.040,
               left: sizeW * 0.015,
               right: sizeW * 0.015,
-              top: sizeW * 0.035),
+              top: sizeW * 0.05),
           child: AnimatedBuilder(
               animation: _colorTween,
               builder: (context, child) {

@@ -30,6 +30,11 @@ TextStyle blue15 = const TextStyle(
   fontSize: 15,
   fontWeight: FontWeight.w500,
 );
+TextStyle blue16bold = const TextStyle(
+  fontSize: 16.0,
+  color: DynamicColor.blue,
+  fontWeight: FontWeight.bold,
+);
 TextStyle blue17 = const TextStyle(
   color: DynamicColor.blue,
   fontSize: 17,

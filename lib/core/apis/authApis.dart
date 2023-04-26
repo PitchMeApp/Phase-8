@@ -17,7 +17,7 @@ class AuthApis extends GetConnect {
 
   static setData({required UserLoginModel userLoginModel}) {
     pref.write(Keys.TOKEN, userLoginModel.token);
-    pref.write(Keys.USER_TYPE, userLoginModel.user!.loginType);
+    // pref.write(Keys.USER_TYPE, userLoginModel.user!.loginType);
   }
 
   Future<UserCredential?> signInWithGoogle() async {

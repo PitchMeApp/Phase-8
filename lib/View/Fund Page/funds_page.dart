@@ -69,7 +69,9 @@ class _FundsPageState extends State<FundsPage> {
                     }
                   } catch (e) {}
                 }),
-          NewCustomBottomBar(),
+          NewCustomBottomBar(
+            index: 2,
+          ),
         ],
       ),
       body: SafeArea(

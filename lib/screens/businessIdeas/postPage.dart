@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
@@ -112,10 +110,10 @@ class _PostPageWidgetState extends State<PostPageWidget>
             onSwipeCompleted: (index, direction) {
               print("left123direction $index");
               if (direction == SwipeDirection.left) {
-                controller.left = !controller.left;
+                controller.left.value = !controller.left.value;
               }
               if (direction == SwipeDirection.right) {
-                controller.right = !controller.right;
+                controller.right.value = !controller.right.value;
               }
               if (!mounted) {
                 return;
@@ -128,30 +126,31 @@ class _PostPageWidgetState extends State<PostPageWidget>
               print('index is $index, direction is $direction');
               controller.label =
                   direction == SwipeDirection.right ? 'Saved' : 'Seen';
+
+              if (direction == SwipeDirection.right) {
+                controller.savedVideo(widget.postModel.result.docs[index].id);
+              }
               controller.setVisibleSeen(true);
               Future.delayed(Duration(milliseconds: 200)).then((value) {
                 controller.setVisibleSeen(false);
               });
               //SEND INDEX AND TITLE
-              log('length = ' + widget.postModel.result.docs.length.toString());
-              log('index = ' + index.toString());
+
               if (index != widget.postModel.result.docs.length) {
-                log('index1 = ' + index.toString());
                 widget.onSwipe(
                     index + 1,
                     widget.postModel.result.docs[index + 1].title.toString(),
                     false);
               } else {
-                log('index2 = ' + index.toString());
                 widget.onSwipe(index, "", true);
               }
 
               if (directionn == SwipeDirection.left &&
-                  controller.left == true) {
+                  controller.left.value == true) {
                 controller.swipableStackController.rewind();
               }
               if (directionn == SwipeDirection.right &&
-                  controller.right == true) {
+                  controller.right.value == true) {
                 controller.swipableStackController.rewind();
               }
 
@@ -177,19 +176,22 @@ class _PostPageWidgetState extends State<PostPageWidget>
                 controller.updateProgressOfCard(properties.swipeProgress);
                 controller.updateDirectionOfCard(properties.direction);
               }
-              print(
-                  "urll2 ${widget.postModel.result.docs[properties.index].vid1}");
 
               return Stack(
                 children: [
                   directionn == SwipeDirection.left
-                      ? controller.left == false
+                      ? controller.left.value == false
                           ? controller.getSliderWidget2(
                               post: widget.postModel.result.docs[itemIndex],
                               context: context,
                               itemIndex: itemIndex)
-                          : ratingScreen()
-                      : controller.right == true
+                          : ratingScreen(
+                              receiverid: widget
+                                  .postModel.result.docs[itemIndex].userid,
+                              postid:
+                                  widget.postModel.result.docs[itemIndex].id,
+                            )
+                      : controller.right.value == true
                           ? interestedSwipe()
                           : controller.getSliderWidget2(
                               post: widget.postModel.result.docs[itemIndex],
@@ -220,14 +222,14 @@ class _PostPageWidgetState extends State<PostPageWidget>
                           ? ''
                           : controller.direction == SwipeDirection.left
                               ? 'Not interested'
-                              : 'interested',
+                              : 'Interested',
                     ),
                   )),
         Align(
           alignment: Alignment.bottomCenter,
           child: Padding(
             padding: EdgeInsets.only(
-                bottom: SizeConfig.getSize10(context: context), right: 8),
+                bottom: SizeConfig.getSize5(context: context), right: 8),
             child: GestureDetector(
               onTap: () {
                 widget.controller.nextPage(

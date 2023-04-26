@@ -55,7 +55,9 @@ class _NeedPageState extends State<NeedPage> {
                   }
                 })
               : const SizedBox(),
-          NewCustomBottomBar()
+          NewCustomBottomBar(
+            index: 2,
+          )
         ],
       ),
       body: SafeArea(

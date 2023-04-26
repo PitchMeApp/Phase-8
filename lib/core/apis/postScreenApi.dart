@@ -10,7 +10,7 @@ class BusinessIdeasApi extends GetConnect {
   Future<PostModel?> getPost() async {
     try {
       var res = await get(GET_POST_DATA_URL);
-      //  log("Res is at getPost ${res.body}");
+      // log("Res is at getPost ${res.body}");
       if (res.statusCode == 200) {
         return PostModel.fromJson(res.body);
       }

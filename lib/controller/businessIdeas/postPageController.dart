@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/controller/businessIdeas/homepagecontroller.dart';
+import 'package:pitch_me_app/devApi%20Service/post_api.dart';
 import 'package:pitch_me_app/models/post/postModel.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/images.dart';
@@ -26,7 +25,9 @@ class PostPageController extends GetxController {
   // final SwipableStackController swipableStackController2 =
   //     SwipableStackController();
   SwipeDirection? direction;
-  bool left = false, right = false;
+  RxBool left = false.obs, right = false.obs;
+
+  final postserver = PostApiServer();
 
   bool notVideo = false;
   var images = [
@@ -53,6 +54,10 @@ class PostPageController extends GetxController {
     visibleSaveSeen.value = value;
   }
 
+  savedVideo(pitchID) {
+    postserver.savedVideoApi(pitchID);
+  }
+
   List<String> videoUrls = [
     "https://saturncube.com/temp-video/video11.mov",
     "https://saturncube.com/temp-video/video12.mov",
@@ -76,7 +81,7 @@ class PostPageController extends GetxController {
       required BuildContext context,
       required int itemIndex}) {
     debugPrint("Post type is ${post.type}");
-    log(' Check 2 = ' + post.file.replaceAll(' ', '%20').toString());
+
     switch (post.type) {
       case 1:
         return Container(
@@ -164,7 +169,6 @@ class PostPageController extends GetxController {
       {required SalesDoc post,
       required BuildContext context,
       required int itemIndex}) {
-    log(' Check 2 = ' + post.vid1.toString());
     switch (post.status) {
       case 0:
         return Container(

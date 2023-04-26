@@ -31,7 +31,9 @@ class _VideoPageMainState extends State<VideoPageMain> {
         backgroundColor: DynamicColor.white,
         resizeToAvoidBottomInset: false,
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: NewCustomBottomBar(),
+        floatingActionButton: NewCustomBottomBar(
+          index: 2,
+        ),
         body: SafeArea(
           child: PageView(
             controller: _controller,

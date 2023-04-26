@@ -1,6 +1,6 @@
 class notification {
   String? message;
-  List<Result>? result;
+  List<NotifyResult>? result;
   int? unreadNotification;
 
   notification({this.message, this.result, this.unreadNotification});
@@ -8,9 +8,9 @@ class notification {
   notification.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     if (json['result'] != null) {
-      result = <Result>[];
+      result = <NotifyResult>[];
       json['result'].forEach((v) {
-        result!.add(new Result.fromJson(v));
+        result!.add(NotifyResult.fromJson(v));
       });
     }
     unreadNotification = json['unread_notification'];
@@ -27,7 +27,7 @@ class notification {
   }
 }
 
-class Result {
+class NotifyResult {
   String? sId;
   String? title;
   String? text;
@@ -36,8 +36,10 @@ class Result {
   String? createdAt;
   String? updatedAt;
   int? iV;
+  int? star;
+  int? videoStar;
 
-  Result(
+  NotifyResult(
       {this.sId,
       this.title,
       this.text,
@@ -45,9 +47,11 @@ class Result {
       this.type,
       this.createdAt,
       this.updatedAt,
+      this.star,
+      this.videoStar,
       this.iV});
 
-  Result.fromJson(Map<String, dynamic> json) {
+  NotifyResult.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
     title = json['title'];
     text = json['text'];
@@ -56,6 +60,8 @@ class Result {
     createdAt = json['createdAt'];
     updatedAt = json['updatedAt'];
     iV = json['__v'];
+    star = (json["star"] != null) ? json["star"] : 0;
+    videoStar = (json["videoStar"] != null) ? json["videoStar"] : 0;
   }
 
   Map<String, dynamic> toJson() {
@@ -68,6 +74,8 @@ class Result {
     data['createdAt'] = this.createdAt;
     data['updatedAt'] = this.updatedAt;
     data['__v'] = this.iV;
+    data["star"] = this.star;
+    data["videoStar"] = this.videoStar;
     return data;
   }
 }

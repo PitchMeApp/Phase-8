@@ -17,6 +17,7 @@ import 'package:pitch_me_app/View/video%20page/Controller/controller.dart';
 import 'package:pitch_me_app/View/what%20need/who_need_page_controller.dart';
 import 'package:pitch_me_app/core/urls.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SuccessPageController extends GetxController {
   SelectedController controller = Get.put(SelectedController());
@@ -40,7 +41,11 @@ class SuccessPageController extends GetxController {
 
   RxBool isLoading = false.obs;
 
+  String userID = '';
+
   Future postSalesPitch(context) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    userID = prefs.get('user_id').toString();
     serviceList.clear();
     typeList.clear();
     serviceDetaisList.clear();
@@ -62,6 +67,7 @@ class SuccessPageController extends GetxController {
       String url = '${BASE_URL}salespitch';
       final request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields.addAll({
+        'userid': userID,
         'type': typeList.toString(),
         'title': _videoFirstPageController.editingController.text,
         'industry': insdustryController.selectedIndustry.value,

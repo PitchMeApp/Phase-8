@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Alert%20Box/show_image_popup.dart';
@@ -19,7 +18,7 @@ class PostDetailPage extends StatefulWidget {
 }
 
 class _PostDetailPageState extends State<PostDetailPage> {
-  late SalesDoc data;
+  dynamic data;
   List typeList = [];
   List serviceList = [];
   List serviceDetailList = [];

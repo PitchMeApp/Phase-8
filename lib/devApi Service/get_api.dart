@@ -1,11 +1,15 @@
 // dev
 
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
+import 'package:pitch_me_app/View/Profile/Likes/model.dart';
+import 'package:pitch_me_app/View/Profile/Pitches/model.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/core/urls.dart';
 import 'package:pitch_me_app/models/industry_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class GetApiService {
   Future<IndustryModel> getIndusrtyApi() async {
@@ -31,7 +35,8 @@ class GetApiService {
   }
 
   Future<SalesPitchListModel> getSalesPiitchListApi() async {
-    String url = '${BASE_URL}salespitch';
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${BASE_URL}salespitch?userid=${prefs.get('user_id')}';
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
@@ -40,6 +45,57 @@ class GetApiService {
 
     return data;
   }
+
+  Future<SavedListModel> getsavedVideoApi() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${BASE_URL}feedback/getsaved';
+
+    final response = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "senderid": prefs.get('user_id').toString(),
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        });
+
+    SavedListModel data = savedListModelFromJson(response.body);
+
+    return data;
+  }
+
+  Future<SavedListModel> getsavedOwnerPitchesApi() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${BASE_URL}feedback/getownerpitches';
+
+    final response = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "senderid": prefs.get('user_id').toString(),
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        });
+
+    SavedListModel data = savedListModelFromJson(response.body);
+
+    return data;
+  }
+
+  Future<SavedLikeListModel> getsavedLikeVideoApi() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${BASE_URL}feedback/getsavedpost';
+
+    final response = await http.post(Uri.parse(url),
+        body: jsonEncode(
+            {"senderid": prefs.get('user_id').toString(), "types": 1}),
+        headers: {
+          'Content-Type': 'application/json',
+        });
+
+    SavedLikeListModel data = savedLikeListModelFromJson(response.body);
+
+    return data;
+  }
+
   // DELETE
 
   Future deleteSalesPittchApi(id) async {
@@ -48,6 +104,45 @@ class GetApiService {
       'Content-Type': 'application/json',
     });
 
+    dynamic data = jsonDecode(response.body);
+
+    return data;
+  }
+
+  Future deleteLikeVideoApi(id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${BASE_URL}feedback/post/$id/${prefs.get('user_id')}';
+    log(url);
+    final response = await http.delete(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+    });
+    log(response.body);
+    dynamic data = jsonDecode(response.body);
+
+    return data;
+  }
+
+  Future deleteSavedVideoApi(id) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${BASE_URL}feedback/pitch/$id/${prefs.get('user_id')}';
+    final response = await http.delete(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+    });
+
+    dynamic data = jsonDecode(response.body);
+
+    return data;
+  }
+
+  // put
+  Future readAllNotificationApi() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${BASE_URL}notification/readall/${prefs.get('user_id')}';
+    log(url);
+    final response = await http.put(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+    });
+    log(response.body);
     dynamic data = jsonDecode(response.body);
 
     return data;

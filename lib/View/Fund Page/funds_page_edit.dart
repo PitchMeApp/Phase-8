@@ -65,7 +65,9 @@ class _FundsPageEditState extends State<FundsPageEdit> {
                     }
                   }
                 }),
-          NewCustomBottomBar(),
+          NewCustomBottomBar(
+            index: 2,
+          ),
         ],
       ),
       body: SafeArea(
