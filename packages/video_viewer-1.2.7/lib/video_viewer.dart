@@ -140,10 +140,12 @@ class VideoViewerState extends State<VideoViewer> {
   @override
   void dispose() {
     _controller.dispose();
+
     super.dispose();
   }
 
   void _initVideoViewer() async {
+    _controller.isDispose = 'Dispose';
     _controller.looping = widget.looping;
     _controller.isShowingThumbnail = _style.thumbnail != null;
     await _controller.initialize(widget.source, autoPlay: widget.autoPlay);
