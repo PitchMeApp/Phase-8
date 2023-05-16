@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/controller/auth/loginController.dart';
 import 'package:pitch_me_app/controller/auth/signupController.dart';
-import 'package:pitch_me_app/screens/auth/linkSentScreen.dart';
+import 'package:pitch_me_app/screens/auth/loginScreen.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
@@ -16,8 +16,6 @@ import 'package:pitch_me_app/utils/widgets/extras/checkBox.dart';
 import 'package:pitch_me_app/utils/widgets/text/text.dart';
 import 'package:pitch_me_app/utils/widgets/textFields/textField.dart';
 
-import 'loginScreen.dart';
-
 class SignUpScreen extends GetView<SignupController> {
   const SignUpScreen({Key? key}) : super(key: key);
 
@@ -25,6 +23,8 @@ class SignUpScreen extends GetView<SignupController> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: BannerWidget(onPressad: () {}),
       body: BackGroundWidget(
         backgroundImage: Assets.backgroundImage,
         bannerRequired: false,
@@ -43,13 +43,14 @@ class SignUpScreen extends GetView<SignupController> {
                   Padding(
                     padding: SizeConfig.leftRightPadding(context),
                     child: appLogoImage(
-                        width: width(context) * 0.5,
+                        width: width(context) * 0.9,
                         height: SizeConfig.getSizeHeightBy(
                             context: context, by: 0.13)),
                   ),
-                  spaceHeight(SizeConfig.getSize10(context: context)),
+                  // spaceHeight(SizeConfig.getSize10(context: context)),
                   whiteBorderContainer(
                       child: Image.asset(Assets.handshakeImage),
+                      color: Colors.transparent,
                       height: SizeConfig.getSizeHeightBy(
                           context: context, by: 0.15),
                       width: SizeConfig.getSizeHeightBy(
@@ -59,18 +60,8 @@ class SignUpScreen extends GetView<SignupController> {
                     padding: SizeConfig.leftRightPadding(context),
                     child: Column(
                       children: [
-                        spaceHeight(20),
-                        new CustomTextField(
-                          controller: controller.txtEmail,
-                          lableText: EMAIL,
-                          context: context,
-                          keyboardType: TextInputType.emailAddress,
-                          inputAction: TextInputAction.next,
-                          focusNode: controller.emailNode,
-                          nextFocusNode: controller.userNameNode,
-                        ),
-                        spaceHeight(SizeConfig.getSize20(context: context)),
-                        new CustomTextField(
+                        spaceHeight(10),
+                        CustomTextField(
                           lableText: USERNAME,
                           context: context,
                           controller: controller.txtUserName,
@@ -79,7 +70,18 @@ class SignUpScreen extends GetView<SignupController> {
                           nextFocusNode: controller.passwordNode,
                         ),
                         spaceHeight(SizeConfig.getSize20(context: context)),
-                        new CustomTextField(
+                        CustomTextField(
+                          controller: controller.txtEmail,
+                          lableText: EMAIL,
+                          context: context,
+                          keyboardType: TextInputType.emailAddress,
+                          inputAction: TextInputAction.next,
+                          focusNode: controller.emailNode,
+                          nextFocusNode: controller.userNameNode,
+                        ),
+
+                        spaceHeight(SizeConfig.getSize20(context: context)),
+                        CustomTextField(
                           lableText: PASSWORD,
                           obscure: true,
                           context: context,
@@ -89,7 +91,7 @@ class SignUpScreen extends GetView<SignupController> {
                           nextFocusNode: controller.confirmPasswordNode,
                         ),
                         spaceHeight(SizeConfig.getSize20(context: context)),
-                        new CustomTextField(
+                        CustomTextField(
                           lableText: CONFIRMPASSWORD,
                           obscure: true,
                           context: context,
@@ -108,7 +110,7 @@ class SignUpScreen extends GetView<SignupController> {
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
-                              children: [roboto(size: 20, text: REGISTER)],
+                              children: [roboto(size: 20, text: SIGNUP)],
                             )),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -124,9 +126,9 @@ class SignUpScreen extends GetView<SignupController> {
                             ),
                             InkWell(
                               onTap: () {
-                                // Get.to(() => LoginScreen(),
-                                //     binding: LoginBinding());
-                                Get.back();
+                                Get.offAll(() => LoginScreen(),
+                                    binding: LoginBinding());
+                                // Get.back();
                               },
                               child: Padding(
                                 padding: EdgeInsets.only(

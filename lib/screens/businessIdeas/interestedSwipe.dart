@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
-import 'package:swipable_stack/swipable_stack.dart';
+import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:sizer/sizer.dart';
 
 class interestedSwipe extends StatefulWidget {
   const interestedSwipe({super.key});
@@ -27,7 +27,7 @@ class _interestedSwipeState extends State<interestedSwipe> {
         body: Column(
       children: [
         SizedBox(
-          height: sizeH * 0.05,
+          height: sizeH * 0.03,
         ),
         SafeArea(
           child: Container(
@@ -36,7 +36,7 @@ class _interestedSwipeState extends State<interestedSwipe> {
             child: Center(
               child: Image.asset(
                 "assets/image/Group 12262.png",
-                height: sizeH * 0.13,
+                height: sizeH * 0.09,
               ),
             ),
           )),
@@ -70,110 +70,195 @@ class _interestedSwipeState extends State<interestedSwipe> {
         //         )),
         //   ),
         // ),
+
         SizedBox(
           height: sizeH * 0.02,
         ),
-        Text(
-          "Would you like to continue ",
-          style: TextStyle(
-              fontSize: sizeH * 0.028,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-              color: Color(0xff377EB4)),
-        ),
-        Text(
-          "watching Sales Pitches or ",
-          style: TextStyle(
-              fontSize: sizeH * 0.028,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-              color: Color(0xff377EB4)),
-        ),
-        Text(
-          "Start Chat with this one?",
-          style: TextStyle(
-              fontSize: sizeH * 0.028,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 0.5,
-              color: Color(0xff377EB4)),
-        ),
         SizedBox(
-          height: sizeH * 0.05,
+          width: sizeW - 40,
+          child: Text(
+            "The Sales Pitch Owner will receive a notification that you are interested, and after looking your Profile, They might contact you if the Interest is Mutual",
+            style: TextStyle(
+                fontSize: sizeH * 0.025,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
+                color: Color(0xff377EB4)),
+            textAlign: TextAlign.center,
+          ),
         ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ///Switch////
-            InkWell(
-              onTap: () {
-                ///
-                setState(() {
-                  selectbutton = true;
-                  // Duration(seconds: 0);
-                  _pageController.swipableStackController.next(
-                      swipeDirection: SwipeDirection.right,
-                      duration: Duration(seconds: 0));
-                });
-              },
-              child: Container(
-                height: sizeH * 0.045,
-                width: sizeW * 0.26,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: selectbutton ? Color(0xff000c61) : Color(0xff377EB4),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                        "assets/Phase 2 icons/ic_forward_24px.svg"),
-                    SizedBox(
-                      width: sizeW * 0.015,
+        // Text(
+        //   "watching Sales Pitches or ",
+        //   style: TextStyle(
+        //       fontSize: sizeH * 0.028,
+        //       fontWeight: FontWeight.bold,
+        //       letterSpacing: 0.5,
+        //       color: Color(0xff377EB4)),
+        // ),
+        // Text(
+        //   "Start Chat with this one?",
+        //   style: TextStyle(
+        //       fontSize: sizeH * 0.028,
+        //       fontWeight: FontWeight.bold,
+        //       letterSpacing: 0.5,
+        //       color: Color(0xff377EB4)),
+        // ),
+        SizedBox(
+          height: sizeH * 0.04,
+        ),
+        Padding(
+          padding: const EdgeInsets.only(left: 30, right: 30),
+          child: Row(
+            children: [
+              Expanded(
+                child: InkWell(
+                  onTap: () {
+                    setState(() {
+                      // selectbutton = true;
+                      // // Duration(seconds: 0);
+                      // _pageController.swipableStackController.next(
+                      //     swipeDirection: SwipeDirection.right,
+                      //     duration: Duration(seconds: 0));
+                      Navigator.of(context).pop();
+
+                      _pageController.right.value = false;
+
+                      //Get.offAll(Floatbar(1));
+                    });
+                  },
+                  child: Container(
+                    height: 6.h,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomLeft: Radius.circular(10)),
+                      color: Color(0xff377EB4),
                     ),
-                    Text(
+                    child: Text(
                       "Continue",
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
-                    )
-                  ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-
-            ////Sign Up////
-            InkWell(
-              onTap: () {
-                setState(() {
-                  selectbutton_Two = true;
-                });
-              },
-              child: Container(
-                height: sizeH * 0.045,
-                width: sizeW * 0.26,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color:
-                      selectbutton_Two ? Color(0xff000c61) : Color(0xff377EB4),
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SvgPicture.asset(
-                        "assets/Phase 2 icons/ic_question_ans.svg"),
-                    SizedBox(
-                      width: sizeW * 0.015,
+              Container(
+                width: 2,
+                height: 6.h,
+                color: DynamicColor.white,
+              ),
+              Expanded(
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    height: 6.h,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      color: Color(0xff377EB4),
                     ),
-                    Text(
-                      "Chat",
+                    child: Text(
+                      "Go to Bio",
                       style: TextStyle(
                           color: Colors.white, fontWeight: FontWeight.bold),
-                    )
-                  ],
+                    ),
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
+        ),
+        SizedBox(
+          height: sizeH * 0.04,
+        ),
+        SizedBox(
+          width: sizeW - 40,
+          child: Text(
+            "The more complete your Profile is, the higher chances of a Contact",
+            style: TextStyle(
+                fontSize: sizeH * 0.028,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 0.5,
+                color: Color(0xff377EB4)),
+            textAlign: TextAlign.center,
+          ),
         )
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        //   children: [
+        //     ///Switch////
+        //     InkWell(
+        //       onTap: () {
+        //         ///
+        //         setState(() {
+        //           selectbutton = true;
+        //           // Duration(seconds: 0);
+        //           _pageController.swipableStackController.next(
+        //               swipeDirection: SwipeDirection.right,
+        //               duration: Duration(seconds: 0));
+        //         });
+        //       },
+        //       child: Container(
+        //         height: sizeH * 0.045,
+        //         width: sizeW * 0.26,
+        //         decoration: BoxDecoration(
+        //           borderRadius: BorderRadius.circular(20),
+        //           color: selectbutton ? Color(0xff000c61) : Color(0xff377EB4),
+        //         ),
+        //         child: Row(
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           children: [
+        //             SvgPicture.asset(
+        //                 "assets/Phase 2 icons/ic_forward_24px.svg"),
+        //             SizedBox(
+        //               width: sizeW * 0.015,
+        //             ),
+        //             Text(
+        //               "Continue",
+        //               style: TextStyle(
+        //                   color: Colors.white, fontWeight: FontWeight.bold),
+        //             )
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+
+        //     ////Sign Up////
+        //     InkWell(
+        //       onTap: () {
+        //         setState(() {
+        //           selectbutton_Two = true;
+        //         });
+        //       },
+        //       child: Container(
+        //         height: sizeH * 0.045,
+        //         width: sizeW * 0.26,
+        //         decoration: BoxDecoration(
+        //           borderRadius: BorderRadius.circular(20),
+        //           color:
+        //               selectbutton_Two ? Color(0xff000c61) : Color(0xff377EB4),
+        //         ),
+        //         child: Row(
+        //           mainAxisAlignment: MainAxisAlignment.center,
+        //           children: [
+        //             SvgPicture.asset(
+        //                 "assets/Phase 2 icons/ic_question_ans.svg"),
+        //             SizedBox(
+        //               width: sizeW * 0.015,
+        //             ),
+        //             Text(
+        //               "Chat",
+        //               style: TextStyle(
+        //                   color: Colors.white, fontWeight: FontWeight.bold),
+        //             )
+        //           ],
+        //         ),
+        //       ),
+        //     ),
+        //   ],
+        // )
       ],
     ));
   }

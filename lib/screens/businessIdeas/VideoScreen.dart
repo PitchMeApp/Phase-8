@@ -1,6 +1,7 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,11 +10,13 @@ import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/controller/businessIdeas/dashBoardController.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/noti.dart';
 import 'package:pitch_me_app/screens/businessIdeas/dashBoardScreen_Two.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home_manu.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/text/text.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../controller/businessIdeas/postPageController.dart';
 import '../../utils/extras/extras.dart';
@@ -36,19 +39,23 @@ class _mainHome_TwoState extends State<mainHome_Two>
 
   bool _isInitialValue = false;
   bool fullScreen = false;
+  bool isManu = false;
 
   String title = '';
+  String businesstype = '';
+
   int currentIndexOfDashboard = 0;
   late Widget currentScreen;
   Timer timer = Timer(Duration(seconds: 0), () {});
   @override
   void initState() {
     super.initState();
+    getUserType();
+    // Colors.white.withOpacity(0.3)
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _colorTween =
-        ColorTween(begin: Color(0xff599CD0), end: Colors.white.withOpacity(0.3))
-            .animate(_animationController);
+    _colorTween = ColorTween(begin: DynamicColor.blue, end: DynamicColor.blue)
+        .animate(_animationController);
     Future.delayed(const Duration(seconds: 0), () {
       _animationController.status == AnimationStatus.completed
           ? _animationController.reset()
@@ -59,6 +66,7 @@ class _mainHome_TwoState extends State<mainHome_Two>
       postModel.getPostData();
     });
     currentScreen = DashBoardScreen_Two(
+      userType: businesstype,
       currentPage: (int index) {
         currentIndexOfDashboard = index;
         if (!mounted) {
@@ -79,6 +87,15 @@ class _mainHome_TwoState extends State<mainHome_Two>
       return;
     }
     setState(() {});
+  }
+
+  getUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      businesstype = prefs.getString('log_type').toString();
+    });
+
+    log(" ADGL ${businesstype}");
   }
 
   @override
@@ -108,7 +125,7 @@ class _mainHome_TwoState extends State<mainHome_Two>
               } else {
                 return Stack(
                   children: [
-                    currentScreen,
+                    isManu ? HomeManuPage() : currentScreen,
                     Obx(() {
                       return postPageController.right.value == true ||
                               postPageController.left.value == true
@@ -116,12 +133,14 @@ class _mainHome_TwoState extends State<mainHome_Two>
                           : Padding(
                               padding: EdgeInsets.only(
                                   top: SizeConfig.getSize30(context: context) +
-                                      SizeConfig.getSize20(context: context),
+                                      MediaQuery.of(context).size.height *
+                                          0.021,
                                   bottom:
                                       SizeConfig.getSize20(context: context),
-                                  left: SizeConfig.getSize20(context: context),
-                                  right:
-                                      SizeConfig.getSize20(context: context)),
+                                  left: SizeConfig.getFontSize25(
+                                      context: context),
+                                  right: SizeConfig.getFontSize25(
+                                      context: context)),
                               child: Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
@@ -139,7 +158,8 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                                         : sizeH * 0.06,
                                                     width: _isInitialValue
                                                         ? sizeW * 0.65
-                                                        : sizeW * 0.120,
+                                                        : SizeConfig.getSize50(
+                                                            context: context),
                                                     decoration: BoxDecoration(
                                                         borderRadius:
                                                             BorderRadius.circular(
@@ -331,15 +351,32 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                           : Container(
                                               alignment: Alignment.center,
                                               margin: EdgeInsets.only(top: 8),
-                                              decoration: BoxDecoration(
-                                                  color: Color(0xff377eb4),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
+                                              // decoration: BoxDecoration(
+                                              //     color: Color(0xff377eb4),
+                                              //     borderRadius:
+                                              //         BorderRadius.circular(
+                                              //             10)),
                                               height: sizeH * 0.04,
                                               width: sizeW * 0.35,
                                               child: Center(
-                                                child: Text(
+                                                child:
+                                                    // postPageController
+                                                    //         .getIntroVideoApiList
+                                                    //         .value
+                                                    //         .isEmpty
+                                                    //     ? Text(
+                                                    //         'Watch Sales Pitch',
+                                                    //         style: TextStyle(
+                                                    //             color: DynamicColor
+                                                    //                 .blue,
+                                                    //             fontWeight:
+                                                    //                 FontWeight.bold,
+                                                    //             fontSize: 15),
+                                                    //         maxLines: 1,
+                                                    //         overflow: TextOverflow
+                                                    //             .ellipsis,
+                                                    //       ):
+                                                    Text(
                                                   dashboardController
                                                               .salespitch !=
                                                           null
@@ -358,7 +395,7 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                                           : 'No Title'
                                                       : 'No Title',
                                                   style: TextStyle(
-                                                      color: Colors.white,
+                                                      color: DynamicColor.blue,
                                                       fontWeight:
                                                           FontWeight.bold,
                                                       fontSize: 15),
@@ -383,8 +420,17 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                                     const EdgeInsets.all(12.0),
                                                 child: loadSvg(
                                                     image:
-                                                        'assets/image/menu.svg'),
-                                              ))
+                                                        'assets/image/menu.svg',
+                                                    color: isManu == true
+                                                        ? DynamicColor.blue
+                                                        : null),
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  isManu = !isManu;
+                                                });
+                                              },
+                                            )
                                           : Container(),
                                       currentIndexOfDashboard == 0
                                           ? spaceHeight(10)

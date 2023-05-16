@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/controller/businessIdeas/homepagecontroller.dart';
 import 'package:pitch_me_app/screens/businessIdeas/BottomNavigation.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
 import '../Custom header view/new_bottom_bar.dart';
@@ -26,25 +27,24 @@ class _LeavePageState extends State<LeavePage> {
     final sizeW = MediaQuery.of(context).size.width;
 
     return Scaffold(
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: NewCustomBottomBar(
-          index: widget.index,
-        ),
-        body: Column(
+        body: Stack(
+      children: [
+        Column(
           children: [
             SafeArea(
-              child: Container(
-                  child: Padding(
-                padding:
-                    EdgeInsets.only(left: sizeW * 0.02, right: sizeW * 0.02),
-                child: Center(
-                  child: Image.asset(
-                    "assets/image/Group 12262.png",
-                    height: sizeH * 0.13,
-                  ),
+                child: Padding(
+              padding: EdgeInsets.only(
+                top: 10,
+                left: sizeW * 0.02,
+                right: sizeW * 0.02,
+              ),
+              child: Center(
+                child: Image.asset(
+                  "assets/image/Group 12262.png",
+                  height: sizeH * 0.09,
                 ),
-              )),
-            ),
+              ),
+            )),
             Container(
                 child: Padding(
               padding: EdgeInsets.only(left: sizeW * 0.02, right: sizeW * 0.02),
@@ -53,23 +53,27 @@ class _LeavePageState extends State<LeavePage> {
                 height: sizeH * 0.13,
               ),
             )),
-            Padding(
-              padding: EdgeInsets.only(left: sizeW * 0.67, top: sizeH * 0.01),
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: Color(0xff377EB4),
-                    ),
-                    height: sizeH * 0.05,
+            Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                  margin: EdgeInsets.only(
+                      right: SizeConfig.getSize35(context: context)),
+                  padding: EdgeInsets.all(1),
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(7),
+                    color: Color(0xff377EB4),
+                  ),
+                  // height: sizeH * 0.05,
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
                     child: Icon(
                       Icons.close,
                       color: Colors.white,
-                    )),
-              ),
+                      size: 35,
+                    ),
+                  )),
             ),
             SizedBox(
               height: sizeH * 0.02,
@@ -121,6 +125,11 @@ class _LeavePageState extends State<LeavePage> {
               ),
             )
           ],
-        ));
+        ),
+        NewCustomBottomBar(
+          index: widget.index,
+        ),
+      ],
+    ));
   }
 }

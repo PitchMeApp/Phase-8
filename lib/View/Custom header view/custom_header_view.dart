@@ -2,12 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/noti.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
+import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
+import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
 
@@ -43,9 +46,10 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
   void initState() {
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _colorTween =
-        ColorTween(begin: Color(0xff599CD0), end: Colors.white.withOpacity(0.3))
-            .animate(_animationController);
+    _colorTween = ColorTween(begin: DynamicColor.blue, end: DynamicColor.blue
+            //Colors.white.withOpacity(0.3)
+            )
+        .animate(_animationController);
     Future.delayed(const Duration(seconds: 0), () {
       _animationController.status == AnimationStatus.completed
           ? _animationController.reset()
@@ -73,9 +77,10 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
   Widget iconsAndTitle() {
     return Padding(
       padding: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height * 0.014,
-          left: SizeConfig.getSize20(context: context),
-          right: SizeConfig.getSize20(context: context)),
+          top: SizeConfig.getSize30(context: context) +
+              MediaQuery.of(context).size.height * 0.021,
+          left: SizeConfig.getFontSize25(context: context),
+          right: SizeConfig.getFontSize25(context: context)),
       child: Stack(
         children: [
           AnimatedBuilder(
@@ -84,77 +89,49 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    InkWell(
+                    AppBarIconContainer(
                       onTap: () {},
-                      child: Container(
-                          height: 6.h,
-                          width: 12.w,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: _colorTween.value,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(108, 148, 147, 147)
-                                      .withOpacity(0.3),
-                                  blurRadius: 50.0,
-                                  spreadRadius: 10,
-                                  offset: Offset(
-                                    20,
-                                    20,
-                                  ),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(10)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: loadSvg(
-                                image: 'assets/image/notifications.svg'),
-                          )),
+                      height: SizeConfig.getSize50(context: context),
+                      width: SizeConfig.getSize50(context: context),
+                      colorTween: _colorTween,
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: loadSvg(
+                          image: 'assets/image/notifications.svg',
+                        ),
+                      ),
                     ),
                     Container(
                       height: MediaQuery.of(context).size.height * 0.04,
                       width: MediaQuery.of(context).size.width * 0.35,
                       alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: DynamicColor.blue,
-                          borderRadius: BorderRadius.circular(10.0)),
+                      // decoration: BoxDecoration(
+                      //     color: DynamicColor.blue,
+                      //     borderRadius: BorderRadius.circular(10.0)),
                       child: Text(
                         TextStrings.textKey['add_seles_pitch']!,
-                        style: white15TextStyle,
+                        style: blue16bold,
                       ),
                     ),
-                    InkWell(
-                      onTap: () {},
-                      child: Container(
-                        height: 6.h,
-                        width: 12.w,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: _colorTween.value,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromARGB(108, 148, 147, 147)
-                                    .withOpacity(0.3),
-                                blurRadius: 45.0,
-                                spreadRadius: 10,
-                                offset: Offset(
-                                  20,
-                                  20,
-                                ),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(10.0)),
-                        child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: loadSvg(image: 'assets/image/menu.svg'),
+                    AppBarIconContainer(
+                      onTap: () {
+                        PageNavigateScreen().push(
+                            context,
+                            ManuPage(
+                              title: 'Add Sales Pitch',
+                              pageIndex: 2,
+                            ));
+                      },
+                      height: SizeConfig.getSize50(context: context),
+                      width: SizeConfig.getSize50(context: context),
+                      colorTween: _colorTween,
+                      child: Padding(
+                        padding: EdgeInsets.all(12.0),
+                        child: loadSvg(
+                          image: 'assets/image/menu.svg',
                         ),
-                        // const Icon(
-                        //   Icons.menu,
-                        //   color: DynamicColor.white,
-                        //   size: 30,
-                        // ),
                       ),
-                    )
+                    ),
                   ],
                 );
               }),
@@ -207,31 +184,31 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                       builder: (context, child) {
                         return InkWell(
                           onTap: () {
-                            Navigator.of(context).pop();
+                            // Navigator.of(context).pop();
                           },
                           child: Container(
-                            height: 6.h,
-                            width: 12.w,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                                color: _colorTween.value,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: Color.fromARGB(108, 148, 147, 147)
-                                        .withOpacity(0.3),
-                                    blurRadius: 100.0,
-                                    spreadRadius: 10,
-                                    offset: Offset(
-                                      10,
-                                      10,
-                                    ),
-                                  )
-                                ],
-                                borderRadius: BorderRadius.circular(8.0)),
-                            child: const Icon(
-                              Icons.arrow_back,
-                              color: DynamicColor.white,
-                            ),
+                            height: SizeConfig.getSize50(context: context),
+                            width: SizeConfig.getSize50(context: context),
+                            // alignment: Alignment.center,
+                            // decoration: BoxDecoration(
+                            //     color: _colorTween.value,
+                            //     boxShadow: [
+                            //       BoxShadow(
+                            //         color: Color.fromARGB(108, 148, 147, 147)
+                            //             .withOpacity(0.3),
+                            //         blurRadius: 100.0,
+                            //         spreadRadius: 10,
+                            //         offset: Offset(
+                            //           10,
+                            //           10,
+                            //         ),
+                            //       )
+                            //     ],
+                            //     borderRadius: BorderRadius.circular(8.0)),
+                            // child: const Icon(
+                            //   Icons.arrow_back,
+                            //   color: DynamicColor.white,
+                            // ),
                           ),
                         );
                       }),

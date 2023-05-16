@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
-import 'package:pitch_me_app/controller/businessIdeas/homepagecontroller.dart';
 import 'package:pitch_me_app/devApi%20Service/post_api.dart';
 import 'package:pitch_me_app/models/post/postModel.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
@@ -39,7 +38,8 @@ class PostPageController extends GetxController {
     Assets.postImage2,
   ];
   String label = "Seen";
-  HomePageController _homePageController = Get.put(HomePageController());
+
+  //RxList getIntroVideoApiList = [].obs;
 
   updateProgressOfCard(double value) {
     print("DATABCA ${value}");
@@ -57,6 +57,19 @@ class PostPageController extends GetxController {
   savedVideo(pitchID) {
     postserver.savedVideoApi(pitchID);
   }
+
+  // getsavedIntroVideo() {
+  //   postserver.getSavedIntroVideoApi().then((value) {
+  //     log('check = ' + value.toString());
+  //     getIntroVideoApiList.value = value['result'];
+  //     log('check 2 = ' + getIntroVideoApiList.value.toString());
+  //     update();
+  //   });
+  // }
+
+  // addsavedIntroVideo() {
+  //   postserver.addSavedIntroVideoApi();
+  // }
 
   List<String> videoUrls = [
     "https://saturncube.com/temp-video/video11.mov",
@@ -77,7 +90,7 @@ class PostPageController extends GetxController {
   ];
 
   Widget getSliderWidget(
-      {required Result post,
+      {required Results post,
       required BuildContext context,
       required int itemIndex}) {
     debugPrint("Post type is ${post.type}");
@@ -251,4 +264,10 @@ class PostPageController extends GetxController {
         );
     }
   }
+
+  // @override
+  // void onInit() {
+  //   super.onInit();
+  //   getsavedIntroVideo();
+  // }
 }

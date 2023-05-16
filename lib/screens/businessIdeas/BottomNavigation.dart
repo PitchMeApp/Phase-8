@@ -8,6 +8,8 @@ import 'package:pitch_me_app/View/Profile/profile.dart';
 import 'package:pitch_me_app/controller/businessIdeas/homepagecontroller.dart';
 import 'package:pitch_me_app/screens/businessIdeas/VideoScreen.dart';
 import 'package:pitch_me_app/screens/businessIdeas/mainHome.dart';
+import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class Floatbar extends StatefulWidget {
@@ -19,9 +21,7 @@ class Floatbar extends StatefulWidget {
   State<Floatbar> createState() => _FloatbarState();
 }
 
-var abc;
-var loginCondition;
-var businesstype;
+String businesstype = '';
 
 class _FloatbarState extends State<Floatbar>
     with SingleTickerProviderStateMixin {
@@ -39,7 +39,7 @@ class _FloatbarState extends State<Floatbar>
   @override
   void initState() {
     changeColors();
-    //Businesslog();
+    getUserType();
     if (widget.selectData != null) {
       log(widget.selectData.toString());
 
@@ -47,12 +47,11 @@ class _FloatbarState extends State<Floatbar>
     }
     super.initState();
     //getBoolValuesSF();
-
+//Colors.white.withOpacity(0.3)
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _colorTween =
-        ColorTween(begin: Color(0xff599CD0), end: Colors.white.withOpacity(0.3))
-            .animate(_animationController);
+    _colorTween = ColorTween(begin: DynamicColor.blue, end: DynamicColor.blue)
+        .animate(_animationController);
     Future.delayed(const Duration(seconds: 0), () {
       _animationController.status == AnimationStatus.completed
           ? _animationController.reset()
@@ -81,12 +80,32 @@ class _FloatbarState extends State<Floatbar>
     "assets/Phase 2 icons/equalizer_dark.png",
     "assets/Phase 2 icons/ic_person_24px (1).png",
   ];
+  List<Widget> pages = [
+    MainHomeScreen(),
+    mainHome_Two(),
+    DemoVideoPage(),
+    DealsPage(),
+    ProfilePage(),
+  ];
 
-  getBoolValuesSF() async {
+  getUserType() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //Return bool
-    loginCondition = prefs.getString('tok');
-    print(" ADGL ${loginCondition}");
+    setState(() {
+      businesstype = prefs.getString('log_type').toString();
+    });
+
+    log(" ADGL ${businesstype}");
+
+    // if (businesstype == '2' || businesstype == '2') {
+    //   pages = [
+    //     MainHomeScreen(),
+    //     mainHome_Two(),
+    //     //Container(),
+    //     DemoVideoPage(),
+    //     DealsPage(),
+    //     ProfilePage(),
+    //   ];
+    // }
   }
 
   // Businesslog() async {
@@ -99,16 +118,6 @@ class _FloatbarState extends State<Floatbar>
   //   });
   // }
 
-  List<Widget> pages = [
-    MainHomeScreen(),
-    mainHome_Two(),
-    DemoVideoPage(),
-    DealsPage(),
-    ProfilePage(),
-    //shareScreen(),
-    //shareScreen(),
-  ];
-
   var ColorChangerIndex;
   int pageindex = 0;
   @override
@@ -117,18 +126,21 @@ class _FloatbarState extends State<Floatbar>
     final sizeW = MediaQuery.of(context).size.width;
     return Scaffold(
       extendBody: true,
-      body: Obx(() => pages[controller.PageIndexData.value]),
+      body: pages.isEmpty
+          ? Container()
+          : Obx(() => pages[controller.PageIndexData.value]),
       bottomNavigationBar: Padding(
+          padding: EdgeInsets.only(
+              bottom: sizeH * 0.066,
+              left: SizeConfig.getFontSize25(context: context),
+              right: SizeConfig.getFontSize25(context: context),
+              top: sizeW * 0.05),
+
           // padding: EdgeInsets.only(
-          //     bottom: sizeH * 0.056,
+          //     bottom: sizeH * 0.040,
           //     left: sizeW * 0.015,
           //     right: sizeW * 0.015,
-          //     top: sizeW * 0.035),
-          padding: EdgeInsets.only(
-              bottom: sizeH * 0.040,
-              left: sizeW * 0.015,
-              right: sizeW * 0.015,
-              top: sizeW * 0.05),
+          //     top: sizeW * 0.05),
           child: AnimatedBuilder(
               animation: _colorTween,
               builder: (context, child) {
@@ -137,17 +149,18 @@ class _FloatbarState extends State<Floatbar>
                   width: sizeW * 0.4,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    color: _colorTween.value,
+                    color: DynamicColor.blue,
+                    //_colorTween.value,
                     boxShadow: [
-                      BoxShadow(
-                        color: Color.fromARGB(109, 20, 20, 20).withOpacity(0.3),
-                        blurRadius: 25.0,
-                        spreadRadius: 25,
-                        offset: Offset(
-                          20,
-                          20,
-                        ),
-                      )
+                      // BoxShadow(
+                      //   color: Color.fromARGB(109, 20, 20, 20).withOpacity(0.3),
+                      //   blurRadius: 25.0,
+                      //   spreadRadius: 25,
+                      //   offset: Offset(
+                      //     20,
+                      //     20,
+                      //   ),
+                      // )
                     ],
                   ),
                   child: ListView.builder(
@@ -158,7 +171,7 @@ class _FloatbarState extends State<Floatbar>
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           SizedBox(
-                            width: sizeW * 0.06,
+                            width: sizeW * 0.05,
                           ),
                           InkWell(
                             onTap: () async {
@@ -174,7 +187,7 @@ class _FloatbarState extends State<Floatbar>
 
                               Duration(seconds: 0);
                               _colorTween = ColorTween(
-                                      begin: Color(0xff599CD0),
+                                      begin: DynamicColor.blue,
                                       end: Colors.white.withOpacity(0.3))
                                   .animate(_animationController);
 
@@ -201,7 +214,7 @@ class _FloatbarState extends State<Floatbar>
                                     ))),
                           ),
                           SizedBox(
-                            width: sizeW * 0.06,
+                            width: sizeW * 0.05,
                           )
                         ],
                       );

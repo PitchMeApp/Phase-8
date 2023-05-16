@@ -16,7 +16,7 @@ class PitcheController extends GetxController {
   Future<SavedListModel> getUserData() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     userType = prefs.get('log_type').toString();
-    log(userType.toString());
+
     if (userType == '1') {
       return getSavedOwnerPitchesListApi();
     } else if (userType == '2') {

@@ -20,7 +20,8 @@ class Assets {
   static const String settingIco = 'assets/image/setting_icon.svg';
   static const String tiktokNextIco = 'assets/image/tiktok_next_icon.svg';
   static const String appLogoPng = 'assets/image/app_logo.png';
-  static const String appLogoDarkBluePng = 'assets/image/app_logo_dark_blue.png';
+  static const String appLogoDarkBluePng =
+      'assets/image/app_logo_dark_blue.png';
   static const String tiktokPreviousIco =
       'assets/image/tiktok_previous_icon.svg';
   static const String userIco = 'assets/image/user_icon.svg';

@@ -3,8 +3,6 @@ import 'package:get/get.dart';
 import 'package:pitch_me_app/core/apis/authApis.dart';
 import 'package:pitch_me_app/models/auth/registerDataModel.dart';
 import 'package:pitch_me_app/models/auth/userLoginModel.dart';
-import 'package:pitch_me_app/screens/auth/linkSentScreen.dart';
-import 'package:pitch_me_app/screens/auth/loginScreen.dart';
 import 'package:pitch_me_app/screens/businessIdeas/emailConfirm.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/widgets/extras/loading.dart';

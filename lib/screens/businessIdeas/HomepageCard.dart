@@ -1,12 +1,16 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/swipe_limitation.dart';
 import 'package:pitch_me_app/controller/businessIdeas/homepagecontroller.dart';
 import 'package:pitch_me_app/models/post/postModel.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/extras/directVideoViewer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 import 'package:video_viewer/domain/bloc/controller.dart';
+
+import '../../utils/widgets/Navigation/custom_navigation.dart';
 
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({
@@ -27,10 +31,12 @@ class _HomePageWidgetState extends State<HomePageWidget>
     with AutomaticKeepAliveClientMixin<HomePageWidget>, WidgetsBindingObserver {
   void _listenController() => setState(() {});
   HomePageController controller = Get.put(HomePageController());
-
+  String checkGuestType = '';
+  int swipeCount = 0;
   @override
   void initState() {
     super.initState();
+    checkGuest();
     WidgetsBinding.instance.addObserver(this);
     controller.swipableStackController.addListener(_listenController);
     videoViewerControllerList.clear();
@@ -40,6 +46,28 @@ class _HomePageWidgetState extends State<HomePageWidget>
 
   @override
   bool get wantKeepAlive => true;
+
+  int countPage = 0;
+  void checkGuest() async {
+    SharedPreferences preferencesData = await SharedPreferences.getInstance();
+    setState(() {
+      checkGuestType = preferencesData.getString('guest').toString();
+      //preferencesData.remove('count_swipe');
+      if (preferencesData.getString('count_swipe') != 'null') {
+        swipeCount =
+            int.parse(preferencesData.getString('count_swipe').toString());
+      }
+    });
+  }
+
+  void countSwipe(String count) async {
+    SharedPreferences preferencesData = await SharedPreferences.getInstance();
+
+    setState(() {
+      preferencesData.setString('count_swipe', count);
+    });
+    // PageNavigateScreen().pushRemovUntil(context, SwipeLimitationPage());
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -62,16 +90,26 @@ class _HomePageWidgetState extends State<HomePageWidget>
             controller: controller.swipableStackController,
             stackClipBehaviour: Clip.none,
             onSwipeCompleted: (index, direction) {
+              if (checkGuestType == 'null') {
+                var i = swipeCount + 1;
+                print('guest = ' + i.toString());
+                setState(() {
+                  swipeCount = i;
+                });
+                print('guest 2 = ' + checkGuestType);
+                countSwipe(i.toString());
+              } else {
+                controller.label =
+                    direction == SwipeDirection.right ? 'Saved' : 'Seen';
+                if (direction == SwipeDirection.right) {
+                  controller.savedVideo(widget.postModel.result![index].id, 1);
+                  // log('post id = ' + widget.postModel.result![index].id);
+                } else {
+                  controller.savedVideo(widget.postModel.result![index].id, 2);
+                }
+              }
               if (kDebugMode) {
                 print('index is $index, direction is $direction');
-              }
-              controller.label =
-                  direction == SwipeDirection.right ? 'Saved' : 'Seen';
-              if (direction == SwipeDirection.right) {
-                controller.savedVideo(widget.postModel.result![index].id, 1);
-                // log('post id = ' + widget.postModel.result![index].id);
-              } else {
-                controller.savedVideo(widget.postModel.result![index].id, 2);
               }
 
               controller.setVisibleSeen(true);
@@ -107,14 +145,17 @@ class _HomePageWidgetState extends State<HomePageWidget>
               controller.currentItemIndex.value = itemIndex;
               if (this.mounted) {
                 controller.updateProgressOfCard(properties.swipeProgress);
-                controller.updateDirectionOfCard(properties.direction);
+                controller.updateDirectionOfCard(
+                    checkGuestType == 'null' ? null : properties.direction);
               }
               return Stack(
                 children: [
-                  controller.getSliderWidget(
-                      post: widget.postModel.result![itemIndex],
-                      context: context,
-                      itemIndex: itemIndex),
+                  swipeCount > 19
+                      ? SwipeLimitationPage()
+                      : controller.getSliderWidget(
+                          post: widget.postModel.result![itemIndex],
+                          context: context,
+                          itemIndex: itemIndex),
                 ],
               );
             },
@@ -174,38 +215,69 @@ class _HomePageWidgetState extends State<HomePageWidget>
             ),
           ),
         ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding:
-                EdgeInsets.only(bottom: SizeConfig.getSize10(context: context)),
-            child: GestureDetector(
-              onTap: () {
-                controller.swipableStackController
-                    .next(swipeDirection: SwipeDirection.left);
-              },
-              child: Container(
-                height: SizeConfig.getSize35(context: context),
-                width: SizeConfig.getSize35(context: context),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromARGB(71, 60, 60, 60).withOpacity(0.2),
-                        blurRadius: 20,
-                        offset: Offset(
-                          0,
-                          0,
-                        ))
-                  ],
-                ),
-                child: RotatedBox(
-                  quarterTurns: 3,
-                  child: Image.asset(
-                      "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png"),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  controller.swipableStackController
+                      .next(swipeDirection: SwipeDirection.right);
+                },
+                child: Container(
+                  height: SizeConfig.getSize35(context: context),
+                  width: SizeConfig.getSize35(context: context),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color:
+                              Color.fromARGB(71, 60, 60, 60).withOpacity(0.2),
+                          blurRadius: 20,
+                          offset: Offset(
+                            0,
+                            0,
+                          ))
+                    ],
+                  ),
+                  child: RotatedBox(
+                    quarterTurns: 1,
+                    child: Image.asset(
+                        "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png"),
+                  ),
                 ),
               ),
             ),
-          ),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  controller.swipableStackController
+                      .next(swipeDirection: SwipeDirection.left);
+                },
+                child: Container(
+                  height: SizeConfig.getSize35(context: context),
+                  width: SizeConfig.getSize35(context: context),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color:
+                              Color.fromARGB(71, 60, 60, 60).withOpacity(0.2),
+                          blurRadius: 20,
+                          offset: Offset(
+                            0,
+                            0,
+                          ))
+                    ],
+                  ),
+                  child: RotatedBox(
+                    quarterTurns: 3,
+                    child: Image.asset(
+                        "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png"),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ],
     );

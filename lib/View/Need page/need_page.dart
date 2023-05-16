@@ -4,13 +4,14 @@ import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
 import 'package:pitch_me_app/View/Need%20page/need_page_controller.dart';
 import 'package:pitch_me_app/View/navigation_controller.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
+import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../utils/colors/colors.dart';
 import '../../utils/strings/strings.dart';
-import '../../utils/widgets/Arrow Button/arrow_button.dart';
 import '../Custom header view/custom_header_view.dart';
 import '../offer_page/offer_page.dart';
 
@@ -32,193 +33,211 @@ class _NeedPageState extends State<NeedPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+      body: Stack(
         children: [
-          _needPageController.searchingSelectedItems.isNotEmpty ||
-                  (_needPageController.data2[0]['isSelected'] == true ||
-                      _needPageController.data2[1]['isSelected'] == true)
-              ? ArrowButton(onPressed: () {
-                  //Get.back();
-                  if (formKey.currentState!.validate() == true) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    if (_navigationController.navigationType.value == 'Post') {
-                      PageNavigateScreen().push(
-                          context,
-                          OfferPage(
-                            key: abcKey,
-                          ));
-                    } else {
-                      Navigator.of(context).pop();
-                    }
-                  }
-                })
-              : const SizedBox(),
-          NewCustomBottomBar(
-            index: 2,
-          )
-        ],
-      ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Form(
-            key: formKey,
-            child: Column(
-              children: [
-                CustomHeaderView(
-                  title: TextStrings.textKey['needs']!,
-                  icon: 'assets/images/need note.png',
-                  subTitle: TextStrings.textKey['sub_needs']!,
-                  progressPersent: 0.5,
-                  padding: 0,
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, top: 10, bottom: 10, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                          child: customBox(
-                              10.0,
-                              10.0,
-                              0.0,
-                              0.0,
-                              Icons.list_alt,
-                              _needPageController.data[0]['value'],
-                              _needPageController.data[0]['isSelected'],
-                              onPressad: () {
-                        setState(() {
-                          _needPageController.checkColor.value = 1;
-                          _needPageController.onselectValue(0);
-                          _needPageController.customText.value =
-                              'Choose Up to 5 Skills Needed';
-                          _needPageController.itemType.value = 'Skill';
-                        });
-                      })),
-                      Container(
-                        width: 2,
-                        height: 6.h,
-                        color: DynamicColor.white,
-                      ),
-                      Expanded(
-                          child: customBox(
-                        0.0,
-                        0.0,
-                        0.0,
-                        0.0,
-                        Icons.settings_suggest,
-                        _needPageController.data[1]['value'],
-                        _needPageController.data[1]['isSelected'],
-                        onPressad: () {
-                          setState(() {
-                            _needPageController.checkColor.value = 1;
-                            _needPageController.onselectValue(1);
-                            _needPageController.customText.value =
-                                'Choose Up to 5 Services Needed';
-                            _needPageController.itemType.value = 'Service';
-                          });
-                        },
-                      )),
-                      Container(
-                        width: 2,
-                        height: 6.h,
-                        color: DynamicColor.white,
-                      ),
-                      Expanded(
-                          child: customBox(
-                        0.0,
-                        0.0,
-                        10.0,
-                        10.0,
-                        Icons.group,
-                        _needPageController.data[2]['value'],
-                        _needPageController.data[2]['isSelected'],
-                        onPressad: () {
-                          setState(() {
-                            _needPageController.checkColor.value = 1;
-                            _needPageController.onselectValue(2);
-                            _needPageController.customText.value =
-                                'That "Introduction" that makes all the difference';
-                            _needPageController.itemType.value = 'Connection';
-                          });
-                        },
-                      )),
-                    ],
+          SingleChildScrollView(
+            child: Form(
+              key: formKey,
+              child: Column(
+                children: [
+                  CustomHeaderView(
+                    title: TextStrings.textKey['needs']!,
+                    icon: 'assets/images/need note.png',
+                    subTitle: TextStrings.textKey['sub_needs']!,
+                    progressPersent: 0.5,
+                    padding: 0,
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 20, top: 10, bottom: 10, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                          child: customBox(
-                              10.0,
-                              10.0,
-                              0.0,
-                              0.0,
-                              Icons.chair_alt,
-                              _needPageController.data2[0]['value'],
-                              _needPageController.data2[0]['isSelected'],
-                              onPressad: () {
-                        setState(() {
-                          _needPageController.checkColor.value = 1;
-                          _needPageController.onselectValue2(0, 1);
-                          _needPageController.customText.value =
-                              'Take care of the Business on your Behalf';
-
-                          _needPageController.searchingSelectedItems.value = [];
-                          _needPageController.textController.text = '';
-                          _needPageController.searchingItems.value = [];
-                        });
-                      })),
-                      Container(
-                        width: 2,
-                        height: 6.h,
-                        color: DynamicColor.white,
-                      ),
-                      Expanded(
-                          child: customBox(
-                        0.0,
-                        0.0,
-                        10.0,
-                        10.0,
-                        Icons.local_atm,
-                        _needPageController.data2[1]['value'],
-                        _needPageController.data2[1]['isSelected'],
-                        onPressad: () {
+                  Padding(
+                    padding: EdgeInsets.only(
+                        top: 10,
+                        bottom: 5,
+                        left: SizeConfig.getFontSize25(context: context),
+                        right: SizeConfig.getFontSize25(context: context)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                            child: customBox(
+                                10.0,
+                                10.0,
+                                0.0,
+                                0.0,
+                                Icons.list_alt,
+                                _needPageController.data[0]['value'],
+                                _needPageController.data[0]['isSelected'],
+                                onPressad: () {
                           setState(() {
                             _needPageController.checkColor.value = 1;
-                            _needPageController.onselectValue2(1, 0);
+                            _needPageController.onselectValue(0);
                             _needPageController.customText.value =
-                                'Sell Your Business';
+                                'Choose Up to 5 Skills Needed';
+                            _needPageController.itemType.value = 'Skill';
+                          });
+                        })),
+                        Container(
+                          width: 2,
+                          height: 6.h,
+                          color: DynamicColor.white,
+                        ),
+                        Expanded(
+                            child: customBox(
+                          0.0,
+                          0.0,
+                          0.0,
+                          0.0,
+                          Icons.settings_suggest,
+                          _needPageController.data[1]['value'],
+                          _needPageController.data[1]['isSelected'],
+                          onPressad: () {
+                            setState(() {
+                              _needPageController.checkColor.value = 1;
+                              _needPageController.onselectValue(1);
+                              _needPageController.customText.value =
+                                  'Choose Up to 5 Services Needed';
+                              _needPageController.itemType.value = 'Service';
+                            });
+                          },
+                        )),
+                        Container(
+                          width: 2,
+                          height: 6.h,
+                          color: DynamicColor.white,
+                        ),
+                        Expanded(
+                            child: customBox(
+                          0.0,
+                          0.0,
+                          10.0,
+                          10.0,
+                          Icons.group,
+                          _needPageController.data[2]['value'],
+                          _needPageController.data[2]['isSelected'],
+                          onPressad: () {
+                            setState(() {
+                              _needPageController.checkColor.value = 1;
+                              _needPageController.onselectValue(2);
+                              _needPageController.customText.value =
+                                  'That "Introduction" that makes all the difference';
+                              _needPageController.itemType.value = 'Connection';
+                            });
+                          },
+                        )),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(
+                        bottom: 10,
+                        left: SizeConfig.getFontSize25(context: context),
+                        right: SizeConfig.getFontSize25(context: context)),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                            child: customBox(
+                                10.0,
+                                10.0,
+                                0.0,
+                                0.0,
+                                Icons.chair_alt,
+                                _needPageController.data2[0]['value'],
+                                _needPageController.data2[0]['isSelected'],
+                                onPressad: () {
+                          setState(() {
+                            _needPageController.checkColor.value = 1;
+                            _needPageController.onselectValue2(0, 1);
+                            _needPageController.customText.value =
+                                'Take care of the Business on your Behalf';
 
                             _needPageController.searchingSelectedItems.value =
                                 [];
                             _needPageController.textController.text = '';
                             _needPageController.searchingItems.value = [];
                           });
-                        },
-                      )),
-                    ],
+                        })),
+                        Container(
+                          width: 2,
+                          height: 6.h,
+                          color: DynamicColor.white,
+                        ),
+                        Expanded(
+                            child: customBox(
+                          0.0,
+                          0.0,
+                          10.0,
+                          10.0,
+                          Icons.local_atm,
+                          _needPageController.data2[1]['value'],
+                          _needPageController.data2[1]['isSelected'],
+                          onPressad: () {
+                            setState(() {
+                              _needPageController.checkColor.value = 1;
+                              _needPageController.onselectValue2(1, 0);
+                              _needPageController.customText.value =
+                                  'Sell Your Business';
+
+                              _needPageController.searchingSelectedItems.value =
+                                  [];
+                              _needPageController.textController.text = '';
+                              _needPageController.searchingItems.value = [];
+                            });
+                          },
+                        )),
+                      ],
+                    ),
                   ),
-                ),
-                _needPageController.selectedNeedType.value.isEmpty
-                    ? Container()
-                    : _footerHint(),
-                _needPageController.customText.value.isNotEmpty
-                    ? _searchBar()
-                    : Container(),
-                searchItemList(),
-              ],
+                  _needPageController.selectedNeedType.value.isEmpty
+                      ? Container()
+                      : _footerHint(),
+                  _needPageController.customText.value.isNotEmpty
+                      ? _searchBar()
+                      : Container(),
+                  searchItemList(),
+                ],
+              ),
             ),
           ),
-        ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              BackArrow(
+                  alignment: Alignment.centerLeft,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icons.arrow_back_ios),
+              _needPageController.searchingSelectedItems.isNotEmpty ||
+                      (_needPageController.data2[0]['isSelected'] == true ||
+                          _needPageController.data2[1]['isSelected'] == true)
+                  ? BackArrow(
+                      alignment: Alignment.centerRight,
+                      onPressed: () {
+                        try {
+                          if (formKey.currentState!.validate() == true) {
+                            FocusScope.of(context).requestFocus(FocusNode());
+                            if (_navigationController.navigationType.value ==
+                                'Post') {
+                              PageNavigateScreen().push(
+                                  context,
+                                  OfferPage(
+                                    key: abcKey,
+                                  ));
+                            } else {
+                              Navigator.of(context).pop();
+                            }
+                          }
+                        } catch (e) {}
+                      },
+                      icon: Icons.arrow_forward_ios)
+                  : Container(),
+            ],
+          ),
+          NewCustomBottomBar(
+            index: 2,
+          ),
+        ],
       ),
     );
   }
@@ -258,8 +277,8 @@ class _NeedPageState extends State<NeedPage> {
                               ),
                             ),
                             SizedBox(
-                              // height: 5.h,
-                              width: MediaQuery.of(context).size.width - 80,
+                              height: 45,
+                              width: MediaQuery.of(context).size.width - 95,
                               child: TextFormField(
                                 cursorHeight: 22,
                                 controller: _needPageController.textController,
@@ -276,7 +295,7 @@ class _NeedPageState extends State<NeedPage> {
                                       color:
                                           DynamicColor.blue.withOpacity(0.5)),
                                   contentPadding: const EdgeInsets.only(
-                                    bottom: 10,
+                                    //bottom: 10,
                                     left: 10,
                                     right: 10,
                                   ),
@@ -310,7 +329,7 @@ class _NeedPageState extends State<NeedPage> {
                                       color: DynamicColor.blue,
                                       borderRadius: BorderRadius.circular(50)),
                                   padding: EdgeInsets.only(left: 10, right: 10),
-                                  margin: EdgeInsets.only(right: 5),
+                                  margin: EdgeInsets.only(right: 5, left: 15),
                                   child: Wrap(
                                     // alignment: WrapAlignment.center,
                                     crossAxisAlignment:
@@ -362,13 +381,12 @@ class _NeedPageState extends State<NeedPage> {
                   borderRadius: BorderRadius.circular(10)),
               child: GetBuilder<NeedPageController>(
                   builder: (_needPageController) {
-                return ListView.separated(
+                return ListView.builder(
                     itemCount: _needPageController.searchingItems.length,
                     shrinkWrap: true,
                     primary: false,
-                    separatorBuilder: (context, index) => Divider(
-                          height: 0,
-                        ),
+                    padding: EdgeInsets.zero,
+                    //separatorBuilder: (context, index) =>
                     itemBuilder: (context, index) {
                       dynamic data = _needPageController.searchingItems[index];
 
@@ -433,7 +451,7 @@ class _NeedPageState extends State<NeedPage> {
     return InkWell(
       onTap: onPressad,
       child: Container(
-        height: 6.h,
+        height: 5.h,
         // padding: const EdgeInsets.only(left: 15, right: 15),
         alignment: Alignment.center,
         decoration: BoxDecoration(

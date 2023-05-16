@@ -2,11 +2,12 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
+import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/View/Profile/Likes/controller.dart';
 import 'package:pitch_me_app/View/Profile/Likes/detail_page.dart';
 import 'package:pitch_me_app/View/Profile/Likes/model.dart';
-import 'package:pitch_me_app/View/posts/profile_appbar.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
@@ -40,39 +41,44 @@ class _LikesListPageState extends State<LikesListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: NewCustomBottomBar(
-        index: 4,
-        isBack: true,
-      ),
       body: Stack(
-        children: [_buildBodyView(), BackArrow()],
-      ),
-    );
-  }
-
-  Widget _buildBodyView() {
-    return SafeArea(
-      child: Padding(
-        padding: EdgeInsets.only(
-            top: MediaQuery.of(context).size.height * 0.014,
-            left: SizeConfig.getSize20(context: context),
-            right: SizeConfig.getSize20(context: context)),
-        child: Column(
-          children: [
-            ProfilePostHeader(
-              title: 'Likes',
-            ),
-            const SizedBox(height: 30),
-            _postListWidget(),
-          ],
-        ),
+        children: [
+          _postListWidget(),
+          BackArrow(
+            alignment: Alignment.centerLeft,
+            icon: Icons.arrow_back_ios,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          CustomAppbar(
+            title: 'Likes',
+            onPressad: () {
+              PageNavigateScreen().push(
+                  context,
+                  ManuPage(
+                    title: 'Likes',
+                    pageIndex: 4,
+                    isManu: 'Manu',
+                  ));
+            },
+            onPressadForNotify: () {},
+          ),
+          NewCustomBottomBar(
+            index: 4,
+            isBack: true,
+          ),
+        ],
       ),
     );
   }
 
   Widget _postListWidget() {
-    return Expanded(
+    return Padding(
+      padding: EdgeInsets.only(
+          top: SizeConfig.getSize60(context: context),
+          left: SizeConfig.getSize25(context: context),
+          right: SizeConfig.getSize25(context: context)),
       child: FutureBuilder<SavedLikeListModel>(
           future: controller.getSavedLikeListApi(),
           builder: (context, snapshot) {
@@ -101,7 +107,7 @@ class _LikesListPageState extends State<LikesListPage> {
                       itemBuilder: (context, index) {
                         LikeResult data = snapshot.data!.result[index];
                         String url = Uri.encodeFull(
-                            'https://api.salespitchapp.com/' + data.file);
+                            'http://191.101.229.245:9070/' + data.file);
                         // _initVideoPlayer(url);
 
                         return Card(
@@ -113,7 +119,7 @@ class _LikesListPageState extends State<LikesListPage> {
                                     SizedBox(
                                       width: MediaQuery.of(context).size.width,
                                       child: VideoViewer(
-                                        controller: _videoPlayerController,
+                                        // controller: _videoPlayerController,
                                         autoPlay: false,
                                         enableHorizontalSwapingGesture: false,
                                         enableVerticalSwapingGesture: false,

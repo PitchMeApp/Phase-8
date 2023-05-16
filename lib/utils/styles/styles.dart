@@ -60,6 +60,11 @@ TextStyle darkBlue15 = const TextStyle(
   fontSize: 15,
   fontWeight: FontWeight.bold,
 );
+TextStyle darkBlue19 = const TextStyle(
+  color: DynamicColor.darkBlue,
+  fontSize: 19,
+  fontWeight: FontWeight.bold,
+);
 TextStyle red15 = const TextStyle(
   color: DynamicColor.redColor,
   fontSize: 15,

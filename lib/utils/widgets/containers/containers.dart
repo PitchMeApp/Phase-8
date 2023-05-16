@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/strings/images.dart';
+import 'package:pitch_me_app/utils/styles/styles.dart';
 
 Widget appLogoImage({double? height, double? width, bool isDark = true}) {
   return Image.asset(
@@ -30,7 +31,8 @@ Widget textFieldContainer(
 }
 
 Widget whiteBorderContainer(
-    {double? height,
+    {Color? color,
+    double? height,
     double? width,
     required Widget child,
     double cornerRadius = 30}) {
@@ -39,8 +41,10 @@ Widget whiteBorderContainer(
     height: height,
     decoration: BoxDecoration(
       borderRadius: BorderRadius.circular(cornerRadius),
-      color: const Color(0xffffffff),
-      border: Border.all(width: 1.0, color: const Color(0xff707070)),
+      color: (color == null) ? const Color(0xffffffff) : color,
+      border: (color != null)
+          ? null
+          : Border.all(width: 1.0, color: const Color(0xff707070)),
     ),
     child: child,
   );
@@ -148,12 +152,12 @@ class _buttonContainerState extends State<buttonContainer> {
                     ]
                   : [
                       BoxShadow(
-                        color: const Color(0xff599cd0),
+                        color: DynamicColor.blue,
                         offset: Offset(5, 5),
                         blurRadius: 20,
                       ),
                       BoxShadow(
-                        color: const Color(0xff599cd0),
+                        color: DynamicColor.blue,
                         offset: Offset(-5, -5),
                         blurRadius: 10,
                       ),
@@ -170,6 +174,58 @@ class _buttonContainerState extends State<buttonContainer> {
           ),
         ],
       ),
+    );
+  }
+}
+
+class NewButtonContainer extends StatefulWidget {
+  String title;
+  String subTitle;
+  int heroTage;
+  VoidCallback onTap;
+  NewButtonContainer({
+    super.key,
+    required this.onTap,
+    required this.title,
+    required this.subTitle,
+    required this.heroTage,
+  });
+
+  @override
+  State<NewButtonContainer> createState() => _NewButtonContainerState();
+}
+
+class _NewButtonContainerState extends State<NewButtonContainer> {
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 50,
+          width: MediaQuery.of(context).size.width - 40,
+          child: FloatingActionButton.extended(
+              heroTag: widget.heroTage,
+              backgroundColor: DynamicColor.white,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              onPressed: widget.onTap,
+              label: Text(
+                widget.title,
+                style: blue17,
+              )),
+        ),
+        SizedBox(
+          width: MediaQuery.of(context).size.width - 40,
+          child: Padding(
+            padding: const EdgeInsets.only(top: 5, bottom: 5),
+            child: Text(
+              widget.subTitle,
+              style: white13TextStyle,
+              textAlign: TextAlign.center,
+            ),
+          ),
+        )
+      ],
     );
   }
 }
@@ -293,6 +349,7 @@ class AppBarIconContainer extends StatefulWidget {
   final Widget child;
   double cornerRadius;
   Animation? colorTween;
+  VoidCallback? onTap;
   AppBarIconContainer({
     Key? key,
     this.height,
@@ -300,6 +357,7 @@ class AppBarIconContainer extends StatefulWidget {
     required this.child,
     this.cornerRadius = 10,
     required this.colorTween,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -315,10 +373,7 @@ class _AppBarIconContainerState extends State<AppBarIconContainer> {
         animation: widget.colorTween!,
         builder: (context, child) {
           return InkWell(
-            onTap: () {
-              isPressed = !isPressed;
-              setState(() {});
-            },
+            onTap: widget.onTap,
             child: Container(
               height: widget.height,
               width: widget.width,

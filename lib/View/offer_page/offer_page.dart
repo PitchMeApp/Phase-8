@@ -6,10 +6,10 @@ import 'package:pitch_me_app/View/offer_page/controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
+import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
 import '../../utils/strings/strings.dart';
-import '../../utils/widgets/Arrow Button/arrow_button.dart';
 import '../Add Image Page/addImage_page.dart';
 import '../Custom header view/custom_header_view.dart';
 
@@ -32,47 +32,59 @@ class _OfferPageState extends State<OfferPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          _offerPageController.offrerTextController.text.isNotEmpty
-              ? ArrowButton(onPressed: () {
-                  //Get.back();
-                  if (formKey.currentState!.validate() == true) {
-                    FocusScope.of(context).requestFocus(FocusNode());
-                    if (_navigationController.navigationType.value == 'Post') {
-                      PageNavigateScreen().push(
-                          context,
-                          AddImagePage(
-                            key: abcKey,
-                          ));
-                    } else {
+      body: Form(
+        key: formKey,
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                CustomHeaderView(
+                  title: TextStrings.textKey['offer']!,
+                  icon: 'assets/images/offer image.png',
+                  subTitle: TextStrings.textKey['sub_offer']!,
+                  progressPersent: 0.6,
+                  padding: 0,
+                ),
+                _searchBar()
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                BackArrow(
+                    alignment: Alignment.centerLeft,
+                    onPressed: () {
                       Navigator.of(context).pop();
-                    }
-                  }
-                })
-              : const SizedBox(),
-          NewCustomBottomBar(
-            index: 2,
-          )
-        ],
-      ),
-      body: SafeArea(
-        child: Form(
-          key: formKey,
-          child: Column(
-            children: [
-              CustomHeaderView(
-                title: TextStrings.textKey['offer']!,
-                icon: 'assets/images/offer image.png',
-                subTitle: "",
-                progressPersent: 0.6,
-                padding: 0,
-              ),
-              _searchBar()
-            ],
-          ),
+                    },
+                    icon: Icons.arrow_back_ios),
+                _offerPageController.offrerTextController.text.isNotEmpty
+                    ? BackArrow(
+                        alignment: Alignment.centerRight,
+                        onPressed: () {
+                          try {
+                            if (formKey.currentState!.validate() == true) {
+                              FocusScope.of(context).requestFocus(FocusNode());
+                              if (_navigationController.navigationType.value ==
+                                  'Post') {
+                                PageNavigateScreen().push(
+                                    context,
+                                    AddImagePage(
+                                      key: abcKey,
+                                    ));
+                              } else {
+                                Navigator.of(context).pop();
+                              }
+                            }
+                          } catch (e) {}
+                        },
+                        icon: Icons.arrow_forward_ios)
+                    : Container(),
+              ],
+            ),
+            NewCustomBottomBar(
+              index: 2,
+            ),
+          ],
         ),
       ),
     );
@@ -80,7 +92,7 @@ class _OfferPageState extends State<OfferPage> {
 
   Widget _searchBar() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 10),
       child: Row(
         children: [
           Expanded(
@@ -90,6 +102,7 @@ class _OfferPageState extends State<OfferPage> {
               cursorHeight: 22,
               controller: _offerPageController.offrerTextController,
               style: blue15,
+              maxLines: 5,
               decoration: InputDecoration(
                   hintText:
                       'Ex: Every 10.000 USD = 5% Ownership.Every 50.000 usd also 3% Royalties.',

@@ -86,7 +86,7 @@ class HomePageController extends GetxController {
     "https://saturncube.com/temp-video/video15.mov",
   ];
   Widget getSliderWidget(
-      {required Result post,
+      {required Results post,
       required BuildContext context,
       required int itemIndex}) {
     debugPrint("Post type is ${post.type}");

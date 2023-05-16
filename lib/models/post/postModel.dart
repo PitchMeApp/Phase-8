@@ -15,12 +15,12 @@ class PostModel {
   });
 
   String? message;
-  List<Result>? result;
+  List<Results>? result;
 
   factory PostModel.fromJson(Map<String, dynamic> json) => PostModel(
         message: json["message"],
         result:
-            List<Result>.from(json["result"].map((x) => Result.fromJson(x))),
+            List<Results>.from(json["result"].map((x) => Results.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -29,8 +29,8 @@ class PostModel {
       };
 }
 
-class Result {
-  Result({
+class Results {
+  Results({
     required this.id,
     required this.type,
     required this.file,
@@ -48,7 +48,7 @@ class Result {
   DateTime createdAt;
   dynamic title;
 
-  factory Result.fromJson(Map<String, dynamic> json) => Result(
+  factory Results.fromJson(Map<String, dynamic> json) => Results(
         id: json["_id"],
         type: json["type"],
         file: json["file"],

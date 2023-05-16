@@ -3,13 +3,21 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pitch_me_app/View/Custom%20header%20view/custom_header_view.dart';
+import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/login_limitation.dart';
+import 'package:pitch_me_app/Phase%206/Guest%20UI/Profile/manu.dart';
+import 'package:pitch_me_app/View/Add%20Image%20Page/addImage_page.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
+import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/View/Select%20industry/select_industry.dart';
 import 'package:pitch_me_app/View/navigation_controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
-import 'package:pitch_me_app/utils/strings/strings.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/arrow_button.dart';
+import 'package:pitch_me_app/utils/extras/extras.dart';
+import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
+import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_viewer/video_viewer.dart';
+
+import '../../Phase 6/Guest UI/Guest limitation pages/user_type_limitation.dart';
 
 class DemoVideoPage extends StatefulWidget {
   const DemoVideoPage({super.key});
@@ -21,28 +29,35 @@ class DemoVideoPage extends StatefulWidget {
 class _DemoVideoPageState extends State<DemoVideoPage> {
   final NavigationController _navigationController =
       Get.put(NavigationController());
-  late VideoPlayerController _videoPlayerController;
+  //late VideoPlayerController _videoPlayerController;
+  VideoViewerController videoViewerController = VideoViewerController();
   bool isLoading = false;
   bool isCheck = false;
 
-  Future _initVideoPlayer() async {
-    _videoPlayerController = VideoPlayerController.network(
-        'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4');
-    await _videoPlayerController.initialize();
-    await _videoPlayerController.setLooping(true);
-    //await _videoPlayerController.play();
-  }
+  String checkGuestType = '';
+  String businesstype = '';
 
-  repalyVideo() async {
-    await _videoPlayerController.play();
-  }
+  // Future _initVideoPlayer() async {
+  //   _videoPlayerController = VideoPlayerController.network(
+  //       'https://ciu.ody.mybluehostin.me/ringbell/watchsales.mp4'
+  //       //'https://sample-videos.com/video123/mp4/720/big_buck_bunny_720p_1mb.mp4'
+  //       );
+  //   await _videoPlayerController.initialize();
+  //   await _videoPlayerController.setLooping(true);
+  //   //await _videoPlayerController.play();
+  // }
+
+  // repalyVideo() async {
+  //   await _videoPlayerController.play();
+  // }
 
   @override
   void initState() {
     setState(() {
-      isLoading = true;
+      // isLoading = true;
     });
-    _initVideoPlayer();
+    checkGuest();
+    //  _initVideoPlayer();
 
     Timer(const Duration(seconds: 3), () {
       setState(() {
@@ -52,111 +67,175 @@ class _DemoVideoPageState extends State<DemoVideoPage> {
     super.initState();
   }
 
+  void checkGuest() async {
+    SharedPreferences preferencesData = await SharedPreferences.getInstance();
+    setState(() {
+      checkGuestType = preferencesData.getString('guest').toString();
+      businesstype = preferencesData.getString('log_type').toString();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: Column(
-        children: [
-          CustomHeaderView(
-            title: TextStrings.textKey['post_seles']!,
-            icon: 'assets/images/record.png',
-            subTitle: TextStrings.textKey['post_seles_sub']!,
-            progressPersent: 0.0,
-            padding: 25,
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-              flex: 6,
-              child: isLoading == true
-                  ? Center(
-                      child: CircularProgressIndicator(
-                      color: DynamicColor.blue,
-                    ))
-                  : Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              _videoPlayerController.value.isPlaying
-                                  ? _videoPlayerController.pause()
-                                  : _videoPlayerController.play();
-                            });
-                          },
-                          child: Container(
-                              margin:
-                                  const EdgeInsets.symmetric(horizontal: 20),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20)),
-                              child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: VideoPlayer(_videoPlayerController))),
-                        ),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            InkWell(
-                              onTap: () {
-                                setState(() {
-                                  isCheck = true;
-                                  _videoPlayerController.value.isPlaying
-                                      ? _videoPlayerController.pause()
-                                      : _videoPlayerController.play();
-                                });
-                              },
-                              child: _videoPlayerController.value.isPlaying
-                                  ? Container()
-                                  : Stack(
-                                      alignment: Alignment.center,
-                                      children: [
-                                        Image.asset(
-                                          "assets/images/white_box.png",
-                                          height: 100,
-                                          width: 100,
-                                          color: DynamicColor.white,
-                                        ),
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 0, right: 0),
-                                          child: Icon(
-                                            _videoPlayerController
-                                                    .value.isPlaying
-                                                ? Icons.pause
-                                                : Icons.play_arrow,
-                                            color: DynamicColor.blue,
-                                            size: 50,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
+      body: isCheck == true
+          ? UserTypeLimitationPage(
+              title1:
+                  'Only Business Owners or Business Ideas can access "Add Sales Pitch" Page',
+              title2:
+                  'Make sure after Signing Up with different email, you select Business Owner or Business Idea')
+          : Stack(
+              children: [
+                // isLoading == true
+                //     ? Center(
+                //         child: CircularProgressIndicator(
+                //         color: DynamicColor.blue,
+                //       ))
+                //     :
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      width: width(context),
+                      height: height(context),
+                      color: Color.fromARGB(255, 254, 254, 254),
+                      child: VideoViewer(
+                        controller: videoViewerController,
+                        autoPlay: false,
+                        enableHorizontalSwapingGesture: false,
+                        enableVerticalSwapingGesture: false,
+                        volumeManager: VideoViewerVolumeManager.device,
+                        onFullscreenFixLandscape: false,
+                        forwardAmount: 5,
+                        defaultAspectRatio: 9 / 16,
+                        rewindAmount: -5,
+                        looping: true,
+                        enableShowReplayIconAtVideoEnd: false,
+                        style: VideoViewerStyle(
+                            playAndPauseStyle: PlayAndPauseWidgetStyle(
+                              background: Colors.transparent,
+                              circleRadius: 80.0,
+                              play: Center(
+                                child: Icon(
+                                  Icons.play_arrow,
+                                  size: 80,
+                                  color: DynamicColor.white,
+                                ),
+                              ),
+                              pause: Center(
+                                child: Icon(
+                                  Icons.pause,
+                                  size: 80,
+                                  color: DynamicColor.white,
+                                ),
+                              ),
                             ),
-                          ],
-                        )
-                      ],
-                    )),
-          Expanded(
-              flex: 1,
-              child: isCheck
-                  ? ArrowButton(
+                            thumbnail: Image.network(''),
+                            loading: CircularProgressIndicator(
+                              color: Colors.blue,
+                            )),
+                        source: {
+                          "Source": VideoSource(
+                            video: VideoPlayerController.network(
+                                'https://ciu.ody.mybluehostin.me/ringbell/addwatchsales.mp4'),
+                          )
+                        },
+                      ),
+                    ),
+                    // Column(
+                    //   mainAxisAlignment: MainAxisAlignment.center,
+                    //   crossAxisAlignment: CrossAxisAlignment.center,
+                    //   children: [
+                    //     InkWell(
+                    //       onTap: () {
+                    //         setState(() {
+                    //           videoViewerController.isPlaying
+                    //               ? videoViewerController.pause()
+                    //               : videoViewerController.play();
+                    //         });
+                    //       },
+                    //       child: videoViewerController.isPlaying
+                    //           ? Container()
+                    //           : Stack(
+                    //               alignment: Alignment.center,
+                    //               children: [
+                    //                 // Image.asset(
+                    //                 //   "assets/images/white_box.png",
+                    //                 //   height: 100,
+                    //                 //   width: 100,
+                    //                 //   color: DynamicColor.white,
+                    //                 // ),
+                    //                 Padding(
+                    //                   padding: const EdgeInsets.only(
+                    //                       bottom: 0, right: 0),
+                    //                   child: Icon(
+                    //                     videoViewerController.isPlaying
+                    //                         ? Icons.pause
+                    //                         : Icons.play_arrow,
+                    //                     color: DynamicColor.white,
+                    //                     size: 80,
+                    //                   ),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //     ),
+                    //   ],
+                    // ),
+                    BackArrow(
+                      alignment: Alignment.centerRight,
+                      icon: Icons.arrow_forward_ios,
                       onPressed: () {
-                        _videoPlayerController.pause();
-                        _navigationController.navigationType.value = 'Post';
-                        Get.to(() => SelectIndustryPage());
+                        if (checkGuestType.isNotEmpty &&
+                            checkGuestType != 'null') {
+                          if (businesstype == '3' || businesstype == '4') {
+                            setState(() {
+                              isCheck = true;
+                            });
+                          } else {
+                            videoViewerController.pause();
+                            _navigationController.navigationType.value = 'Post';
+                            Get.to(() => SelectIndustryPage());
+                          }
+                        } else {
+                          Get.to(() => LoginLimitationPage());
+                        }
                       },
-                    )
-                  : Container())
-        ],
-      )),
+                    ),
+                    CustomAppbar(
+                      title: 'Add Sales Pitch',
+                      onPressad: () {
+                        if (checkGuestType.isNotEmpty &&
+                            checkGuestType != 'null') {
+                          PageNavigateScreen().push(
+                              context,
+                              ManuPage(
+                                title: 'Add Sales Pitch',
+                                pageIndex: 2,
+                                isManu: 'Manu',
+                              ));
+                        } else {
+                          Get.to(() => GuestManuPage(
+                                title: 'Add Sales Pitch',
+                                pageIndex: 2,
+                              ));
+                        }
+                      },
+                      onPressadForNotify: () {},
+                    ),
+                  ],
+                  //)
+                ),
+              ],
+            ),
     );
   }
 
   @override
   void dispose() {
     log('video');
-    _videoPlayerController.pause();
-    _videoPlayerController.dispose();
+    videoViewerController.pause();
+    videoViewerController.dispose();
 
     super.dispose();
   }

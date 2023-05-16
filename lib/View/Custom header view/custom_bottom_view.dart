@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/screens/businessIdeas/BottomNavigation.dart';
+import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 
 class CustomFloatbar extends StatefulWidget {
   CustomFloatbar();
@@ -26,9 +28,9 @@ class Custom_FloatbarState extends State<CustomFloatbar>
 
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _colorTween =
-        ColorTween(begin: Color(0xff599CD0), end: Colors.white.withOpacity(0.3))
-            .animate(_animationController);
+    _colorTween = ColorTween(begin: DynamicColor.blue, end: DynamicColor.blue)
+        //Colors.white.withOpacity(0.3)
+        .animate(_animationController);
     Future.delayed(const Duration(seconds: 0), () {
       _animationController.status == AnimationStatus.completed
           ? _animationController.reset()
@@ -62,92 +64,96 @@ class Custom_FloatbarState extends State<CustomFloatbar>
   Widget build(BuildContext context) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
-    return Padding(
-        padding: EdgeInsets.only(
-          bottom: sizeH * 0.02,
-          left: sizeW * 0.015,
-          right: sizeW * 0.015,
-          top: sizeW * 0.05,
-        ),
-        child: AnimatedBuilder(
-            animation: _colorTween,
-            builder: (context, child) {
-              return Container(
-                height: sizeH * 0.07,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  color: _colorTween.value,
-                  boxShadow: [
-                    BoxShadow(
-                      color: Color.fromARGB(109, 20, 20, 20).withOpacity(0.3),
-                      blurRadius: 25.0,
-                      spreadRadius: 25,
-                      offset: Offset(
-                        20,
-                        20,
-                      ),
-                    )
-                  ],
-                ),
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: iconlist.length,
-                  itemBuilder: (context, index) {
-                    return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        SizedBox(
-                          width: sizeW * 0.06,
-                        ),
-                        InkWell(
-                            onTap: () async {
-                              Future changeColors() async {
-                                await Future.delayed(const Duration(seconds: 0),
-                                    () {
-                                  _animationController.status ==
-                                          AnimationStatus.completed
-                                      ? _animationController.reset()
-                                      : _animationController.forward();
+    return Align(
+      alignment: Alignment.bottomCenter,
+      child: Padding(
+          padding: EdgeInsets.only(
+            bottom: sizeH * 0.066,
+            left: SizeConfig.getFontSize25(context: context),
+            right: SizeConfig.getFontSize25(context: context),
+            top: sizeW * 0.05,
+          ),
+          child: AnimatedBuilder(
+              animation: _colorTween,
+              builder: (context, child) {
+                return Container(
+                  height: sizeH * 0.07,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: DynamicColor.blue,
+                    //_colorTween.value,
+                    boxShadow: [
+                      // BoxShadow(
+                      //   color: Color.fromARGB(109, 20, 20, 20).withOpacity(0.3),
+                      //   blurRadius: 25.0,
+                      //   spreadRadius: 25,
+                      //   offset: Offset(
+                      //     20,
+                      //     20,
+                      //   ),
+                      // )
+                    ],
+                  ),
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    itemCount: iconlist.length,
+                    itemBuilder: (context, index) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          SizedBox(
+                            width: sizeW * 0.05,
+                          ),
+                          InkWell(
+                              onTap: () async {
+                                Future changeColors() async {
+                                  await Future.delayed(
+                                      const Duration(seconds: 0), () {
+                                    _animationController.status ==
+                                            AnimationStatus.completed
+                                        ? _animationController.reset()
+                                        : _animationController.forward();
+                                  });
+                                }
+
+                                Duration(seconds: 0);
+                                _colorTween = ColorTween(
+                                        begin: DynamicColor.blue,
+                                        end: Colors.white.withOpacity(0.3))
+                                    .animate(_animationController);
+
+                                _animationController.repeat();
+                                changeColors();
+
+                                setState(() {
+                                  selectIndex = index;
+                                  isSelectedScreen = false;
                                 });
-                              }
+                                if (index != 2) {
+                                  Get.offAll(() => Floatbar(index));
 
-                              Duration(seconds: 0);
-                              _colorTween = ColorTween(
-                                      begin: Color(0xff599CD0),
-                                      end: Colors.white.withOpacity(0.3))
-                                  .animate(_animationController);
-
-                              _animationController.repeat();
-                              changeColors();
-
-                              setState(() {
-                                selectIndex = index;
-                                isSelectedScreen = false;
-                              });
-                              if (index != 2) {
-                                Get.offAll(() => Floatbar(index));
-
-                                // PageNavigateScreen()
-                                //     .push(context, );
-                              }
-                            },
-                            child: Container(
-                                height: sizeH * 0.08,
-                                width: sizeW * 0.07,
-                                child: Image.asset(
-                                  selectIndex == index
-                                      ? filleIcons[index]
-                                      : iconlist[index],
-                                ))),
-                        SizedBox(
-                          width: sizeW * 0.06,
-                        )
-                      ],
-                    );
-                  },
-                ),
-              );
-            }));
+                                  // PageNavigateScreen()
+                                  //     .push(context, );
+                                }
+                              },
+                              child: Container(
+                                  height: sizeH * 0.08,
+                                  width: sizeW * 0.07,
+                                  child: Image.asset(
+                                    selectIndex == index
+                                        ? filleIcons[index]
+                                        : iconlist[index],
+                                  ))),
+                          SizedBox(
+                            width: sizeW * 0.05,
+                          )
+                        ],
+                      );
+                    },
+                  ),
+                );
+              })),
+    );
   }
 
   @override

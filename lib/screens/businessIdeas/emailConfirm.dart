@@ -1,8 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:pitch_me_app/utils/strings/images.dart';
-import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
+import 'package:get/get.dart';
+import 'package:pitch_me_app/controller/auth/loginController.dart';
+import 'package:pitch_me_app/screens/auth/loginScreen.dart';
+import 'package:sizer/sizer.dart';
 
 class Email_screen extends StatefulWidget {
   const Email_screen({super.key});
@@ -32,13 +32,13 @@ class _Email_screenState extends State<Email_screen> {
             child: Center(
               child: Image.asset(
                 "assets/image/Group 12262.png",
-                height: sizeH * 0.13,
+                height: sizeH * 0.09,
               ),
             ),
           )),
         ),
         SizedBox(
-          height: sizeH * 0.06,
+          height: sizeH * 0.03,
         ),
         Container(
             child: Padding(
@@ -52,7 +52,7 @@ class _Email_screenState extends State<Email_screen> {
           height: sizeH * 0.05,
         ),
         Text(
-          "A confirmation link has been",
+          "A Confirmation Link has been",
           style: TextStyle(
               fontSize: sizeH * 0.027,
               fontWeight: FontWeight.bold,
@@ -70,8 +70,41 @@ class _Email_screenState extends State<Email_screen> {
         SizedBox(
           height: sizeH * 0.05,
         ),
+        InkWell(
+          onTap: () {
+            Get.offAll(() => LoginScreen(), binding: LoginBinding());
+          },
+          child: Container(
+            height: 6.h,
+            width: sizeW - 40,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: Color(0xff377EB4),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset(
+                  "assets/images/logout.png",
+                  height: 25,
+                ),
+                SizedBox(
+                  width: sizeW * 0.015,
+                ),
+                Text(
+                  "Log in",
+                  style: TextStyle(
+                      color: Colors.white, fontWeight: FontWeight.bold),
+                )
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          height: sizeH * 0.05,
+        ),
         Text(
-          "If you can't find it Check ",
+          "If you can't find it, check in",
           style: TextStyle(
               fontSize: sizeH * 0.027,
               fontWeight: FontWeight.bold,
@@ -79,7 +112,7 @@ class _Email_screenState extends State<Email_screen> {
               color: Color(0xff377EB4)),
         ),
         Text(
-          "Junk/Spam Box",
+          "Junk/Spam",
           style: TextStyle(
               fontSize: sizeH * 0.027,
               fontWeight: FontWeight.bold,

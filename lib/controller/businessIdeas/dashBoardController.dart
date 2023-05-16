@@ -1,10 +1,12 @@
 import 'dart:developer';
 
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/core/apis/postScreenApi.dart';
 import 'package:pitch_me_app/models/post/postModel.dart';
 import 'package:pitch_me_app/models/statisticsModel/statisticsModel.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashboardController extends GetxController {
   BusinessIdeasApi businessIdeasApi = BusinessIdeasApi();
@@ -22,17 +24,55 @@ class DashboardController extends GetxController {
     try {
       isLoadingPost.value = true;
       hasError.value = false;
+      SharedPreferences prefs = await SharedPreferences.getInstance();
       await businessIdeasApi.getPost().then((value) {
         if (value != null) {
-          postModel.value = value;
-          isLoadingPost.value = false;
-          onSwipe(0, postModel.value.result![0].title!.toString(), false);
+          var userID = prefs.getString('user_id').toString();
+          if (userID.isNotEmpty && userID != 'null') {
+            postModel.value = value;
+            isLoadingPost.value = false;
+            onSwipe(0, postModel.value.result![0].title!.toString(), false);
+          } else {
+            if (prefs.getString('count_swipe') == null) {
+              postModel.value = value;
+              isLoadingPost.value = false;
+              onSwipe(0, postModel.value.result![0].title!.toString(), false);
+            } else {
+              var seencount =
+                  int.parse(prefs.getString('count_swipe').toString());
+              if (value.result != null) {
+                var data = value;
+                List<Results> list = [];
+                var i = 1;
+                value.result!.forEach((element) {
+                  if (i > seencount) {
+                    list.add(element);
+                  }
+                  i++;
+                });
+                log('message' + list.length.toString());
+
+                data.result = list;
+                postModel.value = data;
+              } else {
+                postModel.value = value;
+              }
+            }
+            isLoadingPost.value = false;
+            onSwipe(0, postModel.value.result![0].title!.toString(), false);
+          }
         } else {
+          Fluttertoast.showToast(
+              msg: 'check = ' + value!.message!.toString(),
+              gravity: ToastGravity.CENTER);
           hasError.value = true;
         }
       });
     } catch (e) {
       log("Error at get post is ${e.toString()}");
+      Fluttertoast.showToast(
+          msg: 'Error at get post is = ' + e.toString(),
+          gravity: ToastGravity.CENTER);
       isLoadingPost.value = false;
       hasError.value = true;
     }

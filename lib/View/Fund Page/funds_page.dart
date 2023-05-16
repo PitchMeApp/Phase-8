@@ -7,12 +7,13 @@ import 'package:pitch_me_app/View/navigation_controller.dart';
 import 'package:pitch_me_app/View/offer_page/offer_page.dart';
 import 'package:pitch_me_app/View/what%20need/who_need_page_controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
+import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../utils/styles/styles.dart';
-import '../../utils/widgets/Arrow Button/arrow_button.dart';
 import '../Custom header view/custom_header_view.dart';
 import '../Need page/need_page.dart';
 
@@ -35,83 +36,95 @@ class _FundsPageState extends State<FundsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+      body: Stack(
         children: [
-          _fundNacessaryController.getValueList.value.isEmpty
-              ? Container()
-              : ArrowButton(onPressed: () {
-                  //Get.back();
-                  try {
-                    if (_navigationController.navigationType.value == 'Post') {
-                      if (_whoNeedController.checkColor2 == 2) {
-                        PageNavigateScreen().push(
-                            context,
-                            NeedPage(
-                              key: abcKey,
-                            ));
-                      } else if (_whoNeedController.checkColor == 1) {
-                        PageNavigateScreen().push(
-                            context,
-                            OfferPage(
-                              key: abcKey,
-                            ));
-                      } else {
-                        PageNavigateScreen().push(
-                            context,
-                            NeedPage(
-                              key: abcKey,
-                            ));
-                      }
-                    } else {
-                      Navigator.of(context).pop();
-                    }
-                  } catch (e) {}
+          Column(
+            children: [
+              CustomHeaderView(
+                title: TextStrings.textKey['funds']!,
+                icon: 'assets/images/doller sign.png',
+                subTitle: TextStrings.textKey['syb_funds']!,
+                progressPersent: 0.4,
+                padding: 0,
+              ),
+              const SizedBox(height: 10),
+              GridView(
+                padding: EdgeInsets.only(
+                    left: SizeConfig.getFontSize25(context: context),
+                    right: SizeConfig.getFontSize25(context: context)),
+                shrinkWrap: true,
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 2,
+                    mainAxisSpacing: 9.0,
+                    mainAxisExtent: 40),
+                children: List.generate(_fundNacessaryController.data.length,
+                    (index) {
+                  return customBox(
+                      10.0,
+                      10.0,
+                      10.0,
+                      10.0,
+                      _fundNacessaryController.data[index]['value'],
+                      _fundNacessaryController.data[index]['isSelected'],
+                      onPressad: () => setState(() {
+                            isIndex = index;
+                            _fundNacessaryController.onselectAmount(
+                                _fundNacessaryController.data[index], index);
+                          }));
                 }),
+              ),
+              _amountList(),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              BackArrow(
+                  alignment: Alignment.centerLeft,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icons.arrow_back_ios),
+              _fundNacessaryController.getValueList.value.isEmpty
+                  ? Container()
+                  : BackArrow(
+                      alignment: Alignment.centerRight,
+                      onPressed: () {
+                        try {
+                          if (_navigationController.navigationType.value ==
+                              'Post') {
+                            if (_whoNeedController.checkColor2 == 2) {
+                              PageNavigateScreen().push(
+                                  context,
+                                  NeedPage(
+                                    key: abcKey,
+                                  ));
+                            } else if (_whoNeedController.checkColor == 1) {
+                              PageNavigateScreen().push(
+                                  context,
+                                  OfferPage(
+                                    key: abcKey,
+                                  ));
+                            } else {
+                              PageNavigateScreen().push(
+                                  context,
+                                  NeedPage(
+                                    key: abcKey,
+                                  ));
+                            }
+                          } else {
+                            Navigator.of(context).pop();
+                          }
+                        } catch (e) {}
+                      },
+                      icon: Icons.arrow_forward_ios),
+            ],
+          ),
           NewCustomBottomBar(
             index: 2,
           ),
         ],
-      ),
-      body: SafeArea(
-        child: Column(
-          children: [
-            CustomHeaderView(
-              title: TextStrings.textKey['funds']!,
-              icon: 'assets/images/doller sign.png',
-              subTitle: TextStrings.textKey['syb_funds']!,
-              progressPersent: 0.4,
-              padding: 0,
-            ),
-            const SizedBox(height: 10),
-            GridView(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              shrinkWrap: true,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 3,
-                  crossAxisSpacing: 2,
-                  mainAxisSpacing: 9.0,
-                  mainAxisExtent: 40),
-              children:
-                  List.generate(_fundNacessaryController.data.length, (index) {
-                return customBox(
-                    10.0,
-                    10.0,
-                    10.0,
-                    10.0,
-                    _fundNacessaryController.data[index]['value'],
-                    _fundNacessaryController.data[index]['isSelected'],
-                    onPressad: () => setState(() {
-                          isIndex = index;
-                          _fundNacessaryController.onselectAmount(
-                              _fundNacessaryController.data[index], index);
-                        }));
-              }),
-            ),
-            _amountList(),
-          ],
-        ),
       ),
     );
   }
@@ -122,54 +135,61 @@ class _FundsPageState extends State<FundsPage> {
           ? Container()
           : SizedBox(
               height: MediaQuery.of(context).size.height * 0.4,
-              child: ClickableListWheelScrollView(
-                scrollController: _fundNacessaryController.scrollController,
-                itemHeight: 10,
-                itemCount: _fundNacessaryController.getValueList.value.length,
-                child: ListWheelScrollView.useDelegate(
-                  controller: _fundNacessaryController.scrollController,
-                  itemExtent: 50,
-                  physics: const FixedExtentScrollPhysics(),
-                  overAndUnderCenterOpacity: 0.8,
-                  perspective: 0.004,
-                  onSelectedItemChanged: (index) {
-                    setState(() {
-                      _fundNacessaryController.chengeIndexColor.value = index;
-                      _fundNacessaryController.selectedValue.value =
-                          _fundNacessaryController.getValueList.value[index]
-                              .toString();
-                    });
-                  },
-                  childDelegate: ListWheelChildBuilderDelegate(
-                    childCount:
-                        _fundNacessaryController.getValueList.value.length,
-                    builder: (context, index) {
-                      if (_fundNacessaryController.chengeIndexColor.value ==
-                          0) {
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 70),
+                child: ClickableListWheelScrollView(
+                  scrollController: _fundNacessaryController.scrollController,
+                  itemHeight: 10,
+                  itemCount: _fundNacessaryController.getValueList.value.length,
+                  child: ListWheelScrollView.useDelegate(
+                    controller: _fundNacessaryController.scrollController,
+                    itemExtent: 50,
+                    physics: const FixedExtentScrollPhysics(),
+                    overAndUnderCenterOpacity: 0.8,
+                    perspective: 0.004,
+                    onSelectedItemChanged: (index) {
+                      setState(() {
+                        _fundNacessaryController.chengeIndexColor.value = index;
                         _fundNacessaryController.selectedValue.value =
-                            _fundNacessaryController.getValueList[0].toString();
-                      }
+                            _fundNacessaryController.getValueList.value[index]
+                                .toString();
+                      });
+                    },
+                    childDelegate: ListWheelChildBuilderDelegate(
+                      childCount:
+                          _fundNacessaryController.getValueList.value.length,
+                      builder: (context, index) {
+                        if (_fundNacessaryController.chengeIndexColor.value ==
+                            0) {
+                          _fundNacessaryController.selectedValue.value =
+                              _fundNacessaryController.getValueList[0]
+                                  .toString();
+                        }
 
-                      return Container(
-                        width: MediaQuery.of(context).size.width * 0.6,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: _fundNacessaryController
+                        return Container(
+                          width: MediaQuery.of(context).size.width - 50,
+                          // margin: EdgeInsets.only(
+                          //     left: SizeConfig.getSize35(context: context),
+                          //     right: SizeConfig.getSize35(context: context)),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              color: _fundNacessaryController
+                                          .chengeIndexColor.value ==
+                                      index
+                                  ? DynamicColor.blue
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(8.0)),
+                          child: Text(
+                            '${_fundNacessaryController.getValueList.value[index]}',
+                            style: _fundNacessaryController
                                         .chengeIndexColor.value ==
                                     index
-                                ? DynamicColor.blue
-                                : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8.0)),
-                        child: Text(
-                          '${_fundNacessaryController.getValueList.value[index]}',
-                          style:
-                              _fundNacessaryController.chengeIndexColor.value ==
-                                      index
-                                  ? white17wBold
-                                  : blue17,
-                        ),
-                      );
-                    },
+                                ? white17wBold
+                                : blue17,
+                          ),
+                        );
+                      },
+                    ),
                   ),
                 ),
               ),

@@ -1,15 +1,18 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
+import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/View/Profile/Pitches/controller.dart';
+import 'package:pitch_me_app/View/Profile/Pitches/detail_page.dart';
 import 'package:pitch_me_app/View/Profile/Pitches/model.dart';
-import 'package:pitch_me_app/View/posts/detail_page.dart';
-import 'package:pitch_me_app/View/posts/profile_appbar.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:pitch_me_app/utils/widgets/Alert%20Box/delete_sales_post.dart';
 import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
+import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
 class PitchesListPage extends StatefulWidget {
   const PitchesListPage({super.key});
@@ -39,36 +42,44 @@ class _PitchesListPageState extends State<PitchesListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: NewCustomBottomBar(
-        index: 4,
-        isBack: true,
-      ),
       body: Stack(
-        children: [_buildBodyView(), BackArrow()],
-      ),
-    );
-  }
-
-  Widget _buildBodyView() {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Column(
-          children: [
-            ProfilePostHeader(
-              title: 'Pitches',
-            ),
-            const SizedBox(height: 30),
-            _postListWidget(),
-          ],
-        ),
+        children: [
+          _postListWidget(),
+          BackArrow(
+            alignment: Alignment.centerLeft,
+            icon: Icons.arrow_back_ios,
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          CustomAppbar(
+            title: 'Pitches',
+            onPressad: () {
+              PageNavigateScreen().push(
+                  context,
+                  ManuPage(
+                    title: 'Pitches',
+                    pageIndex: 4,
+                    isManu: 'Manu',
+                  ));
+            },
+            onPressadForNotify: () {},
+          ),
+          NewCustomBottomBar(
+            index: 4,
+            isBack: true,
+          ),
+        ],
       ),
     );
   }
 
   Widget _postListWidget() {
-    return Expanded(
+    return Padding(
+      padding: EdgeInsets.only(
+          top: SizeConfig.getSize60(context: context),
+          left: SizeConfig.getSize15(context: context),
+          right: SizeConfig.getSize15(context: context)),
       child: FutureBuilder<SavedListModel>(
           future: controller.getUserData(),
           builder: (context, snapshot) {
@@ -87,15 +98,17 @@ class _PitchesListPageState extends State<PitchesListPage> {
                   return ListView.builder(
                       shrinkWrap: true,
                       primary: false,
+                      reverse: true,
                       itemCount: snapshot.data!.result.length,
                       itemBuilder: (context, index) {
                         SavedResult data = snapshot.data!.result[index];
-                        //log(snapshot.data!.result.length.toString());
+
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             onTap: () {
-                              Get.to(() => PostDetailPage(
+                              Get.to(() => PitcheShowFullVideoPage(
+                                    url: data.vid1,
                                     data: data,
                                   ));
                             },

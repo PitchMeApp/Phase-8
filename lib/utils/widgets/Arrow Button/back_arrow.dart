@@ -2,20 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 
 class BackArrow extends StatelessWidget {
-  const BackArrow({super.key});
+  Alignment? alignment;
+  VoidCallback onPressed;
+  IconData icon;
+  BackArrow({
+    super.key,
+    this.alignment,
+    required this.onPressed,
+    required this.icon,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.centerLeft,
+      alignment: alignment!,
       child: Padding(
         padding: EdgeInsets.only(left: 5),
         child: InkWell(
-          onTap: () {
-            Navigator.of(context).pop();
-          },
+          onTap: onPressed,
           child: Icon(
-            Icons.arrow_back_ios,
+            icon,
             size: 30,
             color: DynamicColor.blue,
           ),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 
@@ -42,28 +41,17 @@ class BackGroundWidget extends StatelessWidget {
                   ),
                   child: Image.asset(
                     backgroundImage,
-                    fit: fit,width: width(context),
-                    height: imagebottom? MediaQuery.of(context).size.height/2.2:height(context)*0.85,
+                    fit: fit,
+                    width: width(context),
+                    height: imagebottom
+                        ? MediaQuery.of(context).size.height / 2.3
+                        : height(context) * 0.85,
                   ),
                 ),
               child,
             ],
           ),
         ),
-        if (bannerRequired)
-          Container(
-            width: Get.width,
-            height: Get.height * 0.065,
-            alignment: Alignment.bottomCenter,
-            color: colors.bannerColor,
-            child: Center(
-              child: Text(
-                'Banner',
-                style: TextStyle(
-                    color: colors.white, fontSize: 16),
-              ),
-            ),
-          )
       ],
     );
   }

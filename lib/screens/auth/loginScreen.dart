@@ -15,6 +15,7 @@ import 'package:pitch_me_app/utils/strings/images.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:pitch_me_app/utils/widgets/extras/backgroundWidget.dart';
+import 'package:pitch_me_app/utils/widgets/extras/banner.dart';
 import 'package:pitch_me_app/utils/widgets/text/text.dart';
 import 'package:pitch_me_app/utils/widgets/textFields/textField.dart';
 
@@ -26,6 +27,10 @@ class LoginScreen extends GetResponsiveView<LoginController> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: BannerWidget(onPressad: () {
+        print('object');
+      }),
       body: BackGroundWidget(
         bannerRequired: false,
         backgroundImage: Assets.backgroundImage,
@@ -41,13 +46,14 @@ class LoginScreen extends GetResponsiveView<LoginController> {
                 Padding(
                   padding: SizeConfig.leftRightPadding(context),
                   child: appLogoImage(
-                      width: width(context) * 0.5,
+                      width: width(context) * 0.9,
                       height: SizeConfig.getSizeHeightBy(
                           context: context, by: 0.13)),
                 ),
-                spaceHeight(SizeConfig.getSize10(context: context)),
+                //spaceHeight(SizeConfig.getSize5(context: context)),
                 whiteBorderContainer(
                     child: Image.asset(Assets.handshakeImage),
+                    color: Colors.transparent,
                     height:
                         SizeConfig.getSizeHeightBy(context: context, by: 0.15),
                     width:
@@ -57,7 +63,7 @@ class LoginScreen extends GetResponsiveView<LoginController> {
                   padding: SizeConfig.leftRightPadding(context),
                   child: Column(
                     children: [
-                      spaceHeight(20),
+                      spaceHeight(10),
                       CustomTextField(
                         controller: controller.txtEmail,
                         lableText: EMAIL,

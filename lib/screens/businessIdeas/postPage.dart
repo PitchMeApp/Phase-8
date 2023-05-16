@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/user_type_limitation.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
 import 'package:pitch_me_app/screens/businessIdeas/feedbackscreen.dart';
 import 'package:pitch_me_app/screens/businessIdeas/interestedSwipe.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
+import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/extras/directVideoViewer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swipable_stack/swipable_stack.dart';
-import 'package:video_viewer/domain/bloc/controller.dart';
+import 'package:video_viewer/video_viewer.dart';
 
 class PostPageWidget extends StatefulWidget {
   const PostPageWidget({
@@ -29,11 +32,14 @@ class _PostPageWidgetState extends State<PostPageWidget>
   void _listenController() => setState(() {});
   PostPageController controller = Get.put(PostPageController());
   var directionn;
+  String checkGuestType = '';
+  String businesstype = '';
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    checkGuest();
 
     controller.swipableStackController.addListener(_listenController);
     videoViewerControllerList.clear();
@@ -41,6 +47,14 @@ class _PostPageWidgetState extends State<PostPageWidget>
     videoViewerControllerList.addAll(List.generate(
         widget.postModel.result.docs.length,
         (index) => VideoViewerController()));
+  }
+
+  void checkGuest() async {
+    SharedPreferences preferencesData = await SharedPreferences.getInstance();
+    setState(() {
+      checkGuestType = preferencesData.getString('guest').toString();
+      businesstype = preferencesData.getString('log_type').toString();
+    });
   }
 
   @override
@@ -58,48 +72,7 @@ class _PostPageWidgetState extends State<PostPageWidget>
             swipeAnchor: SwipeAnchor.bottom,
             dragStartDuration: Duration.zero,
             stackClipBehaviour: Clip.hardEdge,
-            // overlayBuilder: (context, properties) {
-            //   final opacity = min(properties.swipeProgress, 1.0);
-            //   final isRight = properties.direction == SwipeDirection.right;
-            //   return Container(
-            //     height: 240,
-            //     width: double.infinity,
-            //     decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(12),
-            //       color: Color.fromARGB(255, 253, 253, 253),
-            //     ),
-            //     child: Center(
-            //       child: Column(
-            //         mainAxisAlignment: MainAxisAlignment.center,
-            //         children: [
-            //           Image.asset(
-            //             "assets/image/Group 12261.png",
-            //             height: sizeH * 0.13,
-            //           ),
-            //           Image.asset(
-            //             "assets/image/Group 12262.png",
-            //             height: sizeH * 0.13,
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   );
-            // },
-            // onWillMoveNext: (index, direction) {
-            //   final allowedActions = [
-            //     SwipeDirection.right,
-            //     SwipeDirection.left,
-            //   ];
-            //   return allowedActions.contains(direction == null
-            //       ? ''
-            //       : controller.direction == SwipeDirection.left
-            //           ? Container(
-            //               color: Colors.red,
-            //               height: 10,
-            //               width: 10,
-            //             )
-            //           : Text("data"));
-            // },
+
             detectableSwipeDirections: const {
               SwipeDirection.right,
               SwipeDirection.left,
@@ -109,6 +82,7 @@ class _PostPageWidgetState extends State<PostPageWidget>
             // stackClipBehaviour: Clip.hardEdge,
             onSwipeCompleted: (index, direction) {
               print("left123direction $index");
+
               if (direction == SwipeDirection.left) {
                 controller.left.value = !controller.left.value;
               }
@@ -123,19 +97,60 @@ class _PostPageWidgetState extends State<PostPageWidget>
                 controller.updateProgressOfCard(0.0);
                 controller.updateDirectionOfCard(null);
               });
+              //if (businesstype == '3' || businesstype == '4') {
               print('index is $index, direction is $direction');
               controller.label =
                   direction == SwipeDirection.right ? 'Saved' : 'Seen';
 
               if (direction == SwipeDirection.right) {
+                PageNavigateScreen()
+                    .push(context, interestedSwipe())
+                    .then((value) {
+                  setState(() {
+                    if (widget.postModel.result.docs.isEmpty) {
+                      widget.onSwipe(index, "", true);
+                    } else {
+                      widget.onSwipe(
+                          index + 1,
+                          widget.postModel.result.docs[index + 1].title
+                              .toString(),
+                          false);
+                      // widget.postModel.result.docs[index + 1];
+                    }
+                  });
+                });
                 controller.savedVideo(widget.postModel.result.docs[index].id);
+              } else {
+                PageNavigateScreen()
+                    .push(
+                        context,
+                        ratingScreen(
+                          receiverid:
+                              widget.postModel.result.docs[index].userid,
+                          postid: widget.postModel.result.docs[index].id,
+                        ))
+                    .then((value) {
+                  setState(() {
+                    if (widget.postModel.result.docs.isEmpty) {
+                      widget.onSwipe(index, "", true);
+                    } else {
+                      widget.onSwipe(
+                          index + 1,
+                          widget.postModel.result.docs[index + 1].title
+                              .toString(),
+                          false);
+                      // widget.postModel.result.docs[index + 1];
+                    }
+                  });
+                });
               }
+
               controller.setVisibleSeen(true);
               Future.delayed(Duration(milliseconds: 200)).then((value) {
                 controller.setVisibleSeen(false);
               });
               //SEND INDEX AND TITLE
-
+              //}
               if (index != widget.postModel.result.docs.length) {
                 widget.onSwipe(
                     index + 1,
@@ -179,24 +194,33 @@ class _PostPageWidgetState extends State<PostPageWidget>
 
               return Stack(
                 children: [
-                  directionn == SwipeDirection.left
-                      ? controller.left.value == false
-                          ? controller.getSliderWidget2(
-                              post: widget.postModel.result.docs[itemIndex],
-                              context: context,
-                              itemIndex: itemIndex)
-                          : ratingScreen(
-                              receiverid: widget
-                                  .postModel.result.docs[itemIndex].userid,
-                              postid:
-                                  widget.postModel.result.docs[itemIndex].id,
-                            )
-                      : controller.right.value == true
-                          ? interestedSwipe()
-                          : controller.getSliderWidget2(
-                              post: widget.postModel.result.docs[itemIndex],
-                              context: context,
-                              itemIndex: itemIndex)
+                  // if (businesstype == '3' || businesstype == '4')
+                  controller.getSliderWidget2(
+                      post: widget.postModel.result.docs[itemIndex],
+                      context: context,
+                      itemIndex: itemIndex),
+                  // if (businesstype == '1' || businesstype == '2')
+                  //   directionn == SwipeDirection.left
+                  //       ? controller.left.value == false
+                  //           ? controller.getSliderWidget2(
+                  //               post: widget.postModel.result.docs[itemIndex],
+                  //               context: context,
+                  //               itemIndex: itemIndex)
+                  //           : UserTypeLimitationPage(
+                  //               title1:
+                  //                   'Only Investors or Facilitators can access "Watch Sales Pitch" Page',
+                  //               title2:
+                  //                   'Make sure after Signing Up with different email, you select Investors or Facilitators')
+                  //       : controller.right.value == true
+                  //           ? UserTypeLimitationPage(
+                  //               title1:
+                  //                   'Only Investors or Facilitators can access "Watch Sales Pitch" Page',
+                  //               title2:
+                  //                   'Make sure after Signing Up with different email, you select Investors or Facilitators')
+                  //           : controller.getSliderWidget2(
+                  //               post: widget.postModel.result.docs[itemIndex],
+                  //               context: context,
+                  //               itemIndex: itemIndex)
                 ],
               );
             },
@@ -227,50 +251,87 @@ class _PostPageWidgetState extends State<PostPageWidget>
                   )),
         Align(
           alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.only(
-                bottom: SizeConfig.getSize5(context: context), right: 8),
-            child: GestureDetector(
-              onTap: () {
-                widget.controller.nextPage(
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.linear);
-              },
-              child: Container(
-                height: SizeConfig.getSize35(context: context),
-                width: SizeConfig.getSize35(context: context),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromARGB(70, 51, 50, 50).withOpacity(0.2),
-                        blurRadius: 20,
-                        offset: Offset(
-                          0,
-                          0,
-                        ))
-                  ],
+          child: widget.postModel.result.docs[0].id
+                  .contains('6448e9494ff8f4cb69599465')
+              ? Container()
+              : Padding(
+                  padding: EdgeInsets.only(
+                      bottom: SizeConfig.getSize5(context: context), right: 8),
+                  child: GestureDetector(
+                    onTap: () {
+                      widget.postModel.result.docs[0].id
+                              .contains('6448e9494ff8f4cb69599465')
+                          ? null
+                          : widget.controller.nextPage(
+                              duration: Duration(milliseconds: 200),
+                              curve: Curves.linear);
+                    },
+                    child: Container(
+                      height: SizeConfig.getSize35(context: context),
+                      width: SizeConfig.getSize35(context: context),
+                      decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Color.fromARGB(70, 51, 50, 50)
+                                  .withOpacity(0.2),
+                              blurRadius: 20,
+                              offset: Offset(
+                                0,
+                                0,
+                              ))
+                        ],
+                      ),
+                      child: Image.asset(
+                        "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
                 ),
-                child: Image.asset(
-                  "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
         ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: Padding(
-            padding:
-                EdgeInsets.only(bottom: SizeConfig.getSize10(context: context)),
-            child: GestureDetector(
-              onTap: () {
-                controller.swipableStackController.next(
-                  duration: Duration(milliseconds: 10),
-                  swipeDirection: SwipeDirection.left,
-                );
-              },
-              child: Container(
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            widget.postModel.result.docs[0].id
+                    .contains('6448e9494ff8f4cb69599465')
+                ? Container()
+                : Center(
+                    child: GestureDetector(
+                      onTap: () {
+                        controller.swipableStackController
+                            .next(swipeDirection: SwipeDirection.right);
+                      },
+                      child: Container(
+                        height: SizeConfig.getSize35(context: context),
+                        width: SizeConfig.getSize35(context: context),
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Color.fromARGB(71, 60, 60, 60)
+                                    .withOpacity(0.2),
+                                blurRadius: 20,
+                                offset: Offset(
+                                  0,
+                                  0,
+                                ))
+                          ],
+                        ),
+                        child: RotatedBox(
+                          quarterTurns: 1,
+                          child: Image.asset(
+                              "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png"),
+                        ),
+                      ),
+                    ),
+                  ),
+            Center(
+              child: GestureDetector(
+                onTap: () {
+                  controller.swipableStackController
+                      .next(swipeDirection: SwipeDirection.left);
+                },
+                child: Container(
                   height: SizeConfig.getSize35(context: context),
                   width: SizeConfig.getSize35(context: context),
                   decoration: BoxDecoration(
@@ -289,9 +350,11 @@ class _PostPageWidgetState extends State<PostPageWidget>
                     quarterTurns: 3,
                     child: Image.asset(
                         "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png"),
-                  )),
+                  ),
+                ),
+              ),
             ),
-          ),
+          ],
         ),
       ],
     );

@@ -11,8 +11,8 @@ import 'package:pitch_me_app/View/Need%20page/need_page_controller.dart';
 import 'package:pitch_me_app/View/Select%20industry/industry_controller.dart';
 import 'package:pitch_me_app/View/navigation_controller.dart';
 import 'package:pitch_me_app/View/offer_page/controller.dart';
-import 'package:pitch_me_app/View/posts/posts.dart';
 import 'package:pitch_me_app/View/selected_data_view/selected_controller.dart';
+import 'package:pitch_me_app/View/success%20page/success_page.dart';
 import 'package:pitch_me_app/View/video%20page/Controller/controller.dart';
 import 'package:pitch_me_app/View/what%20need/who_need_page_controller.dart';
 import 'package:pitch_me_app/core/urls.dart';
@@ -86,35 +86,39 @@ class SuccessPageController extends GetxController {
           filename: _videoFirstPageController.videoUrl.value.split('/').last));
       request.files.add(await http.MultipartFile.fromPath(
         'img1',
-        _addImageController.listImagePaths[0].path!,
-        filename: _addImageController.listImagePaths[0].path!.split('/').last,
+        _addImageController.listImagePaths[0],
+        filename:
+            _addImageController.listImagePaths[0].toString().split('/').last,
       ));
       if (_addImageController.listImagePaths.length > 1) {
         request.files.add(await http.MultipartFile.fromPath(
           'img2',
-          _addImageController.listImagePaths[1].path!,
-          filename: _addImageController.listImagePaths[1].path!.split('/').last,
+          _addImageController.listImagePaths[1],
+          filename:
+              _addImageController.listImagePaths[1].toString().split('/').last,
         ));
       }
       if (_addImageController.listImagePaths.length > 2) {
         request.files.add(await http.MultipartFile.fromPath(
           'img3',
-          _addImageController.listImagePaths[2].path!,
-          filename: _addImageController.listImagePaths[2].path!.split('/').last,
+          _addImageController.listImagePaths[2],
+          filename:
+              _addImageController.listImagePaths[2].toString().split('/').last,
         ));
       }
       if (_addImageController.listImagePaths.length > 3) {
         request.files.add(await http.MultipartFile.fromPath(
           'img4',
-          _addImageController.listImagePaths[3].path!,
-          filename: _addImageController.listImagePaths[3].path!.split('/').last,
+          _addImageController.listImagePaths[3],
+          filename:
+              _addImageController.listImagePaths[3].toString().split('/').last,
         ));
       }
       if (_addImageController.filePath.isNotEmpty) {
         request.files.add(await http.MultipartFile.fromPath(
           'file',
-          _addImageController.fileFullPath,
-          filename: _addImageController.fileFullPath.split('/').last,
+          _addImageController.fileFullPath.path,
+          filename: 'file.pdf',
         ));
       }
 
@@ -136,14 +140,14 @@ class SuccessPageController extends GetxController {
 
         Fluttertoast.showToast(
             msg: jsonData['message'], gravity: ToastGravity.CENTER);
-        PageNavigateScreen().pushRemovUntil(context, PostPage());
+        PageNavigateScreen().pushRemovUntil(context, SuccessPage());
       } else {
         Fluttertoast.showToast(
             msg: jsonData['message'], gravity: ToastGravity.CENTER);
       }
     } catch (e) {
       isLoading.value = false;
-      log('error = ' + e.toString());
+      log('error = ' + _addImageController.fileFullPath.path.toString());
     }
   }
 }

@@ -1,5 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/Phase%206/Guest%20UI/BottomNavigation.dart';
+import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/swipe_limitation.dart';
 import 'package:pitch_me_app/controller/auth/loginController.dart';
 import 'package:pitch_me_app/controller/selectionController.dart';
 import 'package:pitch_me_app/core/extras.dart';
@@ -21,6 +25,9 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   String userType = '';
+  String countSwipe = '';
+  dynamic checkGuest;
+
   @override
   void initState() {
     chackAuth();
@@ -29,19 +36,26 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void chackAuth() async {
     SharedPreferences preferencesData = await SharedPreferences.getInstance();
+    checkGuest = preferencesData.getString('guest').toString();
     userType = preferencesData.getString('log_type').toString();
 
     Future.delayed(
       const Duration(seconds: 2),
       () {
-        if (pref.hasData(Keys.TOKEN)) {
-          if (userType.isEmpty || userType == '0') {
-            Get.offAll(() => SelectionScreen(), binding: SelectionBinding());
+        if (checkGuest.isNotEmpty && checkGuest != 'null') {
+          log('No guest check');
+          if (pref.hasData(Keys.TOKEN)) {
+            if (userType.isEmpty || userType == '0') {
+              Get.offAll(() => SelectionScreen(), binding: SelectionBinding());
+            } else {
+              Get.offAll(() => Floatbar(0));
+            }
           } else {
-            Get.offAll(() => Floatbar(0));
+            Get.offAll(() => LoginScreen(), binding: LoginBinding());
           }
         } else {
-          Get.offAll(() => LoginScreen(), binding: LoginBinding());
+          log('guest check');
+          Get.offAll(() => GuestFloatbar(0));
         }
       },
     );
@@ -54,7 +68,7 @@ class _SplashScreenState extends State<SplashScreen> {
         bannerRequired: false,
         backgroundImage: Assets.backgroundImage,
         fit: BoxFit.fill,
-        child: Center(child: appLogoImage()),
+        child: Center(child: appLogoImage(isDark: false)),
       ),
     );
   }

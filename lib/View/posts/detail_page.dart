@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Alert%20Box/show_image_popup.dart';
-import 'package:sizer/sizer.dart';
+import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/colors/colors.dart';
-import '../../utils/styles/styles.dart';
 
 class PostDetailPage extends StatefulWidget {
   final data;
-  PostDetailPage({super.key, this.data});
+  dynamic arrowCheck;
+  VoidCallback? onPressad;
+  PostDetailPage({super.key, this.data, this.arrowCheck, this.onPressad});
 
   @override
   State<PostDetailPage> createState() => _PostDetailPageState();
@@ -45,8 +45,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      // floatingActionButton: bannerWidget(),
+      // // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      // floatingActionButton: BannerWidget(onPressad: () {}),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -60,25 +60,49 @@ class _PostDetailPageState extends State<PostDetailPage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Align(
-                        alignment: Alignment.topLeft,
-                        child: Padding(
-                          padding: const EdgeInsets.only(bottom: 10, left: 10),
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.of(context).pop();
-                              },
-                              icon: Icon(Icons.arrow_back)),
-                        ),
-                      ),
-                      Expanded(
-                          flex: 14, child: appStatistics(context: context)),
-                      Expanded(flex: 1, child: bannerWidget())
+                      widget.arrowCheck != null
+                          ? Align(
+                              alignment: Alignment.bottomCenter,
+                              child: GestureDetector(
+                                onTap: widget.onPressad,
+                                child: Padding(
+                                    padding: EdgeInsets.only(top: 10, right: 7),
+                                    child: RotatedBox(
+                                      quarterTurns: 1,
+                                      child: Icon(
+                                        Icons.arrow_back_ios,
+                                        color: DynamicColor.blue,
+                                        size: 30,
+                                      ),
+                                    )),
+                              ),
+                            )
+                          : Container(),
+                      // Align(
+                      //   alignment: Alignment.topLeft,
+                      //   child: Padding(
+                      //     padding: const EdgeInsets.only(bottom: 10, left: 10),
+                      //     child: IconButton(
+                      //         onPressed: () {
+                      //           Navigator.of(context).pop();
+                      //         },
+                      //         icon: Icon(Icons.arrow_back)),
+                      //   ),
+                      // ),
+                      appStatistics(context: context),
                     ],
                   ),
                 ),
               ],
             ),
+            widget.arrowCheck == null
+                ? BackArrow(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    },
+                    alignment: Alignment.centerLeft,
+                    icon: Icons.arrow_back_ios)
+                : Container(),
           ],
         ),
       ),
@@ -158,7 +182,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
     return Align(
       alignment: Alignment.topLeft,
       child: Padding(
-        padding: const EdgeInsets.only(left: 25, right: 25),
+        padding: const EdgeInsets.only(left: 15, right: 15),
         child: Wrap(
           runSpacing: 10,
           children: [
@@ -235,19 +259,6 @@ class _PostDetailPageState extends State<PostDetailPage> {
     );
   }
 
-  Widget bannerWidget() {
-    return Container(
-      height: 6.h,
-      width: MediaQuery.of(Get.context!).size.width,
-      alignment: Alignment.center,
-      color: DynamicColor.darkBlue,
-      child: Text(
-        'Banner',
-        style: white15TextStyle,
-      ),
-    );
-  }
-
   Widget customWidget(iconImage, name, {required VoidCallback onPressad}) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
@@ -255,8 +266,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
       onTap: onPressad,
       child: Container(
         margin: EdgeInsets.only(bottom: sizeH * 0.015),
-        width: sizeW * 0.85,
-        height: sizeH * 0.068,
+        width: sizeW - 40,
+        height: 50,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
           color: Color(0xff377EB4),

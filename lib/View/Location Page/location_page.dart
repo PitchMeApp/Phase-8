@@ -13,9 +13,10 @@ import 'package:pitch_me_app/View/Location%20Page/location_page_con.dart';
 import 'package:pitch_me_app/View/navigation_controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/keys.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/arrow_button.dart';
+import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:sizer/sizer.dart';
 
@@ -141,123 +142,136 @@ class _LocationPageState extends State<LocationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      floatingActionButtonLocation:
-          FloatingActionButtonLocation.miniCenterFloat,
-      floatingActionButton: Column(
-        mainAxisAlignment: MainAxisAlignment.end,
+      body: Stack(
         children: [
-          checkColor != 0
-              ? ArrowButton(
-                  onPressed: () {
-                    try {
-                      // Get.back();
-                      if (_navigationController.navigationType.value ==
-                          'Post') {
-                        PageNavigateScreen().push(
-                            context,
-                            WhatNeedPage(
-                              key: abcKey,
-                            ));
-                      } else {
-                        Navigator.of(context).pop();
-                      }
-                    } catch (e) {
-                      print(e.toString());
-                    }
-                  },
-                )
-              : Container(),
-          NewCustomBottomBar(
-            index: 2,
-          ),
-        ],
-      ),
-      body: ListView(
-        shrinkWrap: true,
-        physics: ScrollPhysics(),
-        primary: false,
-        children: [
-          CustomHeaderView(
-            title: TextStrings.textKey['location']!,
-            icon: 'assets/icons/near_me.png',
-            subTitle: TextStrings.textKey['sub_location']!,
-            progressPersent: 0.2,
-            padding: 0,
-          ),
-          Padding(
-            padding:
-                const EdgeInsets.only(left: 20, top: 10, bottom: 10, right: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+          SingleChildScrollView(
+            child: Column(
               children: [
-                Expanded(
-                    child:
-                        customBox(10.0, 10.0, 0.0, 0.0, Icons.wifi, 'Online', 1,
-                            onPressad: () {
-                  _locationPageController.selectedType.value = 'Online';
-                  setState(() {
-                    customText = 'Your Business is Online';
-                    checkColor = 1;
-                    openSearchBox = 0;
-                  });
-                })),
-                Container(
-                  width: 2,
-                  height: 6.h,
-                  color: DynamicColor.white,
+                CustomHeaderView(
+                  title: TextStrings.textKey['location']!,
+                  icon: 'assets/icons/near_me.png',
+                  subTitle: TextStrings.textKey['sub_location']!,
+                  progressPersent: 0.2,
+                  padding: 0,
                 ),
-                Expanded(
-                    child: customBox(
-                  0.0,
-                  0.0,
-                  0.0,
-                  0.0,
-                  Icons.public,
-                  'Anywhere',
-                  2,
-                  onPressad: () {
-                    _locationPageController.selectedType.value = 'Anywhere';
-                    setState(() {
-                      customText = 'Your Business works Anywhere';
-                      checkColor = 2;
-                      openSearchBox = 0;
-                    });
-                  },
-                )),
-                Container(
-                  width: 2,
-                  height: 6.h,
-                  color: DynamicColor.white,
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: 10,
+                      bottom: 10,
+                      left: SizeConfig.getFontSize25(context: context),
+                      right: SizeConfig.getFontSize25(context: context)),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                          child: customBox(
+                              10.0, 10.0, 0.0, 0.0, Icons.wifi, 'Online', 1,
+                              onPressad: () {
+                        _locationPageController.selectedType.value = 'Online';
+                        setState(() {
+                          customText = 'Your Business is Online';
+                          checkColor = 1;
+                          openSearchBox = 0;
+                        });
+                      })),
+                      Container(
+                        width: 2,
+                        height: 6.h,
+                        color: DynamicColor.white,
+                      ),
+                      Expanded(
+                          child: customBox(
+                        0.0,
+                        0.0,
+                        0.0,
+                        0.0,
+                        Icons.public,
+                        'Anywhere',
+                        2,
+                        onPressad: () {
+                          _locationPageController.selectedType.value =
+                              'Anywhere';
+                          setState(() {
+                            customText = 'Your Business works Anywhere';
+                            checkColor = 2;
+                            openSearchBox = 0;
+                          });
+                        },
+                      )),
+                      Container(
+                        width: 2,
+                        height: 6.h,
+                        color: DynamicColor.white,
+                      ),
+                      Expanded(
+                          child: customBox(
+                        0.0,
+                        0.0,
+                        10.0,
+                        10.0,
+                        Icons.location_on,
+                        'Place',
+                        3,
+                        onPressad: () {
+                          setState(() {
+                            _locationPageController.selectedType.value =
+                                'Place';
+                            customText = 'Find your Business Area';
+                            checkColor = 3;
+                            openSearchBox = 1;
+                          });
+                        },
+                      )),
+                    ],
+                  ),
                 ),
-                Expanded(
-                    child: customBox(
-                  0.0,
-                  0.0,
-                  10.0,
-                  10.0,
-                  Icons.location_on,
-                  'Place',
-                  3,
-                  onPressad: () {
-                    setState(() {
-                      _locationPageController.selectedType.value = 'Place';
-                      customText = 'Find your Business Area';
-                      checkColor = 3;
-                      openSearchBox = 1;
-                    });
-                  },
-                )),
+                Column(
+                  children: [
+                    textWidget(),
+                    openSearchBox == 1 ? searchBox() : Container(),
+                    const SizedBox(height: 20),
+                    openSearchBox == 1 ? googleMap() : Container(),
+                  ],
+                ),
               ],
             ),
           ),
-          Column(
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              textWidget(),
-              openSearchBox == 1 ? searchBox() : Container(),
-              const SizedBox(height: 20),
-              openSearchBox == 1 ? googleMap() : Container(),
+              BackArrow(
+                  alignment: Alignment.centerLeft,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: Icons.arrow_back_ios),
+              checkColor != 0
+                  ? BackArrow(
+                      alignment: Alignment.centerRight,
+                      onPressed: () {
+                        try {
+                          // Get.back();
+                          if (_navigationController.navigationType.value ==
+                              'Post') {
+                            PageNavigateScreen().push(
+                                context,
+                                WhatNeedPage(
+                                  key: abcKey,
+                                ));
+                          } else {
+                            Navigator.of(context).pop();
+                          }
+                        } catch (e) {
+                          print(e.toString());
+                        }
+                      },
+                      icon: Icons.arrow_forward_ios)
+                  : Container(),
             ],
+          ),
+          NewCustomBottomBar(
+            index: 2,
           ),
         ],
       ),
@@ -280,7 +294,11 @@ class _LocationPageState extends State<LocationPage> {
 
   Widget searchBox() {
     return Padding(
-      padding: const EdgeInsets.only(left: 15, right: 20, top: 15, bottom: 10),
+      padding: EdgeInsets.only(
+          left: SizeConfig.getFontSize25(context: context),
+          right: SizeConfig.getFontSize25(context: context),
+          top: 15,
+          bottom: 10),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -338,7 +356,7 @@ class _LocationPageState extends State<LocationPage> {
       borderRadius: BorderRadius.circular(10),
       child: Container(
         height: 27.h,
-        width: MediaQuery.of(context).size.width - 40,
+        width: MediaQuery.of(context).size.width - 45,
         decoration: BoxDecoration(borderRadius: BorderRadius.circular(10)),
         child: GoogleMap(
           markers: Set<Marker>.from(markers),
@@ -365,7 +383,7 @@ class _LocationPageState extends State<LocationPage> {
     return InkWell(
       onTap: onPressad,
       child: Container(
-        height: 6.h,
+        height: 5.h,
         // padding: const EdgeInsets.only(left: 15, right: 15),
         alignment: Alignment.center,
         decoration: BoxDecoration(

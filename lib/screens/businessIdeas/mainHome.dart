@@ -1,9 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/login_limitation.dart';
+import 'package:pitch_me_app/Phase%206/Guest%20UI/Profile/manu.dart';
 import 'package:pitch_me_app/View/Feedback/feedback_detail.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/noti.dart';
 import 'package:pitch_me_app/screens/businessIdeas/dashBoardScreen.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home_filter.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home_manu.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
@@ -11,6 +16,7 @@ import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:pitch_me_app/utils/widgets/text/text.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MainHomeScreen extends StatefulWidget {
   MainHomeScreen({Key? key}) : super(key: key);
@@ -26,8 +32,8 @@ class _MainHomeScreenState extends State<MainHomeScreen>
 
   bool ChangeBotton = false;
 
-  Color _ContainerColor = Color(0xff599CD0);
-  Color _CoColor = Color(0xff599CD0);
+  Color _ContainerColor = DynamicColor.blue;
+  Color _CoColor = DynamicColor.blue;
   late AnimationController _animationController;
   late Animation _colorTween;
 
@@ -50,11 +56,12 @@ class _MainHomeScreenState extends State<MainHomeScreen>
 
   @override
   void initState() {
+    getUserType();
+    // Colors.white.withOpacity(0.3)
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _colorTween =
-        ColorTween(begin: Color(0xff599CD0), end: Colors.white.withOpacity(0.3))
-            .animate(_animationController);
+    _colorTween = ColorTween(begin: DynamicColor.blue, end: DynamicColor.blue)
+        .animate(_animationController);
     Future.delayed(const Duration(seconds: 0), () {
       _animationController.status == AnimationStatus.completed
           ? _animationController.reset()
@@ -87,6 +94,19 @@ class _MainHomeScreenState extends State<MainHomeScreen>
   }
 
   bool _isInitialValue = false;
+  bool isFilter = false;
+  bool isManu = false;
+
+  String checkGuestType = '';
+  int swipeCount = 0;
+
+  getUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return bool
+    setState(() {
+      checkGuestType = prefs.getString('guest').toString();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -107,14 +127,20 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                       _isInitialValue = false;
                     });
                   },
-                  child: currentScreen),
+                  child: isManu
+                      ? checkGuestType.isNotEmpty && checkGuestType != 'null'
+                          ? HomeManuPage()
+                          : GuestManuPage(title: '', pageIndex: 0)
+                      : isFilter
+                          ? HomePageFilter()
+                          : currentScreen),
               Padding(
                 padding: EdgeInsets.only(
                     top: SizeConfig.getSize30(context: context) +
-                        SizeConfig.getSize20(context: context),
+                        MediaQuery.of(context).size.height * 0.021,
                     bottom: SizeConfig.getSize20(context: context),
-                    left: SizeConfig.getSize20(context: context),
-                    right: SizeConfig.getSize20(context: context)),
+                    left: SizeConfig.getFontSize25(context: context),
+                    right: SizeConfig.getFontSize25(context: context)),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -131,7 +157,8 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                           : sizeH * 0.06,
                                       width: _isInitialValue
                                           ? sizeW * 0.65
-                                          : sizeW * 0.120,
+                                          : SizeConfig.getSize50(
+                                              context: context),
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                               _isInitialValue ? 20 : 10),
@@ -143,9 +170,15 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                       duration: Duration(milliseconds: 300),
                                       child: InkWell(
                                         onTap: () {
-                                          setState(() {
-                                            _isInitialValue = !_isInitialValue;
-                                          });
+                                          if (checkGuestType.isNotEmpty &&
+                                              checkGuestType != 'null') {
+                                            setState(() {
+                                              _isInitialValue =
+                                                  !_isInitialValue;
+                                            });
+                                          } else {
+                                            Get.to(() => LoginLimitationPage());
+                                          }
                                         },
                                         child: Padding(
                                           padding: EdgeInsets.all(12),
@@ -314,12 +347,23 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                             )),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 3),
-                      child: roboto(
-                          size: SizeConfig.getFontSize28(context: context),
-                          text:
-                              '${currentIndexOfDashboard == 0 ? '' : "App Statistics"}',
-                          fontWeight: FontWeight.w700,
-                          color: Color.fromARGB(255, 255, 255, 255)),
+                      child: isFilter
+                          ? Padding(
+                              padding: const EdgeInsets.only(top: 20),
+                              child: roboto(
+                                  size: SizeConfig.getFontSize20(
+                                      context: context),
+                                  text: "Filter",
+                                  fontWeight: FontWeight.w700,
+                                  color: DynamicColor.blue),
+                            )
+                          : roboto(
+                              size: SizeConfig.getFontSize28(context: context),
+                              text: currentIndexOfDashboard == 0
+                                  ? ''
+                                  : "App Statistics",
+                              fontWeight: FontWeight.w700,
+                              color: Color.fromARGB(255, 255, 255, 255)),
                     ),
                     Column(
                       children: [
@@ -330,9 +374,19 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                 colorTween: _colorTween,
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
-                                  child:
-                                      loadSvg(image: 'assets/image/menu.svg'),
-                                ))
+                                  child: loadSvg(
+                                      image: 'assets/image/menu.svg',
+                                      color: isManu == true
+                                          ? DynamicColor.blue
+                                          : null),
+                                ),
+                                onTap: () {
+                                  setState(() {
+                                    isManu = !isManu;
+                                    isFilter = false;
+                                  });
+                                },
+                              )
                             : buttonContainer(
                                 height: SizeConfig.getSize50(context: context),
                                 width: SizeConfig.getSize50(context: context),
@@ -354,9 +408,22 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                 child: Padding(
                                   padding: const EdgeInsets.all(12.0),
                                   child: loadSvg(
-                                    image: 'assets/image/setting.svg',
-                                  ),
+                                      image: 'assets/image/setting.svg',
+                                      color: isFilter == true
+                                          ? DynamicColor.blue
+                                          : null),
                                 ),
+                                onTap: () {
+                                  if (checkGuestType.isNotEmpty &&
+                                      checkGuestType != 'null') {
+                                    setState(() {
+                                      isFilter = !isFilter;
+                                      isManu = false;
+                                    });
+                                  } else {
+                                    Get.to(() => LoginLimitationPage());
+                                  }
+                                },
                               )),
                       ],
                     )

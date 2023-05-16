@@ -44,7 +44,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
           ),
           Image.asset(
             "assets/image/Group 12262.png",
-            height: sizeH * 0.1,
+            height: sizeH * 0.09,
           ),
           SizedBox(
             height: sizeH * 0.065,

@@ -192,7 +192,7 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
               ? ListView.builder(
                   shrinkWrap: true,
                   primary: false,
-                  padding: EdgeInsets.only(left: 30, right: 30),
+                  padding: EdgeInsets.zero,
                   itemCount: serviceList.length,
                   itemBuilder: (context, index) {
                     return Container(
@@ -218,7 +218,7 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
               ? ListView.builder(
                   shrinkWrap: true,
                   primary: false,
-                  padding: EdgeInsets.only(left: 30, right: 30),
+                  padding: EdgeInsets.zero,
                   itemCount: serviceDetailList.length,
                   itemBuilder: (context, index) {
                     return Container(

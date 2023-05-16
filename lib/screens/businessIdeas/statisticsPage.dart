@@ -145,7 +145,7 @@ class StatisticsPage extends StatelessWidget {
                   children: [
                     roboto(
                         size: SizeConfig.getFontSize14(context: context),
-                        text: 'Continent',
+                        text: 'Continents',
                         color: colors.black,
                         fontWeight: FontWeight.w400),
                     spaceHeight(SizeConfig.getSize10(context: context)),

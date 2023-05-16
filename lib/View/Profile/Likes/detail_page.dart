@@ -1,39 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
-import 'package:sizer/sizer.dart';
+import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:video_viewer/video_viewer.dart';
 
 class ShowFullVideoPage extends StatefulWidget {
   String url;
-  ShowFullVideoPage({super.key, required this.url});
+  dynamic arrowCheck;
+  VoidCallback? onPressad;
+  ShowFullVideoPage(
+      {super.key, required this.url, this.arrowCheck, this.onPressad});
 
   @override
   State<ShowFullVideoPage> createState() => _ShowFullVideoPageState();
 }
 
-class _ShowFullVideoPageState extends State<ShowFullVideoPage>
-    with SingleTickerProviderStateMixin {
+class _ShowFullVideoPageState extends State<ShowFullVideoPage> {
   VideoViewerController videoViewerController = VideoViewerController();
-
-  late AnimationController _animationController;
-  late Animation _colorTween;
-
-  @override
-  void initState() {
-    _animationController =
-        AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _colorTween =
-        ColorTween(begin: Color(0xff599CD0), end: Colors.white.withOpacity(0.3))
-            .animate(_animationController);
-    Future.delayed(const Duration(seconds: 0), () {
-      _animationController.status == AnimationStatus.completed
-          ? _animationController.reset()
-          : _animationController.forward();
-    });
-
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,45 +53,30 @@ class _ShowFullVideoPageState extends State<ShowFullVideoPage>
               },
             ),
           ),
-          Padding(
-            padding: EdgeInsets.only(left: sizeW * 0.025, top: sizeW * 0.12),
-            child: AnimatedBuilder(
-                animation: _colorTween,
-                builder: (context, child) {
-                  return InkWell(
-                    onTap: () {
-                      videoViewerController.pause();
-                      // videoViewerController.dispose();
-
-                      Navigator.of(context).pop();
-                    },
-                    child: Container(
-                      height: 6.h,
-                      width: 12.w,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: _colorTween.value,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Color.fromARGB(108, 148, 147, 147)
-                                  .withOpacity(0.3),
-                              blurRadius: 100.0,
-                              spreadRadius: 10,
-                              offset: Offset(
-                                10,
-                                10,
-                              ),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(8.0)),
-                      child: const Icon(
-                        Icons.arrow_back,
-                        color: DynamicColor.white,
-                      ),
-                    ),
-                  );
-                }),
-          ),
+          BackArrow(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              alignment: Alignment.centerLeft,
+              icon: Icons.arrow_back_ios),
+          widget.arrowCheck != null
+              ? Align(
+                  alignment: Alignment.bottomCenter,
+                  child: GestureDetector(
+                    onTap: widget.onPressad,
+                    child: Padding(
+                        padding: EdgeInsets.only(bottom: 10, right: 7),
+                        child: RotatedBox(
+                          quarterTurns: 3,
+                          child: Icon(
+                            Icons.arrow_back_ios,
+                            color: DynamicColor.blue,
+                            size: 30,
+                          ),
+                        )),
+                  ),
+                )
+              : Container()
         ],
       ),
     );
@@ -116,7 +84,6 @@ class _ShowFullVideoPageState extends State<ShowFullVideoPage>
 
   @override
   void dispose() {
-    _animationController.dispose();
     videoViewerController.pause();
     super.dispose();
   }

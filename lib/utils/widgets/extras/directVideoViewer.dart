@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:video_viewer/video_viewer.dart';
 
@@ -72,13 +73,33 @@ class _DirectVideoViewerState extends State<DirectVideoViewer> {
         looping: true,
         enableShowReplayIconAtVideoEnd: false,
         style: VideoViewerStyle(
+            playAndPauseStyle: PlayAndPauseWidgetStyle(
+              background: Colors.transparent,
+              circleRadius: 80.0,
+              play: Center(
+                child: Icon(
+                  Icons.play_arrow,
+                  size: 80,
+                  color: DynamicColor.white,
+                ),
+              ),
+              pause: Center(
+                child: Icon(
+                  Icons.pause,
+                  size: 80,
+                  color: DynamicColor.white,
+                ),
+              ),
+            ),
             thumbnail: Image.network(''),
             loading: CircularProgressIndicator(
               color: Colors.blue,
             )),
         source: {
           "Source": VideoSource(
-            video: VideoPlayerController.network(widget.url),
+            video: VideoPlayerController.network(Uri.encodeFull(widget.url
+                .replaceAll('https://api.salespitchapp.com',
+                    'http://191.101.229.245:9070'))),
           )
         },
       ),

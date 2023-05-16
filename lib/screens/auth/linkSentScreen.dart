@@ -1,9 +1,6 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pitch_me_app/controller/auth/loginController.dart';
 import 'package:pitch_me_app/controller/auth/signupController.dart';
-import 'package:pitch_me_app/screens/selectionScreen.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
@@ -11,11 +8,7 @@ import 'package:pitch_me_app/utils/strings/images.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:pitch_me_app/utils/widgets/extras/backgroundWidget.dart';
-import 'package:pitch_me_app/utils/widgets/extras/banner.dart';
 import 'package:pitch_me_app/utils/widgets/text/text.dart';
-import 'package:pitch_me_app/utils/widgets/textFields/textField.dart';
-
-import 'loginScreen.dart';
 
 class LinkSentScreen extends GetView<SignupController> {
   const LinkSentScreen({Key? key}) : super(key: key);
@@ -42,13 +35,14 @@ class LinkSentScreen extends GetView<SignupController> {
                     Padding(
                       padding: SizeConfig.leftRightPadding(context),
                       child: appLogoImage(
-                          width: width(context) * 0.5,
+                          width: width(context) * 0.9,
                           height: SizeConfig.getSizeHeightBy(
                               context: context, by: 0.13)),
                     ),
                     spaceHeight(SizeConfig.getSize10(context: context)),
                     whiteBorderContainer(
                         child: Image.asset(Assets.handshakeImage),
+                        color: Colors.transparent,
                         height: SizeConfig.getSizeHeightBy(
                             context: context, by: 0.15),
                         width: SizeConfig.getSizeHeightBy(

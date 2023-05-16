@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:pitch_me_app/models/FeedbackModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:swipable_stack/swipable_stack.dart';
 
 import '../../../controller/businessIdeas/postPageController.dart';
 import '../../../core/urls.dart';
@@ -45,10 +44,12 @@ Future<FeedbackModel?> postfeedback(
           backgroundColor: Colors.blue,
           textColor: Colors.white,
           fontSize: 16.0);
-      _pageController.swipableStackController
-          .next(swipeDirection: SwipeDirection.left);
-      // _pageController.left = false;
-      // Navigator.pop(context);
+      // _pageController.swipableStackController
+      //     .next(swipeDirection: SwipeDirection.left);
+      _pageController.left.value = false;
+      //  Navigator.pop(context);
+      //Get.offAll(Floatbar(1));
+      Get.back();
       return feedbackModelFromJson(data);
     } else {
       print('login failed');

@@ -20,10 +20,6 @@ import 'package:pitch_me_app/View/what%20need/who_need_page_controller.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
-import 'package:sizer/sizer.dart';
-
-import '../../utils/colors/colors.dart';
-import '../../utils/styles/styles.dart';
 
 class SelectedPage extends StatefulWidget {
   int showIcon;
@@ -55,8 +51,6 @@ class _SelectedPageState extends State<SelectedPage> {
   Widget build(BuildContext context) {
     _whoNeedController.checkType.value = '';
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: bannerWidget(),
       body: Container(
         width: double.infinity,
         height: double.infinity,
@@ -180,7 +174,7 @@ class _SelectedPageState extends State<SelectedPage> {
                   return ListView.builder(
                       shrinkWrap: true,
                       primary: false,
-                      padding: EdgeInsets.only(left: 30, right: 30),
+                      padding: EdgeInsets.zero,
                       itemCount:
                           _needPageController.selectedNeedType.value.length,
                       itemBuilder: (context, index) {
@@ -204,7 +198,7 @@ class _SelectedPageState extends State<SelectedPage> {
                   return ListView.builder(
                       shrinkWrap: true,
                       primary: false,
-                      padding: EdgeInsets.only(left: 30, right: 30),
+                      padding: EdgeInsets.zero,
                       itemCount: _needPageController
                           .searchingSelectedItems.value.length,
                       itemBuilder: (context, index) {
@@ -239,11 +233,11 @@ class _SelectedPageState extends State<SelectedPage> {
 
   Widget _imagesGridView() {
     return _addImageController.listImagePaths.isEmpty &&
-            _addImageController.fileFullPath.isEmpty
+            _addImageController.filePath.isEmpty
         ? Container()
         : GridView.builder(
             physics: const NeverScrollableScrollPhysics(),
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+            padding: const EdgeInsets.symmetric(horizontal: 25),
             shrinkWrap: true,
             itemCount: _addImageController.listImagePaths.length + 1,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
@@ -253,7 +247,7 @@ class _SelectedPageState extends State<SelectedPage> {
                 mainAxisExtent: 130),
             itemBuilder: (context, index) {
               if (index == _addImageController.listImagePaths.length) {
-                return _addImageController.fileFullPath.isNotEmpty
+                return _addImageController.filePath.isNotEmpty
                     ? InkWell(
                         onTap: () {
                           _navigationController.navigationType.value = 'Edit';
@@ -290,8 +284,7 @@ class _SelectedPageState extends State<SelectedPage> {
                   decoration:
                       BoxDecoration(borderRadius: BorderRadius.circular(30)),
                   child: Image.file(
-                    File(_addImageController.listImagePaths[index].path
-                        .toString()),
+                    File(_addImageController.listImagePaths[index].toString()),
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -300,26 +293,16 @@ class _SelectedPageState extends State<SelectedPage> {
           );
   }
 
-  Widget bannerWidget() {
-    return Container(
-      height: 6.h,
-      width: MediaQuery.of(Get.context!).size.width,
-      alignment: Alignment.center,
-      color: DynamicColor.darkBlue,
-      child: Text(
-        'Banner',
-        style: white15TextStyle,
-      ),
-    );
-  }
-
   Widget customWidget(iconImage, name, {required VoidCallback onPressad}) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: onPressad,
       child: Container(
-        margin: EdgeInsets.only(bottom: sizeH * 0.015),
+        margin: EdgeInsets.only(
+            bottom: sizeH * 0.015,
+            left: SizeConfig.getFontSize25(context: context),
+            right: SizeConfig.getFontSize25(context: context)),
         width: sizeW * 0.85,
         height: sizeH * 0.068,
         decoration: BoxDecoration(

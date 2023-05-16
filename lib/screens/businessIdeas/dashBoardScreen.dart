@@ -5,6 +5,7 @@ import 'package:pitch_me_app/screens/businessIdeas/HomepageCard.dart';
 import 'package:pitch_me_app/screens/businessIdeas/statisticsPage.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/text/text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DashBoardScreen extends StatefulWidget {
   final Function(int index) currentPage;
@@ -23,7 +24,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
   DashboardController controller = Get.put(DashboardController());
 
   bool ChangeButton = false;
-
+  int swipeCount = 0;
   @override
   void initState() {
     // TODO: implement initState
@@ -35,12 +36,25 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     });
   }
 
+  getUserType() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    //Return bool
+    setState(() {
+      if (prefs.getString('count_swipe') != 'null') {
+        swipeCount = int.parse(prefs.getString('count_swipe').toString());
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Obx(() {
       return PageView(
         controller: _controller,
-        physics:
+        physics: 
+        // swipeCount > 19
+        //     ? NeverScrollableScrollPhysics()
+        //     :
             /*controller.isFinish.value? NeverScrollableScrollPhysics():*/
             ClampingScrollPhysics(),
         scrollDirection: Axis.vertical,

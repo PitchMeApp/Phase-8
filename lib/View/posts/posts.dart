@@ -1,11 +1,12 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/custom_bottom_view.dart';
 import 'package:pitch_me_app/View/posts/detail_page.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
-import 'package:pitch_me_app/View/posts/profile_appbar.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:pitch_me_app/utils/widgets/Alert%20Box/delete_sales_post.dart';
 
@@ -39,25 +40,27 @@ class _PostPageState extends State<PostPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: CustomFloatbar(),
-      body: _buildBodyView(controller),
+      body: Stack(
+        children: [_buildBodyView(controller), CustomFloatbar()],
+      ),
     );
   }
 
   Widget _buildBodyView(PostController controller) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
-        child: Column(
-          children: [
-            ProfilePostHeader(
-              title: 'Posts',
-            ),
-            const SizedBox(height: 30),
-            _postListWidget(controller),
-          ],
-        ),
+    return Padding(
+      padding: EdgeInsets.only(
+          left: SizeConfig.getFontSize25(context: context),
+          right: SizeConfig.getFontSize25(context: context)),
+      child: Column(
+        children: [
+          CustomAppbar(
+            title: 'Posts',
+            onPressad: () {},
+            onPressadForNotify: () {},
+          ),
+          const SizedBox(height: 30),
+          _postListWidget(controller),
+        ],
       ),
     );
   }

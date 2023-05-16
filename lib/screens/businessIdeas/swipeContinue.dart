@@ -34,7 +34,7 @@ class _swipeContinueState extends State<swipeContinue> {
             child: Center(
               child: Image.asset(
                 "assets/image/Group 12262.png",
-                height: sizeH * 0.13,
+                height: sizeH * 0.09,
               ),
             ),
           )),

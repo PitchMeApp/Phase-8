@@ -6,12 +6,21 @@ import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
+import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
 class CustomAppbar extends StatefulWidget {
   final String title;
-  const CustomAppbar({super.key, required this.title});
+  VoidCallback onPressad;
+  VoidCallback onPressadForNotify;
+  dynamic isManuColor;
+  CustomAppbar({
+    super.key,
+    required this.title,
+    required this.onPressad,
+    required this.onPressadForNotify,
+    this.isManuColor,
+  });
 
   @override
   State<CustomAppbar> createState() => _CustomAppbarState();
@@ -25,11 +34,11 @@ class _CustomAppbarState extends State<CustomAppbar>
   Timer timer = Timer(Duration(seconds: 0), () {});
   @override
   void initState() {
+    //Colors.white.withOpacity(0.3)
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _colorTween =
-        ColorTween(begin: Color(0xff599CD0), end: Colors.white.withOpacity(0.3))
-            .animate(_animationController);
+    _colorTween = ColorTween(begin: DynamicColor.blue, end: DynamicColor.blue)
+        .animate(_animationController);
     Future.delayed(const Duration(seconds: 0), () {
       _animationController.status == AnimationStatus.completed
           ? _animationController.reset()
@@ -46,115 +55,89 @@ class _CustomAppbarState extends State<CustomAppbar>
   Widget build(BuildContext context) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
-    return Padding(
-      padding: EdgeInsets.only(
-          top: MediaQuery.of(context).size.height * 0.014,
-          left: SizeConfig.getSize20(context: context),
-          right: SizeConfig.getSize20(context: context)),
-      child: Stack(
-        children: [
-          AnimatedBuilder(
-              animation: _colorTween,
-              builder: (context, child) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    InkWell(
-                      onTap: () {},
-                      child: Container(
-                          height: 6.h,
-                          width: 12.w,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: _colorTween.value,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Color.fromARGB(108, 148, 147, 147)
-                                      .withOpacity(0.3),
-                                  blurRadius: 50.0,
-                                  spreadRadius: 10,
-                                  offset: Offset(
-                                    20,
-                                    20,
-                                  ),
-                                )
-                              ],
-                              borderRadius: BorderRadius.circular(10.0)),
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: loadSvg(
-                                image: 'assets/image/notifications.svg'),
-                          )),
-                    ),
-                    Container(
-                      height: MediaQuery.of(context).size.height * 0.04,
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      alignment: Alignment.center,
-                      decoration: widget.title != 'Profile'
-                          ? BoxDecoration(
-                              color: DynamicColor.blue,
-                              borderRadius: BorderRadius.circular(8.0))
-                          : null,
-                      child: Text(
-                        widget.title,
-                        style: widget.title != 'Profile'
-                            ? white15TextStyle
-                            : blue16bold,
-                      ),
-                    ),
-                    InkWell(
-                      onTap: () {},
-                      child: Container(
-                        height: 6.h,
-                        width: 12.w,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            color: _colorTween.value,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Color.fromARGB(108, 148, 147, 147)
-                                    .withOpacity(0.3),
-                                blurRadius: 50.0,
-                                spreadRadius: 10,
-                                offset: Offset(
-                                  20,
-                                  20,
-                                ),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(10.0)),
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Padding(
+        padding: EdgeInsets.only(
+            top: SizeConfig.getSize30(context: context) +
+                MediaQuery.of(context).size.height * 0.021,
+            left: SizeConfig.getFontSize25(context: context),
+            right: SizeConfig.getFontSize25(context: context)),
+        child: Stack(
+          children: [
+            AnimatedBuilder(
+                animation: _colorTween,
+                builder: (context, child) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      AppBarIconContainer(
+                        onTap: widget.onPressadForNotify,
+                        height: SizeConfig.getSize50(context: context),
+                        width: SizeConfig.getSize50(context: context),
+                        colorTween: _colorTween,
                         child: Padding(
-                          padding: const EdgeInsets.all(12.0),
-                          child: loadSvg(image: 'assets/image/menu.svg'),
+                          padding: EdgeInsets.all(12.0),
+                          child: loadSvg(
+                            image: 'assets/image/notifications.svg',
+                          ),
                         ),
                       ),
-                    )
-                  ],
-                );
-              }),
-          Consumer<DataClass>(
-              builder: (BuildContext context, value, Widget? child) {
-            return Visibility(
-              visible: value.totalNotiCount == 0 ? false : true,
-              child: Container(
-                height: 20,
-                width: 20,
-                margin: const EdgeInsets.only(left: 25, bottom: 20),
-                padding: const EdgeInsets.only(left: 3, right: 3),
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                    color: DynamicColor.blue,
-                    borderRadius: BorderRadius.circular(50)),
-                child: FittedBox(
-                  child: Text(
-                    value.totalNotiCount.toString(),
-                    style: TextStyle(color: DynamicColor.white),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.04,
+                        width: MediaQuery.of(context).size.width * 0.35,
+                        alignment: Alignment.center,
+                        // decoration: widget.title != 'Profile'
+                        //     ? BoxDecoration(
+                        //         color: DynamicColor.blue,
+                        //         borderRadius: BorderRadius.circular(8.0))
+                        //     : null,
+                        child: Text(
+                          widget.title,
+                          style: blue16bold,
+                        ),
+                      ),
+                      AppBarIconContainer(
+                        onTap: widget.onPressad,
+                        height: SizeConfig.getSize50(context: context),
+                        width: SizeConfig.getSize50(context: context),
+                        colorTween: _colorTween,
+                        child: Padding(
+                          padding: EdgeInsets.all(12.0),
+                          child: loadSvg(
+                              image: 'assets/image/menu.svg',
+                              color: widget.isManuColor == null
+                                  ? null
+                                  : DynamicColor.darkBlue),
+                        ),
+                      )
+                    ],
+                  );
+                }),
+            Consumer<DataClass>(
+                builder: (BuildContext context, value, Widget? child) {
+              return Visibility(
+                visible: value.totalNotiCount == 0 ? false : true,
+                child: Container(
+                  height: 20,
+                  width: 20,
+                  margin: const EdgeInsets.only(left: 25, bottom: 20),
+                  padding: const EdgeInsets.only(left: 3, right: 3),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: DynamicColor.blue,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: FittedBox(
+                    child: Text(
+                      value.totalNotiCount.toString(),
+                      style: TextStyle(color: DynamicColor.white),
+                    ),
                   ),
                 ),
-              ),
-            );
-          })
-        ],
+              );
+            })
+          ],
+        ),
       ),
     );
   }

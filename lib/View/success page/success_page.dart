@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/success%20page/controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
 import '../../utils/styles/styles.dart';
+import '../posts/posts.dart';
 
 class SuccessPage extends StatefulWidget {
   const SuccessPage({
@@ -20,6 +22,7 @@ class _SuccessPageState extends State<SuccessPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: DynamicColor.blue,
       body: Stack(
         children: [
           Column(
@@ -27,54 +30,60 @@ class _SuccessPageState extends State<SuccessPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
-                "assets/images/Group 12262.png",
-                height: 130,
+                "assets/images/complete.png",
+                height: 120,
               ),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-                  Image.asset(
-                    "assets/images/Rectangle.png",
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 18, bottom: 20),
-                    child: Image.asset(
-                      "assets/images/wing.png",
-                      width: 80,
-                      height: 80,
-                    ),
-                  )
-                ],
+              Image.asset(
+                "assets/image/handshake.png",
+                // height: MediaQuery.of(context).size.height * 0.3,
               ),
+              // Stack(
+              //   alignment: Alignment.center,
+              //   children: [
+              //     Image.asset(
+              //       "assets/images/handshake.png",
+              //     ),
+              //     Padding(
+              //       padding: const EdgeInsets.only(right: 18, bottom: 20),
+              //       child: Image.asset(
+              //         "assets/images/wing.png",
+              //         width: 80,
+              //         height: 80,
+              //       ),
+              //     )
+              //   ],
+              // ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   "You have successfully sent your Sales Pitch for Approval.",
-                  style: blue28,
+                  style: white21wBold,
                   textAlign: TextAlign.center,
                 ),
               ),
-              Obx(() {
-                return _controller.isLoading.value == true
-                    ? Center(
-                        child:
-                            CircularProgressIndicator(color: DynamicColor.blue),
-                      )
-                    : ElevatedButton.icon(
-                        style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(DynamicColor.blue),
-                            minimumSize:
-                                MaterialStateProperty.all(const Size(110, 40))),
-                        onPressed: () {
-                          //PageNavigateScreen().pushRemovUntil(context, PostPage());
-                          _controller.postSalesPitch(context);
-                        },
-                        icon: const Icon(Icons.done),
-                        label: const Text("OK"));
-              })
             ],
           ),
+          Obx(() {
+            return _controller.isLoading.value == true
+                ? Container()
+                : Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 5, right: 5),
+                      child: InkWell(
+                        onTap: () {
+                          PageNavigateScreen()
+                              .pushRemovUntil(context, PostPage());
+                        },
+                        child: Icon(
+                          Icons.arrow_forward_ios,
+                          size: 30,
+                          color: Color.fromARGB(255, 177, 206, 229),
+                        ),
+                      ),
+                    ),
+                  );
+          })
         ],
       ),
     );

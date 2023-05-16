@@ -32,6 +32,9 @@ class SelectionController extends GetxController {
     Get.back();
     if (result != null) {
       preferencesData.setString('log_type', type.toString());
+      preferencesData.setString("guest", 'Guest');
+      preferencesData.setString('count_swipe', '0');
+      preferencesData.setString('new_user', 'New User');
       Get.offAll(() => Floatbar(0));
     }
   }

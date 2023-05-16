@@ -1,9 +1,10 @@
 const String APP_NAME = "Pitch me";
 const String EMAIL = "Email";
-const String USERNAME = "Username";
+const String USERNAME = "Name";
 const String PASSWORD = "Password";
 const String CONFIRMPASSWORD = "Confirm Password";
 const String REGISTER = "Register";
+const String SIGNUP = "SIGN UP";
 const String RESET_PASSWORD = "Reset Password";
 const String ALREADYREGISTERED = "Already have an account? ";
 const String LOGIN = "Login";
@@ -35,17 +36,18 @@ class TextStrings {
     'industry': "What's your Industry?",
     'sun_industry': 'Select 1 Industry that best represents your Sales Pitch',
     'location': 'Location',
-    'sub_location': 'Select the Location that best fits to your Business',
+    'sub_location': 'Select the Location of your Business',
     'what_need': 'Who do you need?',
     'sub_what_need': 'Investors Provide Funds.',
-    'sub_what_need2': 'Facilitator Provide Skills, Services, Connections, etc',
+    'sub_what_need2': 'Facilitator Provide Connections, Skills, Services, etc',
     "funds": "Funds Necessray",
-    "syb_funds": "Select one or more Range of the Funds you need",
+    "syb_funds": "Select the Range",
     'needs': "What do you need?",
-    'sub_needs': 'What do you need from a Facilitator',
+    'sub_needs': 'Select one or more options',
     'offer': 'What do you Offer?',
-    'add_image': 'Add Image',
-    'add_image_sub': 'Upload up to 4 image and 1 PDF',
+    'sub_offer': 'Give clear Instructions to Potential Partners',
+    'add_image': 'Upload',
+    'add_image_sub': 'Select up to 4 images and 1 file',
     'record': 'Record Sales Pitch',
     'delete_sales': 'Delete Post',
     'delete_sales_sub': 'Are you sure you want to delete the post?',
@@ -61,7 +63,7 @@ class TextStrings {
     'contract': 'Contracts',
     'investment': 'Investments',
     'share': 'Shares',
-    'update': 'Updates',
+    'update': 'CRM',
     'profile': 'Profile',
     'biography': 'Biography',
     'likes': 'Likes',
@@ -69,5 +71,17 @@ class TextStrings {
     'logout': 'Log Out',
     'log_out': 'Logout The App',
     'log_out_sub': 'Are you sure you want to logout the app?',
+    'log_in': 'Log In',
+    'sign_up': 'Sign Up',
+    'tutorial': 'TUTORIALS',
+    'faq': 'Faq',
+    'advrise': 'ADVERTISE WITH US',
+    'buy_pitch': ' BUY PITCH ME SHARES',
+    'contact': 'Contact',
+    'advice': 'Advice',
+    'mistake': 'Mistakes',
+    'strategies': 'Strategies',
+    'motivational': 'Motivational',
+    'success_stories': 'Success Stories'
   };
 }

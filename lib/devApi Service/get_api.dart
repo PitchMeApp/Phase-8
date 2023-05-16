@@ -25,6 +25,7 @@ class GetApiService {
 
   Future<IndustryModel> getServiceApi() async {
     String url = '${BASE_URL}services';
+
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });

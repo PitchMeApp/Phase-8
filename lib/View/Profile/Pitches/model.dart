@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 SavedListModel savedListModelFromJson(String str) =>
@@ -97,7 +96,7 @@ class SavedResult {
             ? 'https://api.salespitchapp.com/' + json["file"]
             : json["file"],
         vid1: json["vid1"].isNotEmpty
-            ? 'https://api.salespitchapp.com/' + json["vid1"]
+            ? 'http://191.101.229.245:9070/' + json["vid1"]
             : json["vid1"],
         description: json["description"],
         comment: json["comment"],

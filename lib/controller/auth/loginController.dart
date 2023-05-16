@@ -61,7 +61,10 @@ class LoginController extends GetxController {
         prefs.setString("tok", result.token.toString());
         var log =
             prefs.setString("log_type", result.user!.loginType.toString());
+        prefs.setString("guest", 'Guest');
+        prefs.setString('count_swipe', '0');
         print("dhtdfhfghfff ${result.user!.loginType.toString()}");
+
         AuthApis.setData(userLoginModel: result);
         if (result.user!.loginType == null || result.user!.loginType == 0) {
           Get.offAll(() => SelectionScreen(), binding: SelectionBinding());
@@ -73,6 +76,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> socialLogin(int which) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       Get.dialog(Loading());
       UserCredential? userCredential = which == 1
@@ -98,6 +102,12 @@ class LoginController extends GetxController {
                     : 3);
         Get.back();
         if (result != null) {
+          prefs.setString("user_id", result.user!.sId.toString());
+          prefs.setString("tok", result.token.toString());
+          var log =
+              prefs.setString("log_type", result.user!.loginType.toString());
+          prefs.setString("guest", 'Guest');
+          prefs.setString('count_swipe', '0');
           AuthApis.setData(userLoginModel: result);
           if (result.user!.loginType == null || result.user!.loginType == 0) {
             Get.offAll(() => SelectionScreen(), binding: SelectionBinding());
