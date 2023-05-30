@@ -146,7 +146,7 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                 padding: const EdgeInsets.only(left: 3, right: 3),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    color: DynamicColor.blue,
+                    color: DynamicColor.darkBlue,
                     borderRadius: BorderRadius.circular(50)),
                 child: FittedBox(
                   child: Text(

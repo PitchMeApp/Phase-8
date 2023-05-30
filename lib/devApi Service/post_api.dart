@@ -27,20 +27,23 @@ class PostApiServer {
     } catch (e) {}
   }
 
-  Future savedVideoApi(pitchID) async {
+  Future savedVideoApi(pitchID, receiverid) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = '${BASE_URL}feedback/addsaved';
     try {
       final response = await http.post(Uri.parse(url),
           body: jsonEncode({
             "senderid": prefs.get('user_id').toString(),
+            "receiverid": (receiverid == null)
+                ? prefs.get('user_id').toString()
+                : receiverid,
             "pitchid": pitchID.toString(),
           }),
           headers: {
             'Content-Type': 'application/json',
           });
       dynamic data = jsonDecode(response.body);
-      log('message' + data.toString());
+
       Fluttertoast.showToast(
           msg: 'Add Successfully', gravity: ToastGravity.CENTER);
       return data;

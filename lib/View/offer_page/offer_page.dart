@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
 import 'package:pitch_me_app/View/navigation_controller.dart';
 import 'package:pitch_me_app/View/offer_page/controller.dart';
+import 'package:pitch_me_app/View/offer_page/selection_person.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
@@ -10,7 +11,6 @@ import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
 import '../../utils/strings/strings.dart';
-import '../Add Image Page/addImage_page.dart';
 import '../Custom header view/custom_header_view.dart';
 
 class OfferPage extends StatefulWidget {
@@ -68,7 +68,7 @@ class _OfferPageState extends State<OfferPage> {
                                   'Post') {
                                 PageNavigateScreen().push(
                                     context,
-                                    AddImagePage(
+                                    SelectionPersonPage(
                                       key: abcKey,
                                     ));
                               } else {

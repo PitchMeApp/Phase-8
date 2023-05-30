@@ -37,6 +37,7 @@ class _PitcheShowFullVideoPageState extends State<PitcheShowFullVideoPage> {
         PostDetailPage(
           data: widget.data,
           arrowCheck: true,
+          userID: widget.data.userid,
           onPressad: () {
             pageController.previousPage(
                 duration: Duration(milliseconds: 200), curve: Curves.linear);

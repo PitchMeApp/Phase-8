@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Deals%20Page/deals_page.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
+import 'package:pitch_me_app/View/Profile/Biography/biography.dart';
 import 'package:pitch_me_app/View/Profile/Likes/likes_list.dart';
 import 'package:pitch_me_app/View/Profile/Pitches/pitches_list.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/widgets/Alert%20Box/logout.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
-import '../../Phase 6/Guest UI/Guest limitation pages/under_progress_limitation.dart';
 import '../../utils/strings/strings.dart';
 
 class ProfilePage extends StatefulWidget {
@@ -35,7 +35,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     title: TextStrings.textKey['biography']!,
                     onPressad: () {
                       PageNavigateScreen()
-                          .push(context, UnderDevLimitationPage());
+                          .push(context, BiographyPage(type: 'Biography'));
                     }),
                 CustomListBox(
                     icon: 'assets/images/ic_favorite_24px@4x.png',

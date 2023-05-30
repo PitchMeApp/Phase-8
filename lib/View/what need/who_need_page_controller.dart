@@ -20,7 +20,7 @@ class WhoNeedController extends GetxController {
     for (var element in data) {
       if (value == element) {
         if (element['isSelected'] != true) {
-          isSelectedItem.value.add(element);
+          isSelectedItem.value.add(element['value']);
           if (value['value'] == 'Investor') {
             checkColor = 1;
             checkType.value = 'Investor';
@@ -35,7 +35,7 @@ class WhoNeedController extends GetxController {
           update();
         } else {
           element['isSelected'] = false;
-          isSelectedItem.value.remove(element);
+          isSelectedItem.value.remove(element['value']);
           if (element['value'] == 'Investor') {
             checkColor = 0;
             checkType.value = '';

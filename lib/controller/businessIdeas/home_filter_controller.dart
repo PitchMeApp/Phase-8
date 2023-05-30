@@ -16,14 +16,14 @@ class HomeFilterController extends GetxController {
       if (value == i) {
         // log(data[i].toString());
         if (data[i]['isSelected'] != true) {
-          selectedData.value.add(data[i]);
+          selectedData.value.add(data[i]['value']);
           data[i]['isSelected'] = true;
 
           // getServiceApiCall(data[i]['value'], data[i]['isSelected']);
           update();
         } else {
           data[i]['isSelected'] = false;
-          selectedData.value.remove(data[i]);
+          selectedData.value.remove(data[i]['value']);
           // getServiceApiCall(data[i]['value'], data[i]['isSelected']);
           update();
         }

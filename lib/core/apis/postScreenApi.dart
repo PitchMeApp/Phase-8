@@ -8,7 +8,12 @@ import 'package:pitch_me_app/models/statisticsModel/statisticsModel.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class BusinessIdeasApi extends GetConnect {
-  Future<PostModel?> getPost() async {
+  Future<PostModel?> getPost(filter) async {
+    String category = filter
+        .toString()
+        .replaceAll('[', '')
+        .replaceAll(']', '')
+        .replaceAll(' ', '');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     try {
       var res;
@@ -16,7 +21,7 @@ class BusinessIdeasApi extends GetConnect {
       var userID = prefs.getString('user_id').toString();
       if (userID.isNotEmpty && userID != 'null') {
         //res = await get('${BASE_URL}salespitch?type=2');
-        res = await get('$GET_POST_DATA_URL?user=$userID');
+        res = await get('$GET_POST_DATA_URL?user=$userID&category=$category');
 
         //res = await get(GET_POST_DATA_URL);
       } else {
@@ -50,7 +55,7 @@ class BusinessIdeasApi extends GetConnect {
       res = await get('${BASE_URL}salespitch?type=2');
     }
 
-    log("Res is at getPost ${res.body}");
+    log("Res is at getPost ${'${BASE_URL}salespitch?type=2&user=$userID&usertype=$bussinessType'}");
     if (res.statusCode == 200) {
       return SalesPitchListModel.fromJson(res.body);
     }

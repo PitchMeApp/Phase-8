@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/custom_bottom_view.dart';
+import 'package:pitch_me_app/View/Profile/Pitches/detail_page.dart';
 import 'package:pitch_me_app/View/posts/detail_page.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
@@ -93,9 +94,14 @@ class _PostPageState extends State<PostPage> {
                           padding: const EdgeInsets.all(8.0),
                           child: GestureDetector(
                             onTap: () {
-                              Get.to(() => PostDetailPage(
+                              Get.to(() => PitcheShowFullVideoPage(
+                                    url: data.vid1,
                                     data: data,
                                   ));
+                              // Get.to(() => PostDetailPage(
+                              //       data: data,
+                              //       userID: data.userid,
+                              //     ));
                             },
                             child: Stack(
                               alignment: Alignment.topRight,

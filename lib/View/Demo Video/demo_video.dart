@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/login_limitation.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Profile/manu.dart';
-import 'package:pitch_me_app/View/Add%20Image%20Page/addImage_page.dart';
+import 'package:pitch_me_app/Phase%206/demo%20watch%20sales%20pitch/demo_watch_sales.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/View/Select%20industry/select_industry.dart';
@@ -205,15 +205,22 @@ class _DemoVideoPageState extends State<DemoVideoPage> {
                     CustomAppbar(
                       title: 'Add Sales Pitch',
                       onPressad: () {
+                        videoViewerController.pause();
                         if (checkGuestType.isNotEmpty &&
                             checkGuestType != 'null') {
-                          PageNavigateScreen().push(
-                              context,
-                              ManuPage(
-                                title: 'Add Sales Pitch',
-                                pageIndex: 2,
-                                isManu: 'Manu',
-                              ));
+                          PageNavigateScreen()
+                              .push(
+                                  context,
+                                  ManuPage(
+                                    title: 'Add Sales Pitch',
+                                    pageIndex: 2,
+                                    isManu: 'Manu',
+                                  ))
+                              .then((value) {
+                            setState(() {
+                              videoViewerController.play();
+                            });
+                          });
                         } else {
                           Get.to(() => GuestManuPage(
                                 title: 'Add Sales Pitch',

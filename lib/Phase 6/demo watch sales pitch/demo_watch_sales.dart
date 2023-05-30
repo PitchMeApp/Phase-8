@@ -13,8 +13,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_viewer/video_viewer.dart';
 
 class DemoWatchSalesPitch extends StatefulWidget {
-  final SalesPitchListModel postModel;
-  const DemoWatchSalesPitch({super.key, required this.postModel});
+  const DemoWatchSalesPitch({super.key});
 
   @override
   State<DemoWatchSalesPitch> createState() => _DemoWatchSalesPitchState();
@@ -26,6 +25,7 @@ class _DemoWatchSalesPitchState extends State<DemoWatchSalesPitch> {
   String businesstype = '';
   @override
   void initState() {
+    log('check');
     getUserType();
     super.initState();
   }
@@ -127,7 +127,8 @@ class _DemoWatchSalesPitchState extends State<DemoWatchSalesPitch> {
 
   @override
   void dispose() {
-    videoViewerController.pause();
+    log('check 2');
+    videoViewerController.dispose();
 
     super.dispose();
   }

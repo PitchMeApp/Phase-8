@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/View/Profile/Biography/biography.dart';
 import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/home_page_biography.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:sizer/sizer.dart';
+import 'package:swipable_stack/swipable_stack.dart';
 
 class interestedSwipe extends StatefulWidget {
-  const interestedSwipe({super.key});
+  String userID;
+  interestedSwipe({super.key, required this.userID});
 
   @override
   State<interestedSwipe> createState() => _interestedSwipeState();
@@ -149,7 +153,9 @@ class _interestedSwipeState extends State<interestedSwipe> {
               ),
               Expanded(
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Get.to(() => BiographyPage(type: 'Bio'));
+                  },
                   child: Container(
                     height: 6.h,
                     alignment: Alignment.center,

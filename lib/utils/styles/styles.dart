@@ -20,6 +20,11 @@ TextStyle white21wBold = const TextStyle(
   color: DynamicColor.white,
   fontWeight: FontWeight.w500,
 );
+TextStyle blue10 = const TextStyle(
+  fontSize: 10,
+  color: DynamicColor.blue,
+  fontWeight: FontWeight.w500,
+);
 TextStyle blue12 = const TextStyle(
   color: DynamicColor.blue,
   fontSize: 12,

@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/BottomNavigation.dart';
-import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/swipe_limitation.dart';
 import 'package:pitch_me_app/controller/auth/loginController.dart';
 import 'package:pitch_me_app/controller/selectionController.dart';
 import 'package:pitch_me_app/core/extras.dart';

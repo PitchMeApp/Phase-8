@@ -14,12 +14,14 @@ class CustomAppbar extends StatefulWidget {
   VoidCallback onPressad;
   VoidCallback onPressadForNotify;
   dynamic isManuColor;
+  dynamic colorTween;
   CustomAppbar({
     super.key,
     required this.title,
     required this.onPressad,
     required this.onPressadForNotify,
     this.isManuColor,
+    this.colorTween,
   });
 
   @override
@@ -37,8 +39,15 @@ class _CustomAppbarState extends State<CustomAppbar>
     //Colors.white.withOpacity(0.3)
     _animationController =
         AnimationController(vsync: this, duration: Duration(seconds: 5));
-    _colorTween = ColorTween(begin: DynamicColor.blue, end: DynamicColor.blue)
-        .animate(_animationController);
+    if (widget.colorTween != null) {
+      _colorTween =
+          ColorTween(begin: DynamicColor.white, end: DynamicColor.white)
+              .animate(_animationController);
+    } else {
+      _colorTween = ColorTween(begin: DynamicColor.blue, end: DynamicColor.blue)
+          .animate(_animationController);
+    }
+
     Future.delayed(const Duration(seconds: 0), () {
       _animationController.status == AnimationStatus.completed
           ? _animationController.reset()
@@ -80,6 +89,9 @@ class _CustomAppbarState extends State<CustomAppbar>
                           padding: EdgeInsets.all(12.0),
                           child: loadSvg(
                             image: 'assets/image/notifications.svg',
+                            color: widget.colorTween == 'BIOGRAPHY'
+                                ? DynamicColor.blue
+                                : null,
                           ),
                         ),
                       ),
@@ -94,7 +106,9 @@ class _CustomAppbarState extends State<CustomAppbar>
                         //     : null,
                         child: Text(
                           widget.title,
-                          style: blue16bold,
+                          style: widget.colorTween == 'BIOGRAPHY'
+                              ? white17wBold
+                              : blue16bold,
                         ),
                       ),
                       AppBarIconContainer(
@@ -106,9 +120,11 @@ class _CustomAppbarState extends State<CustomAppbar>
                           padding: EdgeInsets.all(12.0),
                           child: loadSvg(
                               image: 'assets/image/menu.svg',
-                              color: widget.isManuColor == null
-                                  ? null
-                                  : DynamicColor.darkBlue),
+                              color: widget.colorTween == 'BIOGRAPHY'
+                                  ? DynamicColor.blue
+                                  : widget.isManuColor == null
+                                      ? null
+                                      : DynamicColor.darkBlue),
                         ),
                       )
                     ],
@@ -125,7 +141,7 @@ class _CustomAppbarState extends State<CustomAppbar>
                   padding: const EdgeInsets.only(left: 3, right: 3),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      color: DynamicColor.blue,
+                      color: DynamicColor.darkBlue,
                       borderRadius: BorderRadius.circular(50)),
                   child: FittedBox(
                     child: Text(

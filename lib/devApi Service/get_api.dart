@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:http/http.dart' as http;
+import 'package:pitch_me_app/View/Profile/Biography/model/model.dart';
 import 'package:pitch_me_app/View/Profile/Likes/model.dart';
 import 'package:pitch_me_app/View/Profile/Pitches/model.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
@@ -58,7 +59,7 @@ class GetApiService {
         headers: {
           'Content-Type': 'application/json',
         });
-
+    // log(jsonDecode(response.body).toString());
     SavedListModel data = savedListModelFromJson(response.body);
 
     return data;
@@ -75,7 +76,7 @@ class GetApiService {
         headers: {
           'Content-Type': 'application/json',
         });
-
+    //  log(jsonDecode(response.body).toString());
     SavedListModel data = savedListModelFromJson(response.body);
 
     return data;
@@ -97,6 +98,30 @@ class GetApiService {
     return data;
   }
 
+  Future<BiogaphyModel> getUserBioGraphyApi(userId) async {
+    String url = '${BASE_URL}biography?userid=$userId';
+    final response = await http.get(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+    });
+    log(jsonDecode(response.body).toString());
+    BiogaphyModel data = biogaphyModelFromJson(response.body);
+
+    return data;
+  }
+
+  Future getUserDetailApi(id) async {
+    //SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${BASE_URL}feedback/user/$id';
+    // log(url);
+    final response = await http.get(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+    });
+
+    //SavedListModel data = savedListModelFromJson(response.body);
+    dynamic data = jsonDecode(response.body);
+    // log('userdata = ' + data.toString());
+    return data;
+  }
   // DELETE
 
   Future deleteSalesPittchApi(id) async {
@@ -136,14 +161,26 @@ class GetApiService {
   }
 
   // put
-  Future readAllNotificationApi() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String url = '${BASE_URL}notification/readall/${prefs.get('user_id')}';
-    log(url);
+  Future readNotificationApi(id) async {
+    String url = '${BASE_URL}notification/read/$id';
+
     final response = await http.put(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
-    log(response.body);
+
+    dynamic data = jsonDecode(response.body);
+
+    return data;
+  }
+
+  Future readAllNotificationApi() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${BASE_URL}notification/readall/${prefs.get('user_id')}';
+
+    final response = await http.put(Uri.parse(url), headers: {
+      'Content-Type': 'application/json',
+    });
+
     dynamic data = jsonDecode(response.body);
 
     return data;

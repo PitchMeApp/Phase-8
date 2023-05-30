@@ -1,6 +1,6 @@
 const String APP_NAME = "Pitch me";
 const String EMAIL = "Email";
-const String USERNAME = "Name";
+const String USERNAME = "Full name";
 const String PASSWORD = "Password";
 const String CONFIRMPASSWORD = "Confirm Password";
 const String REGISTER = "Register";
@@ -46,6 +46,7 @@ class TextStrings {
     'sub_needs': 'Select one or more options',
     'offer': 'What do you Offer?',
     'sub_offer': 'Give clear Instructions to Potential Partners',
+    'who_can': 'Who can watch',
     'add_image': 'Upload',
     'add_image_sub': 'Select up to 4 images and 1 file',
     'record': 'Record Sales Pitch',
@@ -82,6 +83,8 @@ class TextStrings {
     'mistake': 'Mistakes',
     'strategies': 'Strategies',
     'motivational': 'Motivational',
-    'success_stories': 'Success Stories'
+    'success_stories': 'Success Stories',
+    'bio_text': 'The more complete, the higher chances of',
+    'bio_text2': 'someone to Initiate talks with you',
   };
 }

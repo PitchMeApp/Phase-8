@@ -1,7 +1,10 @@
 // import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart' hide BoxDecoration, BoxShadow;
 import 'package:flutter_inset_box_shadow/flutter_inset_box_shadow.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/images.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
 
@@ -302,46 +305,6 @@ class _BottomMenuContainerState extends State<BottomMenuContainer> {
     );
   }
 }
-// Widget greyButtonContainer(
-//     {double? height,
-//     double? width,
-//     required Widget child,
-//     double cornerRadius = 50}) {
-//   return Container(
-//     height: height,
-//     width: width,
-//     child: child,
-//     decoration: BoxDecoration(
-//       borderRadius: BorderRadius.circular(cornerRadius),
-//       color: const Color(0xffe2e2e2),
-//       boxShadow: isPressed
-//           ? [
-//               BoxShadow(
-//                   color: colors.black.withOpacity(0.3),
-//                   offset: Offset(5, 5),
-//                   blurRadius: 20,
-//                   inset: true),
-//               BoxShadow(
-//                   color: colors.black.withOpacity(0.3),
-//                   offset: Offset(-5, -5),
-//                   blurRadius: 10,
-//                   inset: true),
-//             ]
-//           : [
-//               BoxShadow(
-//                 color: const Color(0xffffffff),
-//                 offset: Offset(5, 5),
-//                 blurRadius: 20,
-//               ),
-//               BoxShadow(
-//                 color: const Color(0xffffffff),
-//                 offset: Offset(-5, -5),
-//                 blurRadius: 10,
-//               ),
-//             ],
-//     ),
-//   );
-// }
 
 class AppBarIconContainer extends StatefulWidget {
   final double? height;
@@ -402,5 +365,377 @@ class _AppBarIconContainerState extends State<AppBarIconContainer> {
             ),
           );
         });
+  }
+  // dev
+}
+
+class CircleBox extends StatelessWidget {
+  String title;
+  String title2;
+  String imageType;
+  dynamic isHttp;
+  dynamic checkApprove;
+  TextStyle textStyle;
+  VoidCallback onPressad;
+  CircleBox(
+      {super.key,
+      required this.title,
+      required this.title2,
+      required this.imageType,
+      this.isHttp,
+      this.checkApprove,
+      required this.textStyle,
+      required this.onPressad});
+
+  @override
+  Widget build(BuildContext context) {
+    return isHttp != null && imageType.contains('https')
+        ? Stack(
+            alignment: Alignment.bottomRight,
+            children: [
+              InkWell(
+                onTap: onPressad,
+                child: Container(
+                    height: SizeConfig.getSize60(context: context),
+                    width: SizeConfig.getSize60(context: context),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: DynamicColor.white,
+                        borderRadius: BorderRadius.circular(100)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(7),
+                      child: isHttp != null
+                          ? Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: checkApprove == 2 &&
+                                          imageType.contains('https')
+                                      ? DynamicColor.blue
+                                      : DynamicColor.darkBlue,
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Text(
+                                checkApprove == 2 && imageType.contains('https')
+                                    ? 'Verified'
+                                    : checkApprove == 3
+                                        ? 'Not Verified'
+                                        : 'Pending',
+                                style: TextStyle(
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 12,
+                                    color: DynamicColor.white),
+                                textAlign: TextAlign.center,
+                              ),
+                            )
+                          : Container(
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  color: Color(0xffE6E6E6),
+                                  borderRadius: BorderRadius.circular(100)),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    title,
+                                    style: textStyle,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  title2.isEmpty
+                                      ? Container()
+                                      : Text(
+                                          title2,
+                                          style: textStyle,
+                                          textAlign: TextAlign.center,
+                                        ),
+                                ],
+                              ),
+                            ),
+                    )),
+              ),
+              checkApprove == 2 && imageType.contains('https')
+                  ? Container(
+                      padding: EdgeInsets.all(2),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          color: DynamicColor.blue,
+                          borderRadius: BorderRadius.circular(50)),
+                      child: Icon(
+                        Icons.check,
+                        color: DynamicColor.white,
+                        size: 18,
+                      ),
+                    )
+                  : Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                        padding: EdgeInsets.all(2),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: DynamicColor.redColor,
+                            borderRadius: BorderRadius.circular(50)),
+                        child: Icon(
+                          Icons.close,
+                          color: DynamicColor.white,
+                          size: 18,
+                        ),
+                      ),
+                    ),
+            ],
+          )
+        : InkWell(
+            onTap: onPressad,
+            child: Container(
+              height: SizeConfig.getSize60(context: context),
+              width: SizeConfig.getSize60(context: context),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: DynamicColor.white,
+                  borderRadius: BorderRadius.circular(100)),
+              child: imageType.isEmpty
+                  ? Padding(
+                      padding: const EdgeInsets.all(7),
+                      child: Container(
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            color: Color(0xffE6E6E6),
+                            borderRadius: BorderRadius.circular(100)),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              title,
+                              style: textStyle,
+                              textAlign: TextAlign.center,
+                            ),
+                            title2.isEmpty
+                                ? Container()
+                                : Text(
+                                    title2,
+                                    style: textStyle,
+                                    textAlign: TextAlign.center,
+                                  ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : imageType.contains('pdf')
+                      ? Container(
+                          height: 40,
+                          width: 40,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(30)),
+                          //padding: EdgeInsets.only(bottom: 10),
+                          child: Image.asset(
+                            'assets/images/pdf.png',
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                      : CircleAvatar(
+                          radius: 28,
+                          backgroundColor: DynamicColor.white,
+                          backgroundImage: FileImage(File(imageType)),
+                        ),
+            ),
+          );
+  }
+}
+
+class HomeCircleBox extends StatelessWidget {
+  String title;
+  String title2;
+
+  dynamic isHttp;
+  dynamic checkApprove;
+  TextStyle textStyle;
+  //VoidCallback onPressad;
+  HomeCircleBox({
+    super.key,
+    required this.title,
+    required this.title2,
+    this.isHttp,
+    this.checkApprove,
+    required this.textStyle,
+    // required this.onPressad
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      alignment: Alignment.bottomRight,
+      children: [
+        InkWell(
+          //onTap: onPressad,
+          child: Container(
+              height: SizeConfig.getSize60(context: context),
+              width: SizeConfig.getSize60(context: context),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                  color: DynamicColor.white,
+                  borderRadius: BorderRadius.circular(100)),
+              child: Padding(
+                  padding: const EdgeInsets.all(7),
+                  child:
+                      // isHttp != null
+                      //     ?
+                      Container(
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        color: checkApprove == 2
+                            ? DynamicColor.blue
+                            : DynamicColor.darkBlue,
+                        borderRadius: BorderRadius.circular(100)),
+                    child: Text(
+                      checkApprove == 2
+                          ? 'Verified'
+                          : checkApprove == 3
+                              ? 'Not Verified'
+                              : 'Pending',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          color: DynamicColor.white),
+                      textAlign: TextAlign.center,
+                    ),
+                  )
+                  // : Container(
+                  //     alignment: Alignment.center,
+                  //     decoration: BoxDecoration(
+                  //         color: Color(0xffE6E6E6),
+                  //         borderRadius: BorderRadius.circular(100)),
+                  //     child: Column(
+                  //       mainAxisAlignment: MainAxisAlignment.center,
+                  //       crossAxisAlignment: CrossAxisAlignment.center,
+                  //       children: [
+                  //         Text(
+                  //           title,
+                  //           style: textStyle,
+                  //           textAlign: TextAlign.center,
+                  //         ),
+                  //         title2.isEmpty
+                  //             ? Container()
+                  //             : Text(
+                  //                 title2,
+                  //                 style: textStyle,
+                  //                 textAlign: TextAlign.center,
+                  //               ),
+                  //  ],
+                  //),
+                  //),
+                  )),
+        ),
+        checkApprove == 2
+            ? Container(
+                padding: EdgeInsets.all(2),
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: DynamicColor.blue,
+                    borderRadius: BorderRadius.circular(50)),
+                child: Icon(
+                  Icons.check,
+                  color: DynamicColor.white,
+                  size: 18,
+                ),
+              )
+            : Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  padding: EdgeInsets.all(2),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      color: DynamicColor.redColor,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Icon(
+                    Icons.close,
+                    color: DynamicColor.white,
+                    size: 18,
+                  ),
+                ),
+              ),
+      ],
+    );
+  }
+}
+
+class CurveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    int curveHeight = 40;
+    Offset controlPoint = Offset(size.width / 2, size.height + curveHeight);
+    Offset endPoint = Offset(size.width, size.height - curveHeight);
+
+    Path path = Path()
+      ..lineTo(0, size.height - curveHeight)
+      ..quadraticBezierTo(
+          controlPoint.dx, controlPoint.dy, endPoint.dx, endPoint.dy)
+      ..lineTo(size.width, 0)
+      ..close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+}
+
+class CustomBioFields extends StatelessWidget {
+  String image;
+  String title;
+  dynamic isHttp;
+  VoidCallback onTap;
+  CustomBioFields({
+    super.key,
+    required this.image,
+    required this.title,
+    required this.onTap,
+    this.isHttp,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(
+          left: SizeConfig.getSize40(context: context),
+          right: SizeConfig.getSize40(context: context)),
+      child: InkWell(
+        onTap: onTap,
+        child: Card(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Container(
+                height: 35,
+                width: 35,
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: 5, bottom: 5, left: 10),
+                decoration: BoxDecoration(
+                    color: DynamicColor.blue,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(10),
+                        bottomRight: Radius.circular(10))),
+                child: Image.asset(
+                  image,
+                  height: 25,
+                ),
+              ),
+              Text(
+                title,
+                style: TextStyle(
+                    color: isHttp != null
+                        ? DynamicColor.blue
+                        : DynamicColor.lightwhite,
+                    fontSize: 16),
+              ),
+              Container(
+                height: 40,
+                width: 40,
+              )
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }

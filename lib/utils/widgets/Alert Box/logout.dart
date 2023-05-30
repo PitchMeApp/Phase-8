@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/View/Profile/Biography/controller/controller.dart';
 import 'package:pitch_me_app/controller/auth/loginController.dart';
 import 'package:pitch_me_app/core/extras.dart';
 import 'package:pitch_me_app/screens/auth/loginScreen.dart';
@@ -32,6 +33,7 @@ class _LogoutPopUpState extends State<LogoutPopUp> {
       prefs.clear();
       pref.erase();
       videoViewerControllerList.clear();
+      Get.delete<BiographyController>(force: true);
       navigatePage();
       setState(() {
         isLoading = false;

@@ -43,8 +43,9 @@ class _PitchesListPageState extends State<PitchesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
+        alignment: Alignment.center,
         children: [
-          _postListWidget(),
+          SingleChildScrollView(child: _postListWidget()),
           BackArrow(
             alignment: Alignment.centerLeft,
             icon: Icons.arrow_back_ios,

@@ -22,6 +22,7 @@ class _ShowFullVideoPageState extends State<ShowFullVideoPage> {
   Widget build(BuildContext context) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
+    print(widget.url);
     return Scaffold(
       body: Stack(
         children: [
@@ -42,13 +43,33 @@ class _ShowFullVideoPageState extends State<ShowFullVideoPage> {
               looping: true,
               enableShowReplayIconAtVideoEnd: false,
               style: VideoViewerStyle(
+                  playAndPauseStyle: PlayAndPauseWidgetStyle(
+                    background: Colors.transparent,
+                    circleRadius: 80.0,
+                    play: Center(
+                      child: Icon(
+                        Icons.play_arrow,
+                        size: 80,
+                        color: DynamicColor.white,
+                      ),
+                    ),
+                    pause: Center(
+                      child: Icon(
+                        Icons.pause,
+                        size: 80,
+                        color: DynamicColor.white,
+                      ),
+                    ),
+                  ),
                   thumbnail: Image.network(''),
                   loading: CircularProgressIndicator(
                     color: Colors.blue,
                   )),
               source: {
                 "Source": VideoSource(
-                  video: VideoPlayerController.network(widget.url),
+                  video: VideoPlayerController.network(Uri.encodeFull(widget.url
+                      .replaceAll('https://api.salespitchapp.com',
+                          'http://191.101.229.245:9070'))),
                 )
               },
             ),

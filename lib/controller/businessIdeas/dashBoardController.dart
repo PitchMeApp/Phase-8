@@ -20,12 +20,13 @@ class DashboardController extends GetxController {
       isFinish = false.obs,
       isFinish2 = false.obs;
   SalesPitchListModel? salespitch;
-  getPost(Function(int index, String title, bool isFinish) onSwipe) async {
+  getPost(
+      Function(int index, String title, bool isFinish) onSwipe, filter) async {
     try {
       isLoadingPost.value = true;
       hasError.value = false;
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      await businessIdeasApi.getPost().then((value) {
+      await businessIdeasApi.getPost(filter).then((value) {
         if (value != null) {
           var userID = prefs.getString('user_id').toString();
           if (userID.isNotEmpty && userID != 'null') {
@@ -62,17 +63,17 @@ class DashboardController extends GetxController {
             onSwipe(0, postModel.value.result![0].title!.toString(), false);
           }
         } else {
-          Fluttertoast.showToast(
-              msg: 'check = ' + value!.message!.toString(),
-              gravity: ToastGravity.CENTER);
+          // Fluttertoast.showToast(
+          //     msg: 'check = ' + value!.message!.toString(),
+          //     gravity: ToastGravity.CENTER);
           hasError.value = true;
         }
       });
     } catch (e) {
       log("Error at get post is ${e.toString()}");
-      Fluttertoast.showToast(
-          msg: 'Error at get post is = ' + e.toString(),
-          gravity: ToastGravity.CENTER);
+      // Fluttertoast.showToast(
+      //     msg: 'Error at get post is = ' + e.toString(),
+      //     gravity: ToastGravity.CENTER);
       isLoadingPost.value = false;
       hasError.value = true;
     }

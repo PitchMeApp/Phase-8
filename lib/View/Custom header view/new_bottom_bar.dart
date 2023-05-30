@@ -69,7 +69,7 @@ class _NewCustomBottomBarState extends State<NewCustomBottomBar>
   Widget build(BuildContext context) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
-
+//if(Platform.isAndroid)
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(

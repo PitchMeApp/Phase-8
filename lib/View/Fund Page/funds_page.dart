@@ -151,7 +151,8 @@ class _FundsPageState extends State<FundsPage> {
                       setState(() {
                         _fundNacessaryController.chengeIndexColor.value = index;
                         _fundNacessaryController.selectedValue.value =
-                            _fundNacessaryController.getValueList.value[index]
+                            _fundNacessaryController
+                                .getValueList.value[index]['range']
                                 .toString();
                       });
                     },
@@ -162,7 +163,7 @@ class _FundsPageState extends State<FundsPage> {
                         if (_fundNacessaryController.chengeIndexColor.value ==
                             0) {
                           _fundNacessaryController.selectedValue.value =
-                              _fundNacessaryController.getValueList[0]
+                              _fundNacessaryController.getValueList[0]['range']
                                   .toString();
                         }
 
@@ -180,7 +181,7 @@ class _FundsPageState extends State<FundsPage> {
                                   : Colors.transparent,
                               borderRadius: BorderRadius.circular(8.0)),
                           child: Text(
-                            '${_fundNacessaryController.getValueList.value[index]}',
+                            '${_fundNacessaryController.getValueList.value[index]['range']}',
                             style: _fundNacessaryController
                                         .chengeIndexColor.value ==
                                     index

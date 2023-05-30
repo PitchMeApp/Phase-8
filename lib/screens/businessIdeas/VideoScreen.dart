@@ -10,6 +10,7 @@ import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/controller/businessIdeas/dashBoardController.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/noti.dart';
 import 'package:pitch_me_app/screens/businessIdeas/dashBoardScreen_Two.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/home_page_biography.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home_manu.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
@@ -43,6 +44,7 @@ class _mainHome_TwoState extends State<mainHome_Two>
 
   String title = '';
   String businesstype = '';
+  String newUser = '';
 
   int currentIndexOfDashboard = 0;
   late Widget currentScreen;
@@ -93,6 +95,7 @@ class _mainHome_TwoState extends State<mainHome_Two>
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
       businesstype = prefs.getString('log_type').toString();
+      newUser = prefs.getString('new_user').toString();
     });
 
     log(" ADGL ${businesstype}");
@@ -223,11 +226,24 @@ class _mainHome_TwoState extends State<mainHome_Two>
 
                                                                                 _isInitialValue = false;
                                                                               });
-                                                                              PageNavigateScreen().push(
-                                                                                  context,
-                                                                                  FeedbackPage(
-                                                                                    data: value.post!.result![index],
-                                                                                  ));
+
+                                                                              if (value.post?.result![index].type == 5) {
+                                                                                PageNavigateScreen().normalpushReplesh(
+                                                                                    context,
+                                                                                    HomeBiographyPage(
+                                                                                      type: 'watch',
+                                                                                      userID: '',
+                                                                                      notifyID: value.post!.result![index].sId!,
+                                                                                    ));
+                                                                              } else {
+                                                                                PageNavigateScreen().normalpushReplesh(
+                                                                                    context,
+                                                                                    FeedbackPage(
+                                                                                      type: 'watch',
+                                                                                      data: value.post!.result![index],
+                                                                                      notifyID: value.post!.result![index].sId!,
+                                                                                    ));
+                                                                              }
                                                                             },
                                                                             child:
                                                                                 Container(
@@ -323,7 +339,7 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                                             Alignment.center,
                                                         decoration: BoxDecoration(
                                                             color: DynamicColor
-                                                                .blue,
+                                                                .darkBlue,
                                                             borderRadius:
                                                                 BorderRadius
                                                                     .circular(
@@ -359,50 +375,53 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                               height: sizeH * 0.04,
                                               width: sizeW * 0.35,
                                               child: Center(
-                                                child:
-                                                    // postPageController
-                                                    //         .getIntroVideoApiList
-                                                    //         .value
-                                                    //         .isEmpty
-                                                    //     ? Text(
-                                                    //         'Watch Sales Pitch',
-                                                    //         style: TextStyle(
-                                                    //             color: DynamicColor
-                                                    //                 .blue,
-                                                    //             fontWeight:
-                                                    //                 FontWeight.bold,
-                                                    //             fontSize: 15),
-                                                    //         maxLines: 1,
-                                                    //         overflow: TextOverflow
-                                                    //             .ellipsis,
-                                                    //       ):
-                                                    Text(
-                                                  dashboardController
-                                                              .salespitch !=
-                                                          null
-                                                      ? dashboardController
-                                                              .salespitch!
-                                                              .result
-                                                              .docs
-                                                              .isNotEmpty
-                                                          ? dashboardController
-                                                              .salespitch!
-                                                              .result
-                                                              .docs[postPageController
-                                                                  .swipableStackController
-                                                                  .currentIndex]
-                                                              .title
-                                                          : 'No Title'
-                                                      : 'No Title',
-                                                  style: TextStyle(
-                                                      color: DynamicColor.blue,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      fontSize: 15),
-                                                  maxLines: 1,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                ),
+                                                child: businesstype == '1' ||
+                                                        businesstype == '2' ||
+                                                        ((businesstype == '3' ||
+                                                                businesstype ==
+                                                                    '4') &&
+                                                            (newUser ==
+                                                                'New User'))
+                                                    ? Text(
+                                                        'Watch Sales Pitch',
+                                                        style: TextStyle(
+                                                            color: DynamicColor
+                                                                .blue,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 15),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      )
+                                                    : Text(
+                                                        dashboardController
+                                                                    .salespitch !=
+                                                                null
+                                                            ? dashboardController
+                                                                    .salespitch!
+                                                                    .result
+                                                                    .docs
+                                                                    .isNotEmpty
+                                                                ? dashboardController
+                                                                    .salespitch!
+                                                                    .result
+                                                                    .docs[postPageController
+                                                                        .swipableStackController
+                                                                        .currentIndex]
+                                                                    .title
+                                                                : 'No Title'
+                                                            : 'No Title',
+                                                        style: TextStyle(
+                                                            color: DynamicColor
+                                                                .blue,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            fontSize: 15),
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                      ),
                                               ),
                                             )
                                       : Container(),
@@ -422,7 +441,7 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                                     image:
                                                         'assets/image/menu.svg',
                                                     color: isManu == true
-                                                        ? DynamicColor.blue
+                                                        ? DynamicColor.darkBlue
                                                         : null),
                                               ),
                                               onTap: () {

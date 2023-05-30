@@ -7,6 +7,7 @@ import 'package:pitch_me_app/Phase%206/Guest%20UI/Profile/manu.dart';
 import 'package:pitch_me_app/View/Feedback/feedback_detail.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/noti.dart';
 import 'package:pitch_me_app/screens/businessIdeas/dashBoardScreen.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/home_page_biography.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home_filter.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home_manu.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
@@ -209,19 +210,41 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                                                   _isInitialValue =
                                                                       false;
                                                                 });
-                                                                PageNavigateScreen()
-                                                                    .push(
-                                                                        context,
-                                                                        FeedbackPage(
-                                                                          data: value
-                                                                              .post!
-                                                                              .result![index],
-                                                                        ))
-                                                                    .then(
-                                                                        (value) {
-                                                                  setState(
-                                                                      () {});
-                                                                });
+                                                                if (value
+                                                                        .post
+                                                                        ?.result![
+                                                                            index]
+                                                                        .type ==
+                                                                    5) {
+                                                                  PageNavigateScreen().push(
+                                                                      context,
+                                                                      HomeBiographyPage(
+                                                                        type:
+                                                                            'Notification',
+                                                                        notifyID: value
+                                                                            .post!
+                                                                            .result![index]
+                                                                            .sId!,
+                                                                        userID: value
+                                                                            .post!
+                                                                            .result![index]
+                                                                            .senderID!,
+                                                                      ));
+                                                                } else {
+                                                                  PageNavigateScreen().push(
+                                                                      context,
+                                                                      FeedbackPage(
+                                                                        type:
+                                                                            'home',
+                                                                        notifyID: value
+                                                                            .post!
+                                                                            .result![index]
+                                                                            .sId!,
+                                                                        data: value
+                                                                            .post!
+                                                                            .result![index],
+                                                                      ));
+                                                                }
                                                               },
                                                               child: Container(
                                                                 height: sizeH *
@@ -319,7 +342,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                               left: 3, right: 3),
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                              color: DynamicColor.blue,
+                                              color: DynamicColor.darkBlue,
                                               borderRadius:
                                                   BorderRadius.circular(50)),
                                           child: FittedBox(
@@ -377,7 +400,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                   child: loadSvg(
                                       image: 'assets/image/menu.svg',
                                       color: isManu == true
-                                          ? DynamicColor.blue
+                                          ? DynamicColor.darkBlue
                                           : null),
                                 ),
                                 onTap: () {
@@ -410,7 +433,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                   child: loadSvg(
                                       image: 'assets/image/setting.svg',
                                       color: isFilter == true
-                                          ? DynamicColor.blue
+                                          ? DynamicColor.darkBlue
                                           : null),
                                 ),
                                 onTap: () {

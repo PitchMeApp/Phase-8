@@ -100,6 +100,7 @@ class SalesDoc {
     required this.comment,
     required this.status,
     this.userid,
+    required this.user,
   });
 
   String id;
@@ -120,6 +121,7 @@ class SalesDoc {
   String comment;
   int status;
   dynamic userid;
+  UserData user;
 
   factory SalesDoc.fromJson(Map<String, dynamic> json) => SalesDoc(
         id: json["_id"],
@@ -140,6 +142,7 @@ class SalesDoc {
         comment: json["comment"],
         status: json["status"],
         userid: json['userid'],
+        user: UserData.fromJson(json["user"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -161,5 +164,36 @@ class SalesDoc {
         "comment": comment,
         "status": status,
         "userid": userid,
+        "user": user.toJson(),
+      };
+}
+
+class UserData {
+  String id;
+  String username;
+
+  int logType;
+
+  String? uid;
+
+  UserData({
+    required this.id,
+    required this.username,
+    required this.logType,
+    this.uid,
+  });
+
+  factory UserData.fromJson(Map<String, dynamic> json) => UserData(
+        id: json["_id"],
+        username: json["username"],
+        logType: json["log_type"],
+        uid: json["uid"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "username": username,
+        "log_type": logType,
+        "uid": uid,
       };
 }

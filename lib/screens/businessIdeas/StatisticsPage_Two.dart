@@ -1,15 +1,20 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/home_page_biography.dart';
+import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Alert%20Box/show_image_popup.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/widgets/Navigation/custom_navigation.dart';
+
 class StatisticsPage_Two extends StatefulWidget {
-  const StatisticsPage_Two(
-      {Key? key, required this.pagecont, required this.salesDoc})
-      : super(key: key);
+  const StatisticsPage_Two({
+    Key? key,
+    required this.pagecont,
+    required this.salesDoc,
+  }) : super(key: key);
   final PageController pagecont;
   final SalesDoc salesDoc;
 
@@ -22,11 +27,19 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
   List serviceList = [];
   List serviceDetailList = [];
   late SalesDoc salesDoc;
+
+  String userType = '';
+
   @override
   void initState() {
     salesDoc = widget.salesDoc;
+
     var type = salesDoc.type.replaceAll('[', '').replaceAll(']', '');
-    typeList = type.split(',');
+    if (type.contains(' ')) {
+      typeList = type.split(', ');
+    } else {
+      typeList = type.split(',');
+    }
 
     var service = salesDoc.services.replaceAll('[', '').replaceAll(']', '');
     if (service.isNotEmpty) {
@@ -37,7 +50,20 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
     if (serviceDetail.isNotEmpty) {
       serviceDetailList = serviceDetail.split(', ');
     }
+    checkUserType();
     super.initState();
+  }
+
+  void checkUserType() {
+    if (salesDoc.user.logType == 1) {
+      userType = 'Business Idea';
+    } else if (salesDoc.user.logType == 2) {
+      userType = 'Business Owner';
+    } else if (salesDoc.user.logType == 3) {
+      userType = 'Investor';
+    } else {
+      userType = 'Facilitator';
+    }
   }
 
   @override
@@ -101,92 +127,24 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
       child: Center(
           child: Column(
         children: [
-          Container(
-            margin: EdgeInsets.only(bottom: sizeH * 0.015),
-            width: sizeW * 0.85,
-            height: sizeH * 0.068,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color(0xff377EB4),
-            ),
-            child: ListTile(
-                leading: Image.asset("assets/Phase 2 icons/industry.png",
-                    height: sizeH * 0.04),
-                title: Text(
-                  widget.salesDoc.industry,
-                  style: TextStyle(color: Colors.white),
-                )),
-          ),
-          Container(
-            margin: EdgeInsets.only(bottom: sizeH * 0.015),
-            width: sizeW * 0.85,
-            height: sizeH * 0.068,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color(0xff377EB4),
-            ),
-            child: ListTile(
-                leading: Image.asset("assets/Phase 2 icons/place.png",
-                    height: sizeH * 0.04),
-                title: Text(
-                  widget.salesDoc.location,
-                  style: TextStyle(color: Colors.white),
-                )),
-          ),
+          customWidget('assets/images/industry-mdpi.png', salesDoc.industry,
+              onPressad: () {}),
+          customWidget(
+              'assets/images/ic_place_24px-mdpi.png', salesDoc.location,
+              onPressad: () {}),
           typeList.length > 0
-              ? Container(
-                  margin: EdgeInsets.only(bottom: sizeH * 0.015),
-                  width: sizeW * 0.85,
-                  height: sizeH * 0.068,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xff377EB4),
-                  ),
-                  child: ListTile(
-                      leading: Image.asset("assets/Phase 2 icons/local atm.png",
-                          height: sizeH * 0.04),
-                      title: Text(
-                        typeList[0].replaceAll(',', ''),
-                        style: TextStyle(color: Colors.white),
-                      )),
-                )
+              ? customWidget('assets/images/ic_local_atm_24-mdpi (1).png',
+                  typeList[0].replaceAll(',', ''),
+                  onPressad: () {})
               : Container(),
           salesDoc.valueamount.isNotEmpty
-              ? Container(
-                  margin: EdgeInsets.only(bottom: sizeH * 0.015),
-                  width: sizeW * 0.85,
-                  height: sizeH * 0.068,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xff377EB4),
-                  ),
-                  child: ListTile(
-                      leading: Image.asset(
-                          "assets/Phase 2 icons/monetization.png",
-                          height: sizeH * 0.04),
-                      title: Text(
-                        salesDoc.valueamount,
-                        style: TextStyle(color: Colors.white),
-                      )),
-                )
+              ? customWidget(
+                  'assets/images/ic_monetization.png', salesDoc.valueamount,
+                  onPressad: () {})
               : Container(),
           typeList.length > 1 && typeList[1].isNotEmpty
-              ? Container(
-                  margin: EdgeInsets.only(bottom: sizeH * 0.015),
-                  width: sizeW * 0.85,
-                  height: sizeH * 0.068,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xff377EB4),
-                  ),
-                  child: ListTile(
-                      leading: Image.asset("assets/Phase 2 icons/Group.png",
-                          height: sizeH * 0.04),
-                      title: Text(
-                        typeList[1],
-                        style: TextStyle(color: Colors.white),
-                      )),
-                )
+              ? customWidget('assets/images/_Group_-mdpi.png', typeList[1],
+                  onPressad: () {})
               : Container(),
           serviceList.isNotEmpty
               ? ListView.builder(
@@ -195,23 +153,10 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
                   padding: EdgeInsets.zero,
                   itemCount: serviceList.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(bottom: sizeH * 0.015),
-                      width: sizeW * 0.85,
-                      height: sizeH * 0.068,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color(0xff377EB4),
-                      ),
-                      child: ListTile(
-                          leading: Image.asset(
-                              "assets/Phase 2 icons/content paste.png",
-                              height: sizeH * 0.04),
-                          title: Text(
-                            serviceList[index],
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    );
+                    return customWidget(
+                        "assets/images/ic_content_past-mdpi.png",
+                        serviceList[index],
+                        onPressad: () {});
                   })
               : Container(),
           serviceDetailList.isNotEmpty
@@ -221,41 +166,23 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
                   padding: EdgeInsets.zero,
                   itemCount: serviceDetailList.length,
                   itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(bottom: sizeH * 0.015),
-                      width: sizeW * 0.85,
-                      height: sizeH * 0.068,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: Color(0xff377EB4),
-                      ),
-                      child: ListTile(
-                          leading: Image.asset(
-                              "assets/Phase 2 icons/check circle.png",
-                              height: sizeH * 0.04),
-                          title: Text(
-                            serviceDetailList[index],
-                            style: TextStyle(color: Colors.white),
-                          )),
-                    );
+                    return customWidget(
+                        "assets/images/ic_check_circle-mdpi.png",
+                        serviceDetailList[index],
+                        onPressad: () {});
                   })
               : Container(),
-          Container(
-            margin: EdgeInsets.only(bottom: sizeH * 0.015),
-            width: sizeW * 0.85,
-            height: sizeH * 0.068,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              color: Color(0xff377EB4),
-            ),
-            child: ListTile(
-                leading: Text(""),
-                title: AutoSizeText(
-                  widget.salesDoc.description,
-                  maxLines: 2,
-                  style: TextStyle(color: Colors.white),
-                )),
-          ),
+          customWidget('', userType, onPressad: () {}),
+          customWidget('', 'Biography', onPressad: () {
+            PageNavigateScreen().push(
+                context,
+                HomeBiographyPage(
+                  type: 'Biography',
+                  userID: salesDoc.userid,
+                  notifyID: '',
+                ));
+          }),
+          customWidget('', widget.salesDoc.description, onPressad: () {}),
           Align(
             alignment: Alignment.topLeft,
             child: Padding(
@@ -296,9 +223,60 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
                 ],
               ),
             ),
-          )
+          ),
+          spaceHeight(SizeConfig.getSize80(context: context)),
         ],
       )),
+    );
+  }
+
+  Widget customWidget(iconImage, name, {required VoidCallback onPressad}) {
+    final sizeH = MediaQuery.of(context).size.height;
+    final sizeW = MediaQuery.of(context).size.width;
+    return InkWell(
+      onTap: onPressad,
+      child: Container(
+          height: sizeH * 0.068,
+          margin: EdgeInsets.only(
+              left: SizeConfig.getFontSize25(context: context),
+              right: SizeConfig.getFontSize25(context: context),
+              bottom: sizeH * 0.015),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Color(0xff377EB4),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: SizeConfig.getFontSize14(context: context),
+              right: SizeConfig.getFontSize14(context: context),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                iconImage.isNotEmpty
+                    ? Image.asset(
+                        iconImage,
+                        height: sizeH * 0.04,
+                        width: sizeW * 0.08,
+                        alignment: Alignment.centerLeft,
+                        color: DynamicColor.white,
+                      )
+                    : Container(
+                        width: 30,
+                      ),
+                Text(
+                  name,
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Container(
+                  width: 30,
+                )
+              ],
+            ),
+          )),
     );
   }
 

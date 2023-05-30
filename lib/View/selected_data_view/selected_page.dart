@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -15,8 +16,10 @@ import 'package:pitch_me_app/View/Select%20industry/select_industry.dart';
 import 'package:pitch_me_app/View/navigation_controller.dart';
 import 'package:pitch_me_app/View/offer_page/controller.dart';
 import 'package:pitch_me_app/View/offer_page/offer_page.dart';
+import 'package:pitch_me_app/View/offer_page/selection_person.dart';
 import 'package:pitch_me_app/View/what%20need/what_need_page_edit.dart';
 import 'package:pitch_me_app/View/what%20need/who_need_page_controller.dart';
+import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
@@ -217,6 +220,31 @@ class _SelectedPageState extends State<SelectedPage> {
                       });
                 })
               : Container(),
+          _offerPageController.selectedPersonType.value.isNotEmpty
+              ? Obx(() {
+                  return ListView.builder(
+                      shrinkWrap: true,
+                      primary: false,
+                      padding: EdgeInsets.zero,
+                      itemCount:
+                          _offerPageController.selectedPersonType.value.length,
+                      itemBuilder: (context, index) {
+                        log(_offerPageController.selectedPersonType.value
+                            .toString());
+                        return customWidget(
+                            "assets/images/ic_visibility_24px.png",
+                            _offerPageController.selectedPersonType.value[index]
+                                ['value'], onPressad: () {
+                          _navigationController.navigationType.value = 'Edit';
+                          PageNavigateScreen()
+                              .push(context, SelectionPersonPage())
+                              .then((value) {
+                            setState(() {});
+                          });
+                        });
+                      });
+                })
+              : Container(),
           customWidget("", _offerPageController.offrerTextController.text,
               onPressad: () {
             _navigationController.navigationType.value = 'Edit';
@@ -299,27 +327,43 @@ class _SelectedPageState extends State<SelectedPage> {
     return InkWell(
       onTap: onPressad,
       child: Container(
-        margin: EdgeInsets.only(
-            bottom: sizeH * 0.015,
-            left: SizeConfig.getFontSize25(context: context),
-            right: SizeConfig.getFontSize25(context: context)),
-        width: sizeW * 0.85,
-        height: sizeH * 0.068,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Color(0xff377EB4),
-        ),
-        child: ListTile(
-            leading: iconImage.isNotEmpty
-                ? Image.asset(iconImage, height: sizeH * 0.04)
-                : null,
-            title: Text(
-              name,
-              style: TextStyle(color: Colors.white),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-            )),
-      ),
+          height: sizeH * 0.068,
+          margin: EdgeInsets.only(
+              left: SizeConfig.getFontSize25(context: context),
+              right: SizeConfig.getFontSize25(context: context),
+              bottom: sizeH * 0.015),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Color(0xff377EB4),
+          ),
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: SizeConfig.getFontSize14(context: context),
+              right: SizeConfig.getFontSize14(context: context),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                iconImage.isNotEmpty
+                    ? Image.asset(
+                        iconImage,
+                        height: sizeH * 0.04,
+                        width: sizeW * 0.08,
+                        alignment: Alignment.centerLeft,
+                        color: DynamicColor.white,
+                      )
+                    : Container(width: 30),
+                Text(
+                  name,
+                  style: TextStyle(color: Colors.white, fontSize: 15),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                Container(width: 30)
+              ],
+            ),
+          )),
     );
   }
 }

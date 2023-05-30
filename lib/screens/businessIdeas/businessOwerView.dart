@@ -27,7 +27,7 @@ class _businessOwnerState extends State<businessOwner> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    controller.getPost(widget.onSwipe);
+    controller.getPost(widget.onSwipe, null);
     controller.getStatic();
     _controller.addListener(() {
       widget.currentPage(_controller.page!.toInt());

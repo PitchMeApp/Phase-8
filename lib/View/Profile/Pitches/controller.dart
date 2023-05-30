@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -24,7 +23,7 @@ class PitcheController extends GetxController {
     } else if (userType == '3') {
       return getSavedVideoListApi();
     } else {
-      return getSavedOwnerPitchesListApi();
+      return getSavedVideoListApi();
     }
   }
 

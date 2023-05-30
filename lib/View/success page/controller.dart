@@ -38,6 +38,7 @@ class SuccessPageController extends GetxController {
   List serviceList = [];
   List serviceDetaisList = [];
   List typeList = [];
+  List whoCanWatchList = [];
 
   RxBool isLoading = false.obs;
 
@@ -49,6 +50,7 @@ class SuccessPageController extends GetxController {
     serviceList.clear();
     typeList.clear();
     serviceDetaisList.clear();
+    whoCanWatchList.clear();
     isLoading.value = true;
     for (var element in _needPageController.selectedNeedType.value) {
       serviceList.add(element['value']);
@@ -59,16 +61,18 @@ class SuccessPageController extends GetxController {
       }
     }
 
-    for (var element in _whoNeedController.isSelectedItem.value) {
-      typeList.add(element['value']);
+    // for (var element in _whoNeedController.isSelectedItem.value) {
+    //   typeList.add(element['value']);
+    // }
+    for (var element in _offerPageController.selectedPersonType.value) {
+      whoCanWatchList.add(element['value']);
     }
-
     try {
       String url = '${BASE_URL}salespitch';
       final request = http.MultipartRequest('POST', Uri.parse(url));
       request.fields.addAll({
         'userid': userID,
-        'type': typeList.toString(),
+        'type': _whoNeedController.isSelectedItem.value.toString(),
         'title': _videoFirstPageController.editingController.text,
         'industry': insdustryController.selectedIndustry.value,
         'location': _locationPageController.selectedType.value == 'Place'
@@ -79,8 +83,9 @@ class SuccessPageController extends GetxController {
         'servicesDetail': serviceDetaisList.toString(),
         'description': _offerPageController.offrerTextController.text,
         'status': 1.toString(),
+        'whocanwatch': whoCanWatchList.toString(),
       });
-
+      log(request.fields.toString());
       request.files.add(await http.MultipartFile.fromPath(
           'vid1', _videoFirstPageController.videoUrl.value.toString(),
           filename: _videoFirstPageController.videoUrl.value.split('/').last));

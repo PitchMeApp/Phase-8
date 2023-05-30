@@ -38,18 +38,21 @@ class NotifyResult {
   int? iV;
   int? star;
   int? videoStar;
+  String? senderID;
 
-  NotifyResult(
-      {this.sId,
-      this.title,
-      this.text,
-      this.unreadFlag,
-      this.type,
-      this.createdAt,
-      this.updatedAt,
-      this.star,
-      this.videoStar,
-      this.iV});
+  NotifyResult({
+    this.sId,
+    this.title,
+    this.text,
+    this.unreadFlag,
+    this.type,
+    this.createdAt,
+    this.updatedAt,
+    this.star,
+    this.videoStar,
+    this.iV,
+    this.senderID,
+  });
 
   NotifyResult.fromJson(Map<String, dynamic> json) {
     sId = json['_id'];
@@ -62,6 +65,7 @@ class NotifyResult {
     iV = json['__v'];
     star = (json["star"] != null) ? json["star"] : 0;
     videoStar = (json["videoStar"] != null) ? json["videoStar"] : 0;
+    senderID = (json['sender'] != null) ? json['sender'] : '';
   }
 
   Map<String, dynamic> toJson() {
@@ -76,6 +80,7 @@ class NotifyResult {
     data['__v'] = this.iV;
     data["star"] = this.star;
     data["videoStar"] = this.videoStar;
+    data['sender'];
     return data;
   }
 }

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:pitch_me_app/core/urls.dart';
@@ -20,7 +21,7 @@ Future<notification?> getSinglePostData() async {
     // log('${BASE_URL}notification/getlimited?id=${prefs.get('user_id')}');
     if (response.statusCode == 200) {
       final item = json.decode(response.body);
-      // log('noti =' + item.toString());
+      //log('noti =' + item.toString());
 
       result = notification.fromJson(item);
     } else {

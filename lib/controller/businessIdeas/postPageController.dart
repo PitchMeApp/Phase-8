@@ -54,8 +54,8 @@ class PostPageController extends GetxController {
     visibleSaveSeen.value = value;
   }
 
-  savedVideo(pitchID) {
-    postserver.savedVideoApi(pitchID);
+  savedVideo(pitchID, receiverid) {
+    postserver.savedVideoApi(pitchID, receiverid);
   }
 
   // getsavedIntroVideo() {

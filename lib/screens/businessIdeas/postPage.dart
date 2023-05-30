@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/user_type_limitation.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
 import 'package:pitch_me_app/screens/businessIdeas/feedbackscreen.dart';
@@ -104,7 +103,11 @@ class _PostPageWidgetState extends State<PostPageWidget>
 
               if (direction == SwipeDirection.right) {
                 PageNavigateScreen()
-                    .push(context, interestedSwipe())
+                    .push(
+                        context,
+                        interestedSwipe(
+                          userID: widget.postModel.result.docs[index].userid,
+                        ))
                     .then((value) {
                   setState(() {
                     if (widget.postModel.result.docs.isEmpty) {
@@ -119,7 +122,8 @@ class _PostPageWidgetState extends State<PostPageWidget>
                     }
                   });
                 });
-                controller.savedVideo(widget.postModel.result.docs[index].id);
+                controller.savedVideo(widget.postModel.result.docs[index].id,
+                    widget.postModel.result.docs[index].userid);
               } else {
                 PageNavigateScreen()
                     .push(

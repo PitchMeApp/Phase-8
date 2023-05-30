@@ -118,8 +118,8 @@ class _DashBoardScreen_TwoState extends State<DashBoardScreen_Two> {
                               ((businesstype == '3' || businesstype == '4') &&
                                   (newUser == 'New User'))
                           ? DemoWatchSalesPitch(
-                              postModel: controller.salespitch!,
-                            )
+                              // postModel: controller.salespitch!,
+                              )
                           : PostPageWidget(
                               controller: _controller,
                               onSwipe:

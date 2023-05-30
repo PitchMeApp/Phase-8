@@ -47,7 +47,9 @@ class SavedResult {
     required this.status,
     required this.createdAt,
     required this.updatedAt,
+    required this.userid,
     required this.v,
+    required this.whocanwatch,
   });
 
   String id;
@@ -69,42 +71,45 @@ class SavedResult {
   int status;
   String createdAt;
   String updatedAt;
+  String userid;
   int v;
+  String whocanwatch;
 
   factory SavedResult.fromJson(Map<String, dynamic> json) => SavedResult(
-        id: json["_id"],
-        title: json["title"],
-        industry: json["industry"],
-        type: json["type"],
-        location: json["location"],
-        valueamount: json["valueamount"],
-        services: json["services"],
-        servicesDetail: json["servicesDetail"],
-        img1: json["img1"].isNotEmpty
-            ? 'https://api.salespitchapp.com/' + json["img1"]
-            : json["img1"],
-        img2: json["img2"].isNotEmpty
-            ? 'https://api.salespitchapp.com/' + json["img2"]
-            : json["img2"],
-        img3: json["img3"].isNotEmpty
-            ? 'https://api.salespitchapp.com/' + json["img3"]
-            : json["img3"],
-        img4: json["img4"].isNotEmpty
-            ? 'https://api.salespitchapp.com/' + json["img4"]
-            : json["img4"],
-        file: json["file"].isNotEmpty
-            ? 'https://api.salespitchapp.com/' + json["file"]
-            : json["file"],
-        vid1: json["vid1"].isNotEmpty
-            ? 'http://191.101.229.245:9070/' + json["vid1"]
-            : json["vid1"],
-        description: json["description"],
-        comment: json["comment"],
-        status: json["status"],
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
-        v: json["__v"],
-      );
+      id: json["_id"],
+      title: json["title"],
+      industry: json["industry"],
+      type: json["type"],
+      location: json["location"],
+      valueamount: json["valueamount"],
+      services: json["services"],
+      servicesDetail: json["servicesDetail"],
+      img1: json["img1"].isNotEmpty
+          ? 'https://api.salespitchapp.com/' + json["img1"]
+          : json["img1"],
+      img2: json["img2"].isNotEmpty
+          ? 'https://api.salespitchapp.com/' + json["img2"]
+          : json["img2"],
+      img3: json["img3"].isNotEmpty
+          ? 'https://api.salespitchapp.com/' + json["img3"]
+          : json["img3"],
+      img4: json["img4"].isNotEmpty
+          ? 'https://api.salespitchapp.com/' + json["img4"]
+          : json["img4"],
+      file: json["file"].isNotEmpty
+          ? 'https://api.salespitchapp.com/' + json["file"]
+          : json["file"],
+      vid1: json["vid1"].isNotEmpty
+          ? 'http://191.101.229.245:9070/' + json["vid1"]
+          : json["vid1"],
+      description: json["description"],
+      comment: json["comment"],
+      status: json["status"],
+      createdAt: json["createdAt"],
+      updatedAt: json["updatedAt"],
+      userid: (json['userid'] != null) ? json['userid'] : null,
+      v: json["__v"],
+      whocanwatch: json['whocanwatch']);
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -126,6 +131,8 @@ class SavedResult {
         "status": status,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
+        "userid": userid,
         "__v": v,
+        "whocanwatch": whocanwatch
       };
 }

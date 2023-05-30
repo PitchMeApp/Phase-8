@@ -2,17 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Feedback/controller.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/notification_Model.dart';
+import 'package:pitch_me_app/screens/businessIdeas/BottomNavigation.dart';
+import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
 
 class FeedbackPage extends StatefulWidget {
   // String receiverid;
   // String postid;
   NotifyResult data;
+  String type;
+  String notifyID;
   FeedbackPage({
     super.key,
     // required this.receiverid,
     // required this.postid,
     required this.data,
+    required this.type,
+    required this.notifyID,
   });
 
   @override
@@ -25,7 +31,7 @@ class _FeedbackPageState extends State<FeedbackPage> {
 
   @override
   void initState() {
-    feebackController.readAllNotiApi();
+    feebackController.readAllNotiApi(widget.notifyID);
     super.initState();
   }
 
@@ -146,7 +152,11 @@ class _FeedbackPageState extends State<FeedbackPage> {
           ),
           InkWell(
             onTap: () {
-              Navigator.of(context).pop();
+              if (widget.type == 'watch') {
+                PageNavigateScreen().normalpushReplesh(context, Floatbar(1));
+              } else {
+                Navigator.of(context).pop();
+              }
             },
             child: Container(
               height: sizeH * 0.045,
