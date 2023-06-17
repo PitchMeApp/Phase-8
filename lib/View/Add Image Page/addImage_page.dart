@@ -37,12 +37,9 @@ class _AddImagePageState extends State<AddImagePage> {
           SingleChildScrollView(
             child: Column(
               children: [
-                CustomHeaderView(
-                  title: TextStrings.textKey['add_image']!,
-                  icon: 'assets/images/add image.png',
-                  subTitle: TextStrings.textKey["add_image_sub"]!,
-                  progressPersent: 0.7,
-                  padding: 0,
+                SizedBox(
+                  height: SizeConfig.getSize100(context: context) +
+                      SizeConfig.getSize55(context: context),
                 ),
 
                 selectImages(),
@@ -53,6 +50,13 @@ class _AddImagePageState extends State<AddImagePage> {
                 // _addFileButton()
               ],
             ),
+          ),
+          CustomHeaderView(
+            title: TextStrings.textKey['add_image']!,
+            icon: 'assets/images/add image.png',
+            subTitle: TextStrings.textKey["add_image_sub"]!,
+            progressPersent: 0.7,
+            padding: 0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

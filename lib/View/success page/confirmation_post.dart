@@ -30,15 +30,12 @@ class _ConfirmationPostState extends State<ConfirmationPost> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CustomHeaderView(
-                title: '',
-                icon: '',
-                subTitle: '',
-                progressPersent: 1,
-                padding: 0,
+              SizedBox(
+                height: SizeConfig.getSize100(context: context) +
+                    SizeConfig.getSize55(context: context),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 15),
+                padding: EdgeInsets.only(top: 5),
                 child: SizedBox(
                   width: MediaQuery.of(context).size.width - 40,
                   child: Text(
@@ -78,6 +75,13 @@ class _ConfirmationPostState extends State<ConfirmationPost> {
                 height: SizeConfig.getSizeHeightBy(context: context, by: 0.15),
                 width: SizeConfig.getSizeHeightBy(context: context, by: 0.15),
                 cornerRadius: 25),
+          ),
+          CustomHeaderView(
+            title: '',
+            icon: '',
+            subTitle: '',
+            progressPersent: 1,
+            padding: 0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

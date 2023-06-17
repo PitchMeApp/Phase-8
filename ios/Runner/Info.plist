@@ -64,8 +64,7 @@
 		<string>_http._tcp</string>
 	</array>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>The app requires to use microphone
-        </string>
+	<string>We need to access to the microphone to record audio file</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>

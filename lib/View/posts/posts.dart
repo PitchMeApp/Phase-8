@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/custom_bottom_view.dart';
 import 'package:pitch_me_app/View/Profile/Pitches/detail_page.dart';
-import 'package:pitch_me_app/View/posts/detail_page.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
@@ -42,7 +41,15 @@ class _PostPageState extends State<PostPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        children: [_buildBodyView(controller), CustomFloatbar()],
+        children: [
+          _buildBodyView(controller),
+          CustomAppbar(
+            title: 'Pitches',
+            onPressad: () {},
+            onPressadForNotify: () {},
+          ),
+          CustomFloatbar()
+        ],
       ),
     );
   }
@@ -50,16 +57,11 @@ class _PostPageState extends State<PostPage> {
   Widget _buildBodyView(PostController controller) {
     return Padding(
       padding: EdgeInsets.only(
-          left: SizeConfig.getFontSize25(context: context),
-          right: SizeConfig.getFontSize25(context: context)),
+          left: SizeConfig.getFontSize20(context: context),
+          right: SizeConfig.getFontSize20(context: context)),
       child: Column(
         children: [
-          CustomAppbar(
-            title: 'Posts',
-            onPressad: () {},
-            onPressadForNotify: () {},
-          ),
-          const SizedBox(height: 30),
+          SizedBox(height: SizeConfig.getSize60(context: context)),
           _postListWidget(controller),
         ],
       ),

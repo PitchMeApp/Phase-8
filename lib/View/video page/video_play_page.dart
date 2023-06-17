@@ -100,12 +100,9 @@ class _VideoPageState extends State<VideoPage>
                               });
                             },
                             child: VideoPlayer(_videoPlayerController)),
-                        CustomHeaderView(
-                          title: TextStrings.textKey['record']!,
-                          icon: 'assets/images/videoc.png',
-                          subTitle: '',
-                          progressPersent: 1,
-                          padding: 0,
+                        SizedBox(
+                          height: SizeConfig.getSize100(context: context) +
+                              SizeConfig.getSize55(context: context),
                         ),
                         Center(
                           child: Column(
@@ -186,6 +183,13 @@ class _VideoPageState extends State<VideoPage>
                       pageController: _controller,
                     )
                   ],
+                ),
+                CustomHeaderView(
+                  title: TextStrings.textKey['record']!,
+                  icon: 'assets/images/videoc.png',
+                  subTitle: '',
+                  progressPersent: 1,
+                  padding: 0,
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

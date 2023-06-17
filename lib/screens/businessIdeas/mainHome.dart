@@ -137,6 +137,33 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                           : currentScreen),
               Padding(
                 padding: EdgeInsets.only(
+                    top: SizeConfig.getSize50(context: context)),
+                child: Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 3),
+                    child: isFilter
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 20),
+                            child: roboto(
+                                size:
+                                    SizeConfig.getFontSize20(context: context),
+                                text: "Filter",
+                                fontWeight: FontWeight.w700,
+                                color: DynamicColor.blue),
+                          )
+                        : roboto(
+                            size: SizeConfig.getFontSize28(context: context),
+                            text: currentIndexOfDashboard == 0
+                                ? ''
+                                : "App Statistics",
+                            fontWeight: FontWeight.w700,
+                            color: Color.fromARGB(255, 255, 255, 255)),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(
                     top: SizeConfig.getSize30(context: context) +
                         MediaQuery.of(context).size.height * 0.021,
                     bottom: SizeConfig.getSize20(context: context),
@@ -368,26 +395,6 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                               child: loadSvg(
                                   image: 'assets/image/notifications.svg'),
                             )),
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 3),
-                      child: isFilter
-                          ? Padding(
-                              padding: const EdgeInsets.only(top: 20),
-                              child: roboto(
-                                  size: SizeConfig.getFontSize20(
-                                      context: context),
-                                  text: "Filter",
-                                  fontWeight: FontWeight.w700,
-                                  color: DynamicColor.blue),
-                            )
-                          : roboto(
-                              size: SizeConfig.getFontSize28(context: context),
-                              text: currentIndexOfDashboard == 0
-                                  ? ''
-                                  : "App Statistics",
-                              fontWeight: FontWeight.w700,
-                              color: Color.fromARGB(255, 255, 255, 255)),
-                    ),
                     Column(
                       children: [
                         currentIndexOfDashboard == 0

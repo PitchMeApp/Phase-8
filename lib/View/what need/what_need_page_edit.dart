@@ -36,12 +36,9 @@ class _WhatNeedPageEditState extends State<WhatNeedPageEdit> {
           SingleChildScrollView(
             child: Column(
               children: [
-                CustomHeaderView(
-                  title: TextStrings.textKey['what_need']!,
-                  icon: 'assets/icons/people.png',
-                  subTitle: 'Select 1 or Both options',
-                  progressPersent: 0.3,
-                  padding: 0,
+                SizedBox(
+                  height: SizeConfig.getSize100(context: context) +
+                      SizeConfig.getSize55(context: context),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -97,6 +94,13 @@ class _WhatNeedPageEditState extends State<WhatNeedPageEdit> {
                     : Container()
               ],
             ),
+          ),
+          CustomHeaderView(
+            title: TextStrings.textKey['what_need']!,
+            icon: 'assets/icons/people.png',
+            subTitle: 'Select 1 or Both options',
+            progressPersent: 0.3,
+            padding: 0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -40,12 +40,9 @@ class _NeedPageEditState extends State<NeedPageEdit> {
               key: formKey,
               child: Column(
                 children: [
-                  CustomHeaderView(
-                    title: TextStrings.textKey['needs']!,
-                    icon: 'assets/images/need note.png',
-                    subTitle: TextStrings.textKey['sub_needs']!,
-                    progressPersent: 0.5,
-                    padding: 0,
+                  SizedBox(
+                    height: SizeConfig.getSize100(context: context) +
+                        SizeConfig.getSize55(context: context),
                   ),
                   Padding(
                     padding: EdgeInsets.only(
@@ -198,6 +195,13 @@ class _NeedPageEditState extends State<NeedPageEdit> {
                 ],
               ),
             ),
+          ),
+          CustomHeaderView(
+            title: TextStrings.textKey['needs']!,
+            icon: 'assets/images/need note.png',
+            subTitle: TextStrings.textKey['sub_needs']!,
+            progressPersent: 0.5,
+            padding: 0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

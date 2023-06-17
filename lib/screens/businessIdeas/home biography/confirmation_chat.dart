@@ -1,12 +1,22 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
-import 'package:pitch_me_app/screens/businessIdeas/home%20biography/chat.dart';
+import 'package:pitch_me_app/main.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat.dart';
 import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/extras/banner.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ConfirmationChat extends StatefulWidget {
+  dynamic id;
+  dynamic name;
+  dynamic img;
   ConfirmationChat({
     super.key,
+    this.id,
+    this.name,
+    this.img,
   });
 
   @override
@@ -14,6 +24,21 @@ class ConfirmationChat extends StatefulWidget {
 }
 
 class _ConfirmationChatState extends State<ConfirmationChat> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void createChat() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var senderID = prefs.get('user_id').toString();
+    var onCreate = {'sendorid': senderID, 'recieverid': widget.id};
+    socket.emit('createchat', onCreate);
+    socket.on('receive_user', (data) {
+      log('message = ' + data.toString());
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final sizeH = MediaQuery.of(context).size.height;
@@ -116,7 +141,16 @@ class _ConfirmationChatState extends State<ConfirmationChat> {
                 BackArrow(
                     alignment: Alignment.centerRight,
                     onPressed: () {
-                      PageNavigateScreen().push(context, ChatPage());
+                      if (widget.id != null) {
+                        createChat();
+                        PageNavigateScreen().push(
+                            context,
+                            ChatPage(
+                              id: widget.id,
+                              name: widget.name,
+                              img: widget.img,
+                            ));
+                      }
                     },
                     icon: Icons.arrow_forward_ios),
               ],

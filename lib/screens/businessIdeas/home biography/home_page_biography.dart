@@ -1,6 +1,5 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/under_progress_limitation.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
@@ -67,8 +66,20 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
                     child: CircularProgressIndicator(
                     color: DynamicColor.blue,
                   ))
-                : Column(
+                : Stack(
                     children: [
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: SizeConfig.getSize60(context: context) +
+                                SizeConfig.getSize20(context: context),
+                          ),
+                          msgText(),
+                          biodata(),
+                          //    SizedBox(height: 15),
+                          userDataFields()
+                        ],
+                      ),
                       CustomAppbar(
                         title: 'BIOGRAPHY',
                         colorTween: 'BIOGRAPHY',
@@ -83,10 +94,6 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
                         },
                         onPressadForNotify: () {},
                       ),
-                      msgText(),
-                      biodata(),
-                      //    SizedBox(height: 15),
-                      userDataFields()
                     ],
                   );
           }),
@@ -111,7 +118,25 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
               BackArrow(
                   alignment: Alignment.centerRight,
                   onPressed: () {
-                    PageNavigateScreen().push(context, ConfirmationChat());
+                    if (controller.bioDoc != null) {
+                      PageNavigateScreen().push(
+                          context,
+                          ConfirmationChat(
+                            id: controller.bioDoc == null
+                                ? null
+                                : controller.bioDoc!.userid,
+                            name: controller.bioDoc == null
+                                ? null
+                                : controller.bioDoc!.user.username,
+                            img: controller.bioDoc == null
+                                ? null
+                                : controller.bioDoc!.picture,
+                          ));
+                    } else {
+                      Fluttertoast.showToast(
+                          msg: 'Profile not verified for chat',
+                          gravity: ToastGravity.CENTER);
+                    }
                   },
                   icon: Icons.arrow_forward_ios),
             ],
@@ -261,7 +286,6 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
   }
 
   Widget userDataFields() {
-    log(controller.userName.value);
     return Column(
       children: [
         Obx(() {

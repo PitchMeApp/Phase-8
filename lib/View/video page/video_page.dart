@@ -48,13 +48,11 @@ class _VideoPageMainState extends State<VideoPageMain> {
                     Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        CustomHeaderView(
-                          title: TextStrings.textKey['record']!,
-                          icon: 'assets/images/videoc.png',
-                          subTitle: '',
-                          progressPersent: 0.8,
-                          padding: 0,
+                        SizedBox(
+                          height: SizeConfig.getSize100(context: context) +
+                              SizeConfig.getSize55(context: context),
                         ),
+
                         //const SizedBox(height: 120),
                         Column(
                           children: [
@@ -107,6 +105,7 @@ class _VideoPageMainState extends State<VideoPageMain> {
                             ),
                           ],
                         ),
+
                         const SizedBox(height: 100),
                         Align(
                           alignment: Alignment.bottomCenter,
@@ -134,6 +133,13 @@ class _VideoPageMainState extends State<VideoPageMain> {
                           ),
                         ),
                       ],
+                    ),
+                    CustomHeaderView(
+                      title: TextStrings.textKey['record']!,
+                      icon: 'assets/images/videoc.png',
+                      subTitle: '',
+                      progressPersent: 0.8,
+                      padding: 0,
                     ),
                     BackArrow(
                         alignment: Alignment.centerLeft,

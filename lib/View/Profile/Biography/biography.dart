@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/under_progress_limitation.dart';
@@ -79,8 +77,20 @@ class _BiographyPageState extends State<BiographyPage> {
                     child: CircularProgressIndicator(
                     color: DynamicColor.blue,
                   ))
-                : Column(
+                : Stack(
                     children: [
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: SizeConfig.getSize60(context: context) +
+                                SizeConfig.getSize20(context: context),
+                          ),
+                          msgText(),
+                          biodata(),
+                          // SizedBox(height: 15),
+                          userDataFields(),
+                        ],
+                      ),
                       CustomAppbar(
                         title: 'BIOGRAPHY',
                         colorTween: 'BIOGRAPHY',
@@ -95,10 +105,6 @@ class _BiographyPageState extends State<BiographyPage> {
                         },
                         onPressadForNotify: () {},
                       ),
-                      msgText(),
-                      biodata(),
-                      // SizedBox(height: 15),
-                      userDataFields(),
                     ],
                   );
           }),

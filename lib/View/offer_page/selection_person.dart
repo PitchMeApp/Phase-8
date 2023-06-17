@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Add%20Image%20Page/addImage_page.dart';
@@ -35,12 +33,9 @@ class _SelectionPersonPageState extends State<SelectionPersonPage> {
         children: [
           Column(
             children: [
-              CustomHeaderView(
-                title: TextStrings.textKey['who_can']!,
-                icon: 'assets/images/ic_visibility_24px.png',
-                subTitle: '',
-                progressPersent: 0.6,
-                padding: 1,
+              SizedBox(
+                height: SizeConfig.getSize100(context: context) +
+                    SizeConfig.getSize55(context: context),
               ),
               SizedBox(height: MediaQuery.of(context).size.height * 0.075),
               customBox(
@@ -105,6 +100,13 @@ class _SelectionPersonPageState extends State<SelectionPersonPage> {
                 }
               }),
             ],
+          ),
+          CustomHeaderView(
+            title: TextStrings.textKey['who_can']!,
+            icon: 'assets/images/ic_visibility_24px.png',
+            subTitle: '',
+            progressPersent: 0.6,
+            padding: 1,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

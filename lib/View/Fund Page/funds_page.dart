@@ -40,12 +40,9 @@ class _FundsPageState extends State<FundsPage> {
         children: [
           Column(
             children: [
-              CustomHeaderView(
-                title: TextStrings.textKey['funds']!,
-                icon: 'assets/images/doller sign.png',
-                subTitle: TextStrings.textKey['syb_funds']!,
-                progressPersent: 0.4,
-                padding: 0,
+              SizedBox(
+                height: SizeConfig.getSize100(context: context) +
+                    SizeConfig.getSize55(context: context),
               ),
               const SizedBox(height: 10),
               GridView(
@@ -76,6 +73,13 @@ class _FundsPageState extends State<FundsPage> {
               ),
               _amountList(),
             ],
+          ),
+          CustomHeaderView(
+            title: TextStrings.textKey['funds']!,
+            icon: 'assets/images/doller sign.png',
+            subTitle: TextStrings.textKey['syb_funds']!,
+            progressPersent: 0.4,
+            padding: 0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

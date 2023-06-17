@@ -147,12 +147,9 @@ class _LocationPageState extends State<LocationPage> {
           SingleChildScrollView(
             child: Column(
               children: [
-                CustomHeaderView(
-                  title: TextStrings.textKey['location']!,
-                  icon: 'assets/icons/near_me.png',
-                  subTitle: TextStrings.textKey['sub_location']!,
-                  progressPersent: 0.2,
-                  padding: 0,
+                SizedBox(
+                  height: SizeConfig.getSize100(context: context) +
+                      SizeConfig.getSize55(context: context),
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -236,6 +233,13 @@ class _LocationPageState extends State<LocationPage> {
                 ),
               ],
             ),
+          ),
+          CustomHeaderView(
+            title: TextStrings.textKey['location']!,
+            icon: 'assets/icons/near_me.png',
+            subTitle: TextStrings.textKey['sub_location']!,
+            progressPersent: 0.2,
+            padding: 0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

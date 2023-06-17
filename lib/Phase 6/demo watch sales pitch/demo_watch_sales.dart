@@ -3,7 +3,6 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/user_type_limitation.dart';
-import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/screens/businessIdeas/BottomNavigation.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';

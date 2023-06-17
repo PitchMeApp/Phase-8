@@ -43,6 +43,8 @@ class SizeConfig {
 
   static getSize50({required BuildContext context}) => height(context) * 0.06;
 
+  static getSize55({required BuildContext context}) => height(context) * 0.073;
+
   static getSize60({required BuildContext context}) => height(context) * 0.09;
 
   static getSize80({required BuildContext context}) => height(context) * 0.14;

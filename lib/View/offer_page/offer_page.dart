@@ -6,6 +6,7 @@ import 'package:pitch_me_app/View/offer_page/controller.dart';
 import 'package:pitch_me_app/View/offer_page/selection_person.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
@@ -38,15 +39,19 @@ class _OfferPageState extends State<OfferPage> {
           children: [
             Column(
               children: [
-                CustomHeaderView(
-                  title: TextStrings.textKey['offer']!,
-                  icon: 'assets/images/offer image.png',
-                  subTitle: TextStrings.textKey['sub_offer']!,
-                  progressPersent: 0.6,
-                  padding: 0,
+                SizedBox(
+                  height: SizeConfig.getSize100(context: context) +
+                      SizeConfig.getSize55(context: context),
                 ),
                 _searchBar()
               ],
+            ),
+            CustomHeaderView(
+              title: TextStrings.textKey['offer']!,
+              icon: 'assets/images/offer image.png',
+              subTitle: TextStrings.textKey['sub_offer']!,
+              progressPersent: 0.6,
+              padding: 0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

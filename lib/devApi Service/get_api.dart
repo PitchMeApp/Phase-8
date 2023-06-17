@@ -103,7 +103,7 @@ class GetApiService {
     final response = await http.get(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
-    log(jsonDecode(response.body).toString());
+    // log(jsonDecode(response.body).toString());
     BiogaphyModel data = biogaphyModelFromJson(response.body);
 
     return data;

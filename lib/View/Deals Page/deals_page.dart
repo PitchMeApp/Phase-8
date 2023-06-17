@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat_list.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
@@ -33,8 +34,7 @@ class _DealsPageState extends State<DealsPage> {
                     icon: 'assets/images/ic_message_24px@4x.png',
                     title: TextStrings.textKey['chat']!,
                     onPressad: () {
-                      PageNavigateScreen()
-                          .push(context, UnderDevLimitationPage());
+                      PageNavigateScreen().push(context, ChatListPage());
                     }),
                 CustomListBox(
                     icon: 'assets/images/ic_import_contacts_24px@4x.png',

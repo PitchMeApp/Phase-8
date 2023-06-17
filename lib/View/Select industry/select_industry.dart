@@ -5,6 +5,7 @@ import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
 import 'package:pitch_me_app/View/Location%20Page/location_page.dart';
 import 'package:pitch_me_app/View/Select%20industry/industry_controller.dart';
 import 'package:pitch_me_app/View/navigation_controller.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
@@ -38,12 +39,9 @@ class _SelectIndustryPageState extends State<SelectIndustryPage> {
         children: [
           Column(
             children: [
-              CustomHeaderView(
-                title: TextStrings.textKey['industry']!,
-                icon: 'assets/icons/industry.png',
-                subTitle: TextStrings.textKey['sun_industry']!,
-                progressPersent: 0.1,
-                padding: 0,
+              SizedBox(
+                height: SizeConfig.getSize100(context: context) +
+                    SizeConfig.getSize55(context: context),
               ),
               Expanded(child: Obx(() {
                 return insdustryController.isLoading.value == true
@@ -117,6 +115,13 @@ class _SelectIndustryPageState extends State<SelectIndustryPage> {
                           );
               })),
             ],
+          ),
+          CustomHeaderView(
+            title: TextStrings.textKey['industry']!,
+            icon: 'assets/icons/industry.png',
+            subTitle: TextStrings.textKey['sun_industry']!,
+            progressPersent: 0.1,
+            padding: 0,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
