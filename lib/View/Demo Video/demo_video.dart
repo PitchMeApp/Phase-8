@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/login_limitation.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Profile/manu.dart';
-import 'package:pitch_me_app/Phase%206/demo%20watch%20sales%20pitch/demo_watch_sales.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/View/Select%20industry/select_industry.dart';
@@ -87,151 +86,98 @@ class _DemoVideoPageState extends State<DemoVideoPage> {
                   'Make sure after Signing Up with different email, you select Business Owner or Business Idea')
           : Stack(
               children: [
-                // isLoading == true
-                //     ? Center(
-                //         child: CircularProgressIndicator(
-                //         color: DynamicColor.blue,
-                //       ))
-                //     :
-                Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: width(context),
-                      height: height(context),
-                      color: Color.fromARGB(255, 254, 254, 254),
-                      child: VideoViewer(
-                        controller: videoViewerController,
-                        autoPlay: false,
-                        enableHorizontalSwapingGesture: false,
-                        enableVerticalSwapingGesture: false,
-                        volumeManager: VideoViewerVolumeManager.device,
-                        onFullscreenFixLandscape: false,
-                        forwardAmount: 5,
-                        defaultAspectRatio: 9 / 16,
-                        rewindAmount: -5,
-                        looping: true,
-                        enableShowReplayIconAtVideoEnd: false,
-                        style: VideoViewerStyle(
-                            playAndPauseStyle: PlayAndPauseWidgetStyle(
-                              background: Colors.transparent,
-                              circleRadius: 80.0,
-                              play: Center(
-                                child: Icon(
-                                  Icons.play_arrow,
-                                  size: 80,
-                                  color: DynamicColor.white,
-                                ),
-                              ),
-                              pause: Center(
-                                child: Icon(
-                                  Icons.pause,
-                                  size: 80,
-                                  color: DynamicColor.white,
-                                ),
-                              ),
+                Container(
+                  width: width(context),
+                  height: height(context),
+                  color: Color.fromARGB(255, 254, 254, 254),
+                  child: VideoViewer(
+                    controller: videoViewerController,
+                    autoPlay: false,
+                    enableHorizontalSwapingGesture: false,
+                    enableVerticalSwapingGesture: false,
+                    volumeManager: VideoViewerVolumeManager.device,
+                    onFullscreenFixLandscape: false,
+                    forwardAmount: 5,
+                    defaultAspectRatio: 9 / 16,
+                    rewindAmount: -5,
+                    looping: true,
+                    enableShowReplayIconAtVideoEnd: false,
+                    style: VideoViewerStyle(
+                        playAndPauseStyle: PlayAndPauseWidgetStyle(
+                          background: Colors.transparent,
+                          circleRadius: 80.0,
+                          play: Center(
+                            child: Icon(
+                              Icons.play_arrow,
+                              size: 80,
+                              color: DynamicColor.white,
                             ),
-                            thumbnail: Image.network(''),
-                            loading: CircularProgressIndicator(
-                              color: Colors.blue,
-                            )),
-                        source: {
-                          "Source": VideoSource(
-                            video: VideoPlayerController.network(
-                                'https://ciu.ody.mybluehostin.me/ringbell/addwatchsales.mp4'),
-                          )
-                        },
-                      ),
-                    ),
-                    // Column(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   crossAxisAlignment: CrossAxisAlignment.center,
-                    //   children: [
-                    //     InkWell(
-                    //       onTap: () {
-                    //         setState(() {
-                    //           videoViewerController.isPlaying
-                    //               ? videoViewerController.pause()
-                    //               : videoViewerController.play();
-                    //         });
-                    //       },
-                    //       child: videoViewerController.isPlaying
-                    //           ? Container()
-                    //           : Stack(
-                    //               alignment: Alignment.center,
-                    //               children: [
-                    //                 // Image.asset(
-                    //                 //   "assets/images/white_box.png",
-                    //                 //   height: 100,
-                    //                 //   width: 100,
-                    //                 //   color: DynamicColor.white,
-                    //                 // ),
-                    //                 Padding(
-                    //                   padding: const EdgeInsets.only(
-                    //                       bottom: 0, right: 0),
-                    //                   child: Icon(
-                    //                     videoViewerController.isPlaying
-                    //                         ? Icons.pause
-                    //                         : Icons.play_arrow,
-                    //                     color: DynamicColor.white,
-                    //                     size: 80,
-                    //                   ),
-                    //                 ),
-                    //               ],
-                    //             ),
-                    //     ),
-                    //   ],
-                    // ),
-                    BackArrow(
-                      alignment: Alignment.centerRight,
-                      icon: Icons.arrow_forward_ios,
-                      onPressed: () {
-                        if (checkGuestType.isNotEmpty &&
-                            checkGuestType != 'null') {
-                          if (businesstype == '3' || businesstype == '4') {
-                            setState(() {
-                              isCheck = true;
-                            });
-                          } else {
-                            videoViewerController.pause();
-                            _navigationController.navigationType.value = 'Post';
-                            Get.to(() => SelectIndustryPage());
-                          }
-                        } else {
-                          Get.to(() => LoginLimitationPage());
-                        }
-                      },
-                    ),
-                    CustomAppbar(
-                      title: 'Add Sales Pitch',
-                      onPressad: () {
+                          ),
+                          pause: Center(
+                            child: Icon(
+                              Icons.pause,
+                              size: 80,
+                              color: DynamicColor.white,
+                            ),
+                          ),
+                        ),
+                        thumbnail: Image.network(''),
+                        loading: CircularProgressIndicator(
+                          color: Colors.blue,
+                        )),
+                    source: {
+                      "Source": VideoSource(
+                        video: VideoPlayerController.network(
+                            'https://ciu.ody.mybluehostin.me/ringbell/addwatchsales.mp4'),
+                      )
+                    },
+                  ),
+                ),
+                BackArrow(
+                  alignment: Alignment.centerRight,
+                  icon: Icons.arrow_forward_ios,
+                  onPressed: () {
+                    if (checkGuestType.isNotEmpty && checkGuestType != 'null') {
+                      if (businesstype == '3' || businesstype == '4') {
+                        setState(() {
+                          isCheck = true;
+                        });
+                      } else {
                         videoViewerController.pause();
-                        if (checkGuestType.isNotEmpty &&
-                            checkGuestType != 'null') {
-                          PageNavigateScreen()
-                              .push(
-                                  context,
-                                  ManuPage(
-                                    title: 'Add Sales Pitch',
-                                    pageIndex: 2,
-                                    isManu: 'Manu',
-                                  ))
-                              .then((value) {
-                            setState(() {
-                              videoViewerController.play();
-                            });
-                          });
-                        } else {
-                          Get.to(() => GuestManuPage(
+                        _navigationController.navigationType.value = 'Post';
+                        Get.to(() => SelectIndustryPage());
+                      }
+                    } else {
+                      Get.to(() => LoginLimitationPage());
+                    }
+                  },
+                ),
+                CustomAppbar(
+                  title: 'Add Sales Pitch',
+                  onPressad: () {
+                    videoViewerController.pause();
+                    if (checkGuestType.isNotEmpty && checkGuestType != 'null') {
+                      PageNavigateScreen()
+                          .push(
+                              context,
+                              ManuPage(
                                 title: 'Add Sales Pitch',
                                 pageIndex: 2,
-                              ));
-                        }
-                      },
-                      onPressadForNotify: () {},
-                    ),
-                  ],
-                  //)
+                                isManu: 'Manu',
+                              ))
+                          .then((value) {
+                        setState(() {
+                          videoViewerController.play();
+                        });
+                      });
+                    } else {
+                      Get.to(() => GuestManuPage(
+                            title: 'Add Sales Pitch',
+                            pageIndex: 2,
+                          ));
+                    }
+                  },
+                  onPressadForNotify: () {},
                 ),
               ],
             ),

@@ -43,7 +43,7 @@ class _PitchesListPageState extends State<PitchesListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
-        alignment: Alignment.center,
+        // alignment: Alignment.center,
         children: [
           SingleChildScrollView(child: _postListWidget()),
           BackArrow(
@@ -86,10 +86,15 @@ class _PitchesListPageState extends State<PitchesListPage> {
           builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.waiting:
-                return const Center(
-                    child: CircularProgressIndicator(
-                  color: DynamicColor.blue,
-                ));
+                return Padding(
+                  padding: EdgeInsets.only(
+                      top: SizeConfig.getSize100(context: context) +
+                          SizeConfig.getSize100(context: context)),
+                  child: const Center(
+                      child: CircularProgressIndicator(
+                    color: DynamicColor.blue,
+                  )),
+                );
               default:
                 if (snapshot.hasError) {
                   return const Center(child: Text('No pitches available'));

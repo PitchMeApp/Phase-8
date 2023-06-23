@@ -28,7 +28,7 @@ class BusinessIdeasApi extends GetConnect {
         res = await get(GET_POST_DATA_URL);
       }
 
-      //log("Res is at getPost ${res.body}");
+      log("Res is at getPost ${'$GET_POST_DATA_URL?user=$userID&category=$category'}");
       if (res.statusCode == 200) {
         return PostModel.fromJson(res.body);
       }
@@ -55,7 +55,7 @@ class BusinessIdeasApi extends GetConnect {
       res = await get('${BASE_URL}salespitch?type=2');
     }
 
-    log("Res is at getPost ${'${BASE_URL}salespitch?type=2&user=$userID&usertype=$bussinessType'}");
+    // log("Res is at getPost ${'${BASE_URL}salespitch?type=2&user=$userID&usertype=$bussinessType'}");
     if (res.statusCode == 200) {
       return SalesPitchListModel.fromJson(res.body);
     }

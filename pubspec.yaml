@@ -73,7 +73,6 @@ dependencies:
   intl: ^0.18.1  
   chips_choice: ^3.0.0
   url_launcher: ^6.1.7
-  flutter_chat_bubble: ^2.0.2
   permission_handler: ^10.2.0
   record: ^4.4.4
   voice_message_package: ^1.0.41

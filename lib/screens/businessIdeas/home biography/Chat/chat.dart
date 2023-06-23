@@ -25,10 +25,10 @@ class ChatPage extends StatefulWidget {
   dynamic img;
   ChatPage({
     Key? key,
-    this.id,
-    this.recieverid,
-    this.name,
-    this.img,
+    required this.id,
+    required this.recieverid,
+    required this.name,
+    required this.img,
   }) : super(key: key);
 
   @override

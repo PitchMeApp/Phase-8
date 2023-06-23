@@ -125,6 +125,9 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
                             id: controller.bioDoc == null
                                 ? null
                                 : controller.bioDoc!.userid,
+                            recieverid: controller.bioDoc == null
+                                ? null
+                                : controller.bioDoc!.userid,
                             name: controller.bioDoc == null
                                 ? null
                                 : controller.bioDoc!.user.username,

@@ -193,4 +193,32 @@ class ChatController extends GetxController {
     messageController.clear();
     audioPath.value = '';
   }
+
+  void sendMessageAdmin() {
+    String messageText = messageController.text.trim();
+
+    if (messageText != '' ||
+        downloadFirebaseUrl.value != '' ||
+        audioPath.value != '' ||
+        senderID.value != '') {
+      var messagePost = {
+        'message': messageText,
+        'image': downloadFirebaseUrl.value,
+        'voice': audioPath.value,
+        'video': '',
+        'sendorid': senderID.value,
+        'chatid': chatID.value,
+        'recieverid': recieverid.value,
+      };
+      //log('check  ' + messagePost.toString());
+      socket.emit('sendmessage_admin', messagePost);
+    } else {
+      ScaffoldMessenger.of(Get.context!)
+          .showSnackBar(const SnackBar(content: Text('Please enter message')));
+    }
+
+    downloadFirebaseUrl.value = '';
+    messageController.clear();
+    audioPath.value = '';
+  }
 }

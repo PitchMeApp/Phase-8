@@ -11,6 +11,7 @@ import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/main.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/Model/model.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat_appsupports.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
@@ -34,8 +35,10 @@ class _ChatListPageState extends State<ChatListPage>
   final ChatController chatController = Get.put(ChatController());
   StreamController<ChatListModel> controller =
       StreamController<ChatListModel>();
-  //List usersList = [];
 
+  dynamic adminchatlist;
+  dynamic adminmessage;
+  dynamic adminunread = 0;
   @override
   void initState() {
     //Colors.white.withOpacity(0.3)
@@ -61,13 +64,18 @@ class _ChatListPageState extends State<ChatListPage>
 
     var onCreate = {'sendorid': senderID};
     socket.emit('join_user', onCreate);
-    socket.on('receive_users', (data) {
+    socket.emit('join_admin', onCreate);
+    socket.on('receive_users_admin', (data) {
       //log('check = ' + data.toString());
+      if (data['messages'].length > 0 && senderID == data['roomid']) {
+        adminchatlist = data['messages'][0]['chat']['_id'];
+        adminunread = data['messages'][0]['unread'];
+        adminmessage = data['messages'][0]['message'];
+      }
+    });
+    socket.on('receive_users', (data) {
       ChatListModel chatListModel = ChatListModel.fromJson(data);
-
       controller.add(chatListModel);
-
-      // log(usersList.toString());
     });
   }
 
@@ -159,7 +167,14 @@ class _ChatListPageState extends State<ChatListPage>
               ),
               Expanded(
                 flex: 6,
-                child: list(),
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      aapSupporter(),
+                      list(),
+                    ],
+                  ),
+                ),
               ),
             ],
           ),
@@ -196,6 +211,7 @@ class _ChatListPageState extends State<ChatListPage>
               case ConnectionState.waiting:
                 return Padding(
                   padding: EdgeInsets.only(
+                      top: SizeConfig.getSize100(context: context),
                       bottom: SizeConfig.getSize60(context: context)),
                   child: const Center(
                       child: CircularProgressIndicator(
@@ -221,9 +237,6 @@ class _ChatListPageState extends State<ChatListPage>
                       padding: EdgeInsets.zero,
                       itemCount: snapshot.data!.messages.length,
                       itemBuilder: (context, index) {
-                        // if (index == 0) {
-                        //   return aapSupporter();
-                        // }
                         Message data = snapshot.data!.messages[index];
                         // log('cht = ' + data.toJson().toString());
                         return Column(
@@ -379,44 +392,76 @@ class _ChatListPageState extends State<ChatListPage>
   }
 
   Widget aapSupporter() {
-    return Column(
-      children: [
-        Divider(
-          height: 0,
-        ),
-        ListTile(
-          onTap: () {
-            PageNavigateScreen().push(
-                context,
-                ChatPage(
-                  img: '',
-                  name: 'Pitch Me App',
-                ));
-          },
-          contentPadding: EdgeInsets.zero,
-          horizontalTitleGap: 5.0,
-          minLeadingWidth: 0.0,
-          leading: CircleAvatar(
-            radius: 30,
-            backgroundImage: AssetImage('assets/image/handshake.png'),
-            backgroundColor: DynamicColor.blue,
+    return Padding(
+      padding: EdgeInsets.only(
+          left: SizeConfig.getFontSize20(context: context),
+          right: SizeConfig.getFontSize20(context: context)),
+      child: Column(
+        children: [
+          Divider(
+            height: 0,
           ),
-          title: Text(
-            'Pitch Me App Support',
-            style: TextStyle(fontWeight: FontWeight.w500),
+          ListTile(
+            onTap: () {
+              PageNavigateScreen().push(
+                  context,
+                  AppSupporterChatPage(
+                    img: '',
+                    name: 'Pitch Me App',
+                    id: adminchatlist,
+                    recieverid: 'admin',
+                  ));
+            },
+            contentPadding: EdgeInsets.zero,
+            horizontalTitleGap: 5.0,
+            minLeadingWidth: 0.0,
+            leading: CircleAvatar(
+              radius: 23,
+              backgroundImage: AssetImage('assets/image/handshake.png'),
+              backgroundColor: DynamicColor.blue,
+            ),
+            title: Text(
+              'Pitch Me App Support',
+              style: TextStyle(fontWeight: FontWeight.w500),
+            ),
+            subtitle: Text(
+              'How can we help?',
+              // adminmessage != null
+              //     ? adminmessage['message']
+              //     : 'How can we help?',
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                  color: DynamicColor.hintclr, fontWeight: FontWeight.w400),
+            ),
+            trailing: Column(
+              children: [
+                adminunread != 0
+                    ? Padding(
+                        padding: EdgeInsets.only(right: 5),
+                        child: CircleAvatar(
+                          radius: 12,
+                          backgroundColor: DynamicColor.blue,
+                          child: Text(
+                            adminunread.toString(),
+                            style: white13TextStyle,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: 0,
+                        width: 0,
+                      )
+              ],
+            ),
           ),
-          subtitle: Text(
-            'How can we help?',
-            maxLines: 2,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-                color: DynamicColor.hintclr, fontWeight: FontWeight.w400),
+          Divider(
+            height: 0,
           ),
-        ),
-        Divider(
-          height: 0,
-        ),
-      ],
+        ],
+      ),
     );
   }
 

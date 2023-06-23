@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:pitch_me_app/main.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat.dart';
@@ -12,9 +10,11 @@ class ConfirmationChat extends StatefulWidget {
   dynamic id;
   dynamic name;
   dynamic img;
+  dynamic recieverid;
   ConfirmationChat({
     super.key,
     this.id,
+    this.recieverid,
     this.name,
     this.img,
   });
@@ -24,8 +24,11 @@ class ConfirmationChat extends StatefulWidget {
 }
 
 class _ConfirmationChatState extends State<ConfirmationChat> {
+  dynamic chatData;
+
   @override
   void initState() {
+    createChat();
     super.initState();
   }
 
@@ -35,7 +38,7 @@ class _ConfirmationChatState extends State<ConfirmationChat> {
     var onCreate = {'sendorid': senderID, 'recieverid': widget.id};
     socket.emit('createchat', onCreate);
     socket.on('receive_user', (data) {
-      log('message = ' + data.toString());
+      chatData = data;
     });
   }
 
@@ -142,11 +145,11 @@ class _ConfirmationChatState extends State<ConfirmationChat> {
                     alignment: Alignment.centerRight,
                     onPressed: () {
                       if (widget.id != null) {
-                        createChat();
                         PageNavigateScreen().push(
                             context,
                             ChatPage(
-                              id: widget.id,
+                              id: chatData['messages']['_id'],
+                              recieverid: chatData['messages']['recieverid'],
                               name: widget.name,
                               img: widget.img,
                             ));

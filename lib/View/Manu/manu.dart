@@ -3,6 +3,7 @@ import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/und
 import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
 import 'package:pitch_me_app/View/Deals%20Page/deals_page.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat_list.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
@@ -87,7 +88,7 @@ class _ManuPageState extends State<ManuPage> {
               icon: '',
               title: TextStrings.textKey['contact']!,
               onPressad: () {
-                PageNavigateScreen().push(context, UnderDevLimitationPage());
+                PageNavigateScreen().push(context, ChatListPage());
               }),
         ],
       ),

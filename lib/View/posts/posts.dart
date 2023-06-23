@@ -2,7 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
-import 'package:pitch_me_app/View/Custom%20header%20view/custom_bottom_view.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
 import 'package:pitch_me_app/View/Profile/Pitches/detail_page.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
@@ -48,7 +48,10 @@ class _PostPageState extends State<PostPage> {
             onPressad: () {},
             onPressadForNotify: () {},
           ),
-          CustomFloatbar()
+          NewCustomBottomBar(
+            index: 4,
+            isBack: true,
+          ),
         ],
       ),
     );
