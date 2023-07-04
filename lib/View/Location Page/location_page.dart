@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -113,7 +112,7 @@ class _LocationPageState extends State<LocationPage> {
         setState(() {});
       }
     } catch (e) {
-      log('location = ' + e.toString());
+      // log('location = ' + e.toString());
     }
   }
 
@@ -128,7 +127,7 @@ class _LocationPageState extends State<LocationPage> {
       _locationPageController.searchController.text =
           jsonResponce['results'][0]['formatted_address'];
     } catch (e) {
-      log('message = ' + e.toString());
+      // log('message = ' + e.toString());
     }
   }
 
@@ -423,7 +422,7 @@ class _LocationPageState extends State<LocationPage> {
   void onMapDispose() async {
     final GoogleMapController controller = await controllerCompleter.future;
     controller.dispose();
-    log('dispose');
+    // log('dispose');
   }
 
   @override

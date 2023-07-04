@@ -19,6 +19,9 @@ import 'package:pitch_me_app/utils/widgets/text/text.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../View/Profile/Biography/biography.dart';
+import '../../View/Profile/Pitches/pitches_list.dart';
+
 class MainHomeScreen extends StatefulWidget {
   MainHomeScreen({Key? key}) : super(key: key);
 
@@ -257,7 +260,12 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                                                             .result![index]
                                                                             .senderID!,
                                                                       ));
-                                                                } else {
+                                                                } else if (value
+                                                                        .post
+                                                                        ?.result![
+                                                                            index]
+                                                                        .type ==
+                                                                    6) {
                                                                   PageNavigateScreen().push(
                                                                       context,
                                                                       FeedbackPage(
@@ -270,6 +278,31 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                                                         data: value
                                                                             .post!
                                                                             .result![index],
+                                                                      ));
+                                                                } else if (value
+                                                                        .post
+                                                                        ?.result![
+                                                                            index]
+                                                                        .type ==
+                                                                    7) {
+                                                                  PageNavigateScreen().push(
+                                                                      context,
+                                                                      PitchesListPage(
+                                                                          notifyID: value
+                                                                              .post!
+                                                                              .result![index]
+                                                                              .sId!));
+                                                                } else if (value
+                                                                        .post
+                                                                        ?.result![
+                                                                            index]
+                                                                        .type ==
+                                                                    8) {
+                                                                  PageNavigateScreen().push(
+                                                                      context,
+                                                                      BiographyPage(
+                                                                        type:
+                                                                            '',
                                                                       ));
                                                                 }
                                                               },
@@ -291,17 +324,23 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                                                             color:
                                                                                 Color(0xff000a5e)),
                                                                         Padding(
-                                                                          padding: EdgeInsets.only(
-                                                                              left: sizeW * 0.03,
-                                                                              top: sizeH * 0.01),
+                                                                          padding:
+                                                                              EdgeInsets.only(
+                                                                            left:
+                                                                                sizeW * 0.03,
+                                                                            // top: sizeH * 0.01,
+                                                                          ),
                                                                           child:
                                                                               Column(
                                                                             crossAxisAlignment:
                                                                                 CrossAxisAlignment.start,
+                                                                            mainAxisAlignment:
+                                                                                MainAxisAlignment.center,
                                                                             children: [
                                                                               Container(
                                                                                 height: sizeH * 0.02,
                                                                                 width: sizeW * 0.45,
+                                                                                alignment: Alignment.centerLeft,
                                                                                 // color: Color
                                                                                 //     .fromARGB(
                                                                                 //         255,
@@ -314,11 +353,11 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                                                                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                                                                 ),
                                                                               ),
-                                                                              Text(
-                                                                                value.post?.result?[index].text!.toString() ?? "",
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10),
-                                                                              ),
+                                                                              // Text(
+                                                                              //   value.post?.result?[index].text!.toString() ?? "",
+                                                                              //   overflow: TextOverflow.ellipsis,
+                                                                              //   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10),
+                                                                              // ),
                                                                             ],
                                                                           ),
                                                                         ),
@@ -338,6 +377,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                                                 right: sizeW *
                                                                     0.02),
                                                         child: Divider(
+                                                          height: 2,
                                                           color:
                                                               Color(0xff000a5e),
                                                         ),

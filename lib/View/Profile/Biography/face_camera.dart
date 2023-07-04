@@ -50,7 +50,7 @@ class _FaceCameraPageState extends State<FaceCameraPage> {
   // init camera
   Future<void> _initCamera(CameraDescription description) async {
     _cameraController =
-        CameraController(description, ResolutionPreset.high, enableAudio: true);
+        CameraController(description, ResolutionPreset.low, enableAudio: false);
 
     try {
       await _cameraController.initialize();

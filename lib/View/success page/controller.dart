@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -85,7 +84,7 @@ class SuccessPageController extends GetxController {
         'status': 1.toString(),
         'whocanwatch': whoCanWatchList.toString(),
       });
-      log(request.fields.toString());
+      // log(request.fields.toString());
       request.files.add(await http.MultipartFile.fromPath(
           'vid1', _videoFirstPageController.videoUrl.value.toString(),
           filename: _videoFirstPageController.videoUrl.value.split('/').last));
@@ -152,7 +151,7 @@ class SuccessPageController extends GetxController {
       }
     } catch (e) {
       isLoading.value = false;
-      log('error = ' + _addImageController.fileFullPath.path.toString());
+      // log('error = ' + _addImageController.fileFullPath.path.toString());
     }
   }
 }

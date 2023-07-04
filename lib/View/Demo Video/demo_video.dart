@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -186,7 +185,7 @@ class _DemoVideoPageState extends State<DemoVideoPage> {
 
   @override
   void dispose() {
-    log('video');
+    //  log('video');
     videoViewerController.pause();
     videoViewerController.dispose();
 

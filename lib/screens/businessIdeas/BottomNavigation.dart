@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Deals%20Page/deals_page.dart';
@@ -41,8 +39,6 @@ class _FloatbarState extends State<Floatbar>
     changeColors();
     getUserType();
     if (widget.selectData != null) {
-      log(widget.selectData.toString());
-
       controller.PageIndexData.value = widget.selectData;
     }
     super.initState();
@@ -93,30 +89,7 @@ class _FloatbarState extends State<Floatbar>
     setState(() {
       businesstype = prefs.getString('log_type').toString();
     });
-
-    log(" ADGL ${businesstype}");
-
-    // if (businesstype == '2' || businesstype == '2') {
-    //   pages = [
-    //     MainHomeScreen(),
-    //     mainHome_Two(),
-    //     //Container(),
-    //     DemoVideoPage(),
-    //     DealsPage(),
-    //     ProfilePage(),
-    //   ];
-    // }
   }
-
-  // Businesslog() async {
-  //   SharedPreferences preferencesData = await SharedPreferences.getInstance();
-  //   setState(() {
-  //     businesstype = preferencesData.getString("log_type");
-  //     print("fffgfhg  ${businesstype}");
-  //     abc = businesstype;
-  //     print("fhg  ${abc}");
-  //   });
-  // }
 
   var ColorChangerIndex;
   int pageindex = 0;

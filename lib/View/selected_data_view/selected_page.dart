@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -229,8 +228,8 @@ class _SelectedPageState extends State<SelectedPage> {
                       itemCount:
                           _offerPageController.selectedPersonType.value.length,
                       itemBuilder: (context, index) {
-                        log(_offerPageController.selectedPersonType.value
-                            .toString());
+                        // log(_offerPageController.selectedPersonType.value
+                        //     .toString());
                         return customWidget(
                             "assets/images/ic_visibility_24px.png",
                             _offerPageController.selectedPersonType.value[index]

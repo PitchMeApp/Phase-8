@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/core/apis/postScreenApi.dart';
@@ -51,7 +50,6 @@ class DashboardController extends GetxController {
                   }
                   i++;
                 });
-                log('message' + list.length.toString());
 
                 data.result = list;
                 postModel.value = data;

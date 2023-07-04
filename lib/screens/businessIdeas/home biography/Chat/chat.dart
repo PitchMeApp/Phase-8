@@ -9,26 +9,33 @@ import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/main.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/Model/chat_room_model.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat_list.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/controller.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/home_page_biography.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
-import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voice_message_package/voice_message_package.dart';
+
+import '../../../../utils/widgets/Alert Box/show_image_popup.dart';
 
 class ChatPage extends StatefulWidget {
   dynamic id;
   dynamic recieverid;
   dynamic name;
   dynamic img;
+  dynamic back;
+  String userID;
   ChatPage({
     Key? key,
     required this.id,
     required this.recieverid,
     required this.name,
     required this.img,
+    required this.userID,
+    this.back,
   }) : super(key: key);
 
   @override
@@ -50,8 +57,10 @@ class _ChatPageState extends State<ChatPage>
   List<RoomMessage> chatRoomModel = [];
 
   String senderID = '';
+  String datetime = '';
   @override
   void initState() {
+    log('recierverid = ' + widget.recieverid.toString());
     if (widget.id != null && widget.recieverid != null) {
       chatController.chatID.value = widget.id;
       chatController.recieverid.value = widget.recieverid;
@@ -95,6 +104,7 @@ class _ChatPageState extends State<ChatPage>
     };
     socket.emit('join_chat', onjoin);
     socket.on('receive_messages', (data) {
+      //log(data.toString());
       if (data['roomid'] == widget.id) {
         for (var element in data['message']) {
           chatRoomModel.insert(0, RoomMessage.fromJson(element));
@@ -148,7 +158,12 @@ class _ChatPageState extends State<ChatPage>
                             children: [
                               AppBarIconContainer(
                                 onTap: () {
-                                  // Navigator.of(context).pop();
+                                  if (widget.back != null) {
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    PageNavigateScreen().normalpushReplesh(
+                                        context, ChatListPage());
+                                  }
                                 },
                                 height: SizeConfig.getSize50(context: context),
                                 width: SizeConfig.getSize50(context: context),
@@ -183,30 +198,41 @@ class _ChatPageState extends State<ChatPage>
                               ),
                         widget.img == null
                             ? Container()
-                            : Padding(
-                                padding:
-                                    const EdgeInsets.only(top: 10, bottom: 10),
-                                child: CachedNetworkImage(
-                                  // height: 10.h,
-                                  // width: 10.w,
-                                  imageUrl: widget.img,
-                                  imageBuilder: (context, imageProvider) =>
-                                      CircleAvatar(
-                                          radius: 25,
-                                          backgroundColor: DynamicColor.white,
-                                          backgroundImage: imageProvider),
-                                  placeholder: (context, url) => const Center(
-                                      child: CircularProgressIndicator(
-                                    color: DynamicColor.white,
-                                  )),
-                                  errorWidget: (context, url, error) =>
-                                      const CircleAvatar(
-                                    radius: 25,
-                                    backgroundColor: DynamicColor.white,
-                                    child: Icon(
-                                      Icons.person,
-                                      size: 28,
-                                      color: DynamicColor.blue,
+                            : InkWell(
+                                onTap: () {
+                                  PageNavigateScreen().push(
+                                      context,
+                                      HomeBiographyPage(
+                                        type: 'back',
+                                        userID: widget.userID,
+                                        notifyID: '',
+                                      ));
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.only(
+                                      top: 10, bottom: 10),
+                                  child: CachedNetworkImage(
+                                    // height: 10.h,
+                                    // width: 10.w,
+                                    imageUrl: widget.img,
+                                    imageBuilder: (context, imageProvider) =>
+                                        CircleAvatar(
+                                            radius: 25,
+                                            backgroundColor: DynamicColor.white,
+                                            backgroundImage: imageProvider),
+                                    placeholder: (context, url) => const Center(
+                                        child: CircularProgressIndicator(
+                                      color: DynamicColor.white,
+                                    )),
+                                    errorWidget: (context, url, error) =>
+                                        const CircleAvatar(
+                                      radius: 25,
+                                      backgroundColor: DynamicColor.white,
+                                      child: Icon(
+                                        Icons.person,
+                                        size: 28,
+                                        color: DynamicColor.blue,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -249,23 +275,52 @@ class _ChatPageState extends State<ChatPage>
                                 child: const Center(
                                     child: Text('Start new chat')));
                           } else {
-                            return chatController.isloading.value == false
-                                ? listData(snapshot.data!)
-                                : Center(
-                                    child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      CircularProgressIndicator(
-                                          color: DynamicColor.blue),
-                                      SizedBox(height: 20),
-                                      Text(
-                                        'Sending',
-                                        style: blue15,
-                                      ),
-                                    ],
-                                  ));
+                            return
+                                // chatController.isloading.value != false
+                                //     ?
+                                listData(snapshot.data!);
+                            // : Center(
+                            //     child: SizedBox(
+                            //     height: 170,
+                            //     width: 200,
+                            //     child: AlertDialog(
+                            //       backgroundColor: DynamicColor.lightGrey,
+                            //       shape: RoundedRectangleBorder(
+                            //           borderRadius:
+                            //               BorderRadius.circular(10)),
+                            //       alignment: Alignment.center,
+
+                            //       content: Column(
+                            //         mainAxisAlignment:
+                            //             MainAxisAlignment.center,
+                            //         crossAxisAlignment:
+                            //             CrossAxisAlignment.center,
+                            //         children: [
+                            //           CircularProgressIndicator(
+                            //               color: DynamicColor.blue),
+                            //           SizedBox(height: 20),
+                            //           Text(
+                            //             'Sending',
+                            //             style: blue15,
+                            //           ),
+                            //         ],
+                            //       ),
+                            //       // child: Column(
+                            //       // mainAxisAlignment: MainAxisAlignment.center,
+                            //       // crossAxisAlignment:
+                            //       //     CrossAxisAlignment.center,
+                            //       // children: [
+                            //       //   CircularProgressIndicator(
+                            //       //       color: DynamicColor.blue),
+                            //       //   SizedBox(height: 20),
+                            //       //   Text(
+                            //       //     'Sending',
+                            //       //     style: blue15,
+                            //       //   ),
+                            //       // ],
+                            //       //                                 ),
+                            //     ),
+                            //   ));
                           }
                       }
                     })),
@@ -416,11 +471,16 @@ class _ChatPageState extends State<ChatPage>
           const SizedBox(width: 10),
           Expanded(
             child: SizedBox(
-              height: 50,
+              height: 60,
               child: TextFormField(
                 controller: chatController.messageController,
                 focusNode: focusNode,
                 textCapitalization: TextCapitalization.sentences,
+                textInputAction: TextInputAction.done,
+                enabled: true,
+                expands: true,
+                maxLines: null,
+                minLines: null,
                 autocorrect: true,
                 enableSuggestions: true,
                 decoration: InputDecoration(
@@ -428,6 +488,7 @@ class _ChatPageState extends State<ChatPage>
                   fillColor: Colors.grey[100],
                   labelText: 'Type new message',
                   labelStyle: TextStyle(color: DynamicColor.blue),
+                  contentPadding: const EdgeInsets.all(10),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(width: 0),
                     gapPadding: 10,
@@ -500,6 +561,15 @@ class _ChatPageState extends State<ChatPage>
     return VoiceMessage(
       // contactCircleColor: Colors.transparent,
       audioSrc: msg,
+      meBgColor: DynamicColor.lightGrey,
+      contactBgColor: DynamicColor.blue,
+      contactCircleColor: DynamicColor.blue,
+      contactFgColor: DynamicColor.blue,
+      contactPlayIconColor: DynamicColor.white,
+      mePlayIconColor: DynamicColor.white,
+      contactPlayIconBgColor: DynamicColor.blue,
+      meFgColor: DynamicColor.blue,
+
       played: false,
       me: true,
       onPlay: () {},
@@ -518,157 +588,187 @@ class _ChatPageState extends State<ChatPage>
       itemBuilder: (BuildContext context, int index) {
         var message = list[index];
         // log(message.toString());
+        if (message != null) {
+          int ts = message.time;
+          DateTime tsdate = DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+          datetime = DateFormat('h:mm a').format(tsdate);
+        }
         return (message.sendorid == senderID)
             ? Align(
                 alignment: Alignment.centerRight,
-                child: Padding(
-                  padding: const EdgeInsets.only(right: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: DynamicColor.lightGrey,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30)),
-                          padding: EdgeInsets.all(10),
-                          constraints: BoxConstraints(
-                              maxWidth:
-                                  MediaQuery.of(context).size.width * 0.7),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              message.voice != ''
-                                  ? showMsg(message.voice)
-                                  : Container(
-                                      height: 0,
-                                      width: 0,
-                                    ),
-                              message.image != ''
-                                  ? CachedNetworkImage(
-                                      // height: 12.h,
-                                      // width: 12.w,
-                                      imageUrl: message.image,
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        height: 150,
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: imageProvider)),
+                          child: Container(
+                            decoration: BoxDecoration(
+                                color: Color(0xffE5E5E5),
+                                borderRadius: BorderRadius.circular(30)),
+                            padding: EdgeInsets.all(10),
+                            constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.7),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                message.voice != ''
+                                    ? showMsg(message.voice)
+                                    : Container(
+                                        height: 0,
+                                        width: 0,
                                       ),
-                                      placeholder: (context, url) =>
-                                          const Center(
-                                              child: CircularProgressIndicator(
-                                        color: DynamicColor.blue,
-                                      )),
-                                      errorWidget: (context, url, error) =>
-                                          Container(
-                                        child: Icon(Icons.error),
+                                message.image != ''
+                                    ? CachedNetworkImage(
+                                        // height: 12.h,
+                                        // width: 12.w,
+                                        imageUrl: message.image,
+                                        imageBuilder:
+                                            (context, imageProvider) => InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    ShowFullImagePopup(
+                                                      image_url: message.image,
+                                                    ));
+                                          },
+                                          child: Container(
+                                            height: 150,
+                                            width: 150,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: imageProvider),
+                                            ),
+                                          ),
+                                        ),
+                                        placeholder: (context, url) =>
+                                            const Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                          color: DynamicColor.blue,
+                                        )),
+                                        errorWidget: (context, url, error) =>
+                                            Container(
+                                          child: Icon(Icons.error),
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 0,
+                                        width: 0,
                                       ),
-                                    )
-                                  : Container(
-                                      height: 0,
-                                      width: 0,
-                                    ),
-                              message.message != ''
-                                  ? Text(message.message,
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 16))
-                                  : Container(
-                                      height: 0,
-                                      width: 0,
-                                    ),
-                            ],
+                                message.message != ''
+                                    ? Text(message.message,
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 16))
+                                    : Container(
+                                        height: 0,
+                                        width: 0,
+                                      ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Text(
-                          DateFormat('h:mm a')
-                              .format(DateTime.parse(message.updatedAt)),
-                          style: const TextStyle(
-                              color: Colors.grey, fontSize: 10)),
-                    ],
+                        Text(datetime,
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 10)),
+                      ],
+                    ),
                   ),
                 ),
               )
             : Align(
                 alignment: Alignment.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Card(
-                        elevation: 5,
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30)),
-                        child: Container(
-                          padding: EdgeInsets.all(10),
-                          decoration: BoxDecoration(
-                              color: DynamicColor.white,
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.7,
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Card(
+                          elevation: 5,
+                          shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(30)),
-                          // constraints: BoxConstraints(
-                          //     maxWidth: MediaQuery.of(context).size.width * 0.7),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              message.voice != ''
-                                  ? showMsg(message.voice)
-                                  : Container(
-                                      height: 0,
-                                      width: 0,
-                                    ),
-                              message.image != ''
-                                  ? CachedNetworkImage(
-                                      // height: 12.h,
-                                      // width: 12.w,
-                                      imageUrl: message.image,
-                                      imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        height: 150,
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: imageProvider)),
+                          child: Container(
+                            padding: EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                color: DynamicColor.white,
+                                borderRadius: BorderRadius.circular(30)),
+                            // constraints: BoxConstraints(
+                            //     maxWidth: MediaQuery.of(context).size.width * 0.7),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                message.voice != ''
+                                    ? showMsg(message.voice)
+                                    : Container(
+                                        height: 0,
+                                        width: 0,
                                       ),
-                                      placeholder: (context, url) =>
-                                          const Center(
-                                              child: CircularProgressIndicator(
-                                        color: DynamicColor.blue,
-                                      )),
-                                      errorWidget: (context, url, error) =>
-                                          Container(
-                                        child: Icon(Icons.error),
+                                message.image != ''
+                                    ? CachedNetworkImage(
+                                        // height: 12.h,
+                                        // width: 12.w,
+                                        imageUrl: message.image,
+                                        imageBuilder:
+                                            (context, imageProvider) => InkWell(
+                                          onTap: () {
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) =>
+                                                    ShowFullImagePopup(
+                                                      image_url: message.image,
+                                                    ));
+                                          },
+                                          child: Container(
+                                            height: 150,
+                                            width: 150,
+                                            decoration: BoxDecoration(
+                                                image: DecorationImage(
+                                                    image: imageProvider)),
+                                          ),
+                                        ),
+                                        placeholder: (context, url) =>
+                                            const Center(
+                                                child:
+                                                    CircularProgressIndicator(
+                                          color: DynamicColor.blue,
+                                        )),
+                                        errorWidget: (context, url, error) =>
+                                            Container(
+                                          child: Icon(Icons.error),
+                                        ),
+                                      )
+                                    : Container(
+                                        height: 0,
+                                        width: 0,
                                       ),
-                                    )
-                                  : Container(
-                                      height: 0,
-                                      width: 0,
-                                    ),
-                              message.message != ''
-                                  ? Text(message.message,
-                                      style: const TextStyle(
-                                          color: Colors.black, fontSize: 16))
-                                  : Container(
-                                      height: 0,
-                                      width: 0,
-                                    ),
-                            ],
+                                message.message != ''
+                                    ? Text(message.message,
+                                        style: const TextStyle(
+                                            color: Colors.black, fontSize: 16))
+                                    : Container(
+                                        height: 0,
+                                        width: 0,
+                                      ),
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                      Text(
-                          DateFormat('h:mm a')
-                              .format(DateTime.parse(message.updatedAt)),
-                          style: const TextStyle(
-                              color: Colors.grey, fontSize: 10)),
-                    ],
+                        Text(datetime,
+                            style: const TextStyle(
+                                color: Colors.grey, fontSize: 10)),
+                      ],
+                    ),
                   ),
                 ),
               );
@@ -678,7 +778,7 @@ class _ChatPageState extends State<ChatPage>
 
   @override
   void dispose() {
-    log('despose');
+    //('despose');
     chatController.recordSub!.cancel();
     chatController.amplitudeSub!.cancel();
     // streamController.close();
@@ -690,12 +790,3 @@ class _ChatPageState extends State<ChatPage>
     super.dispose();
   }
 }
-
-// class StreamSocket {
-//   final _socketResponse = StreamController<String>();
-//   void Function(String) get addResponse => _socketResponse.sink.add;
-//   Stream<String> get getResponse => _socketResponse.stream;
-//   void dispose() {
-//     _socketResponse.close();
-//   }
-// }

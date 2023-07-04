@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Profile/Biography/model/model.dart';
 import 'package:pitch_me_app/devApi%20Service/get_api.dart';
+import 'package:pitch_me_app/devApi%20Service/post_api.dart';
 
 class HomeBiographyController extends GetxController {
   int skillImageStatus = 0;
@@ -15,6 +16,8 @@ class HomeBiographyController extends GetxController {
   RxBool isLoading = false.obs;
 
   BioDoc? bioDoc;
+
+  RxList getChat = [].obs;
 
   Future<BioDoc> getBioApi(userID) async {
     isLoading.value = true;
@@ -54,6 +57,17 @@ class HomeBiographyController extends GetxController {
       logType.value = 'Investor';
     } else {
       logType.value = 'Facilitator';
+    }
+  }
+
+  Future getChatApi(reseverID) async {
+    try {
+      await PostApiServer().getChatDetailApi(reseverID).then((value) {
+        getChat.value = value['result'];
+        isLoading.value = false;
+      });
+    } catch (e) {
+      isLoading.value = false;
     }
   }
 }

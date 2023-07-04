@@ -28,7 +28,7 @@ class BusinessIdeasApi extends GetConnect {
         res = await get(GET_POST_DATA_URL);
       }
 
-      log("Res is at getPost ${'$GET_POST_DATA_URL?user=$userID&category=$category'}");
+      // log("Res is at getPost ${'$GET_POST_DATA_URL?user=$userID&category=$category'}");
       if (res.statusCode == 200) {
         return PostModel.fromJson(res.body);
       }

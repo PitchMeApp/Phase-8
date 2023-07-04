@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/main.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/Model/chat_room_model.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/admin_conroller.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat_list.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
@@ -18,17 +18,21 @@ import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
+import '../../../../utils/widgets/Alert Box/show_image_popup.dart';
+
 class AppSupporterChatPage extends StatefulWidget {
   dynamic id;
   dynamic recieverid;
   dynamic name;
   dynamic img;
+  dynamic back;
   AppSupporterChatPage({
     Key? key,
     this.id,
     this.recieverid,
     this.name,
     this.img,
+    this.back,
   }) : super(key: key);
 
   @override
@@ -148,7 +152,12 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                             children: [
                               AppBarIconContainer(
                                 onTap: () {
-                                  // Navigator.of(context).pop();
+                                  if (widget.back != null) {
+                                    Navigator.of(context).pop();
+                                  } else {
+                                    PageNavigateScreen().normalpushReplesh(
+                                        context, ChatListPage());
+                                  }
                                 },
                                 height: SizeConfig.getSize50(context: context),
                                 width: SizeConfig.getSize50(context: context),
@@ -210,7 +219,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                           );
                         default:
                           if (snapshot.hasError) {
-                            log(snapshot.error.toString());
+                            // log(snapshot.error.toString());
                             return Padding(
                                 padding: EdgeInsets.only(
                                     bottom:
@@ -392,11 +401,16 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
           const SizedBox(width: 10),
           Expanded(
             child: SizedBox(
-              height: 50,
+              height: 60,
               child: TextFormField(
                 controller: chatController.messageController,
                 focusNode: focusNode,
                 textCapitalization: TextCapitalization.sentences,
+                textInputAction: TextInputAction.done,
+                enabled: true,
+                expands: true,
+                maxLines: null,
+                minLines: null,
                 autocorrect: true,
                 enableSuggestions: true,
                 decoration: InputDecoration(
@@ -404,6 +418,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                   fillColor: Colors.grey[100],
                   labelText: 'Type new message',
                   labelStyle: TextStyle(color: DynamicColor.blue),
+                  contentPadding: const EdgeInsets.all(10),
                   border: OutlineInputBorder(
                     borderSide: const BorderSide(width: 0),
                     gapPadding: 10,
@@ -530,12 +545,22 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                                       // width: 12.w,
                                       imageUrl: message.image,
                                       imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        height: 150,
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: imageProvider)),
+                                          InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  ShowFullImagePopup(
+                                                    image_url: message.image,
+                                                  ));
+                                        },
+                                        child: Container(
+                                          height: 150,
+                                          width: 150,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: imageProvider)),
+                                        ),
                                       ),
                                       placeholder: (context, url) =>
                                           const Center(
@@ -606,12 +631,22 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                                       // width: 12.w,
                                       imageUrl: message.image,
                                       imageBuilder: (context, imageProvider) =>
-                                          Container(
-                                        height: 150,
-                                        width: 150,
-                                        decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                                image: imageProvider)),
+                                          InkWell(
+                                        onTap: () {
+                                          showDialog(
+                                              context: context,
+                                              builder: (context) =>
+                                                  ShowFullImagePopup(
+                                                    image_url: message.image,
+                                                  ));
+                                        },
+                                        child: Container(
+                                          height: 150,
+                                          width: 150,
+                                          decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                  image: imageProvider)),
+                                        ),
                                       ),
                                       placeholder: (context, url) =>
                                           const Center(
@@ -654,7 +689,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
 
   @override
   void dispose() {
-    log('despose');
+    // log('despose');
     chatController.recordSub!.cancel();
     chatController.amplitudeSub!.cancel();
     // streamController.close();

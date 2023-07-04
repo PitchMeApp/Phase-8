@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:get/get.dart';
 
 class HomeFilterController extends GetxController {
@@ -27,7 +25,6 @@ class HomeFilterController extends GetxController {
           // getServiceApiCall(data[i]['value'], data[i]['isSelected']);
           update();
         }
-        log(selectedData.toString());
       }
     }
     update();

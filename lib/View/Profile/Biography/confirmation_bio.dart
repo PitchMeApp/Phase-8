@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Profile/Biography/controller/controller.dart';
@@ -20,7 +22,7 @@ class _ConfirmationBioState extends State<ConfirmationBio> {
   Widget build(BuildContext context) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
-
+    log(biographyController.idImagePath.path);
     return Scaffold(
         floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         floatingActionButton: BannerWidget(

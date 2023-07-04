@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pitch_me_app/main.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat_appsupports.dart';
 import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/extras/banner.dart';
@@ -25,7 +26,9 @@ class ConfirmationChat extends StatefulWidget {
 
 class _ConfirmationChatState extends State<ConfirmationChat> {
   dynamic chatData;
-
+  dynamic adminchatID;
+  dynamic adminmessage;
+  dynamic adminunread = 0;
   @override
   void initState() {
     createChat();
@@ -35,7 +38,8 @@ class _ConfirmationChatState extends State<ConfirmationChat> {
   void createChat() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var senderID = prefs.get('user_id').toString();
-    var onCreate = {'sendorid': senderID, 'recieverid': widget.id};
+
+    var onCreate = {'sendorid': senderID, 'recieverid': widget.recieverid};
     socket.emit('createchat', onCreate);
     socket.on('receive_user', (data) {
       chatData = data;
@@ -144,14 +148,24 @@ class _ConfirmationChatState extends State<ConfirmationChat> {
                 BackArrow(
                     alignment: Alignment.centerRight,
                     onPressed: () {
-                      if (widget.id != null) {
-                        PageNavigateScreen().push(
+                      if (widget.name == 'Pitch Me App') {
+                        PageNavigateScreen().normalpushReplesh(
+                            context,
+                            AppSupporterChatPage(
+                              id: adminchatID,
+                              recieverid: 'admin',
+                              name: 'Pitch Me App',
+                              img: '',
+                            ));
+                      } else {
+                        PageNavigateScreen().normalpushReplesh(
                             context,
                             ChatPage(
                               id: chatData['messages']['_id'],
-                              recieverid: chatData['messages']['recieverid'],
+                              recieverid: widget.recieverid,
                               name: widget.name,
                               img: widget.img,
+                              userID: widget.id,
                             ));
                       }
                     },

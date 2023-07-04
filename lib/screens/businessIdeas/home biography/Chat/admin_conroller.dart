@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'dart:developer';
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
@@ -12,6 +12,10 @@ import 'package:pitch_me_app/main.dart';
 import 'package:pitch_me_app/utils/firebase%20storage/firbase_storage.dart';
 import 'package:record/record.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../utils/colors/colors.dart';
+import '../../../../utils/styles/styles.dart';
+import 'package:http/http.dart' as http;
 
 class AdminChatController extends GetxController {
   File imagePath = File('');
@@ -63,38 +67,63 @@ class AdminChatController extends GetxController {
   }
 
   void downloadUrl(File path) async {
-    log(path.path);
-    isloading.value = true;
+    openDilog();
+    try {
+      String url = 'https://ciu.ody.mybluehostin.me/file/upload.php';
+      final request = http.MultipartRequest('POST', Uri.parse(url));
 
-    final destination = 'file/${path.path}';
-    task = FirebaseApi.uploadFile(destination, path)!;
-    if (task == null) return;
-    final snapshot = await task.whenComplete(() {});
-    var downloadUrls = await snapshot.ref.getDownloadURL().then((value) {
-      downloadFirebaseUrl.value = value;
+      request.files.add(await http.MultipartFile.fromPath(
+          'fileToUpload', path.path,
+          filename: path.path.split('/').last));
 
-      sendMessageAdmin();
-    }).catchError((e) {
-      isloading.value = false;
-    });
-    isloading.value = false;
+      var res = await request.send();
+
+      var response = await res.stream.bytesToString();
+
+      var jsonData = jsonDecode(response);
+
+      if (jsonData['status'] == 1) {
+        print('data = ' + jsonData.toString());
+        downloadFirebaseUrl.value = jsonData['data'];
+        sendMessageAdmin();
+        Navigator.of(Get.context!).pop();
+      } else {
+        Navigator.of(Get.context!).pop();
+      }
+    } catch (e) {
+      Navigator.of(Get.context!).pop();
+      print('data 2 = ' + e.toString());
+    }
   }
 
   void downloadAudioUrl(File path) async {
-    isloading.value = true;
+    openDilog();
+    try {
+      String url = 'https://ciu.ody.mybluehostin.me/file/upload.php';
+      final request = http.MultipartRequest('POST', Uri.parse(url));
 
-    final destination = 'file/${path.path}';
-    task = FirebaseApi.uploadFile(destination, path)!;
-    if (task == null) return;
-    final snapshot = await task.whenComplete(() {});
-    var downloadUrls = await snapshot.ref.getDownloadURL().then((value) {
-      audioPath.value = value;
-      log('url = ' + audioPath.value);
-      sendMessageAdmin();
-    }).catchError((e) {
-      isloading.value = false;
-    });
-    isloading.value = false;
+      request.files.add(await http.MultipartFile.fromPath(
+          'fileToUpload', path.path.replaceAll('file:///', ''),
+          filename: path.path.split('/').last));
+
+      var res = await request.send();
+
+      var response = await res.stream.bytesToString();
+
+      var jsonData = jsonDecode(response);
+
+      if (jsonData['status'] == 1) {
+        print('data = ' + jsonData.toString());
+        audioPath.value = jsonData['data'];
+        sendMessageAdmin();
+        Navigator.of(Get.context!).pop();
+      } else {
+        Navigator.of(Get.context!).pop();
+      }
+    } catch (e) {
+      Navigator.of(Get.context!).pop();
+      print('data 2 = ' + e.toString());
+    }
   }
 
   // voiceMsg
@@ -192,5 +221,36 @@ class AdminChatController extends GetxController {
     downloadFirebaseUrl.value = '';
     messageController.clear();
     audioPath.value = '';
+  }
+
+  void openDilog() {
+    showDialog(
+        barrierDismissible: false,
+        context: Get.context!,
+        builder: (context) => showLoading());
+  }
+
+  Widget showLoading() {
+    return Center(
+        child: SizedBox(
+            height: 170,
+            width: 200,
+            child: AlertDialog(
+                backgroundColor: DynamicColor.lightGrey,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                alignment: Alignment.center,
+                content: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(color: DynamicColor.blue),
+                    SizedBox(height: 20),
+                    Text(
+                      'Sending',
+                      style: blue15,
+                    ),
+                  ],
+                ))));
   }
 }

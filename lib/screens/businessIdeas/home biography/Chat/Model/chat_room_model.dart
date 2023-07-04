@@ -41,6 +41,7 @@ class RoomMessage {
   String createdAt;
   String updatedAt;
   int v;
+  int time;
 
   RoomMessage({
     required this.id,
@@ -54,6 +55,7 @@ class RoomMessage {
     required this.createdAt,
     required this.updatedAt,
     required this.v,
+    required this.time,
   });
 
   factory RoomMessage.fromJson(Map<String, dynamic> json) => RoomMessage(
@@ -68,6 +70,7 @@ class RoomMessage {
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
         v: json["__v"],
+        time: json["time"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -82,5 +85,6 @@ class RoomMessage {
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "__v": v,
+        "time": time,
       };
 }

@@ -405,27 +405,72 @@ class CircleBox extends StatelessWidget {
                     child: Padding(
                       padding: const EdgeInsets.all(7),
                       child: isHttp != null
-                          ? Container(
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                  color: checkApprove == 2 &&
-                                          imageType.contains('https')
-                                      ? DynamicColor.blue
-                                      : DynamicColor.darkBlue,
-                                  borderRadius: BorderRadius.circular(100)),
-                              child: Text(
-                                checkApprove == 2 && imageType.contains('https')
-                                    ? 'Verified'
-                                    : checkApprove == 3
-                                        ? 'Not Verified'
-                                        : 'Pending',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: 12,
-                                    color: DynamicColor.white),
-                                textAlign: TextAlign.center,
-                              ),
-                            )
+                          ? imageType.contains('pdf')
+                              ? Container(
+                                  height: 40,
+                                  width: 40,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30)),
+                                  //padding: EdgeInsets.only(bottom: 10),
+                                  child: Image.asset(
+                                    'assets/images/pdf.png',
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : imageType.contains('https://api')
+                                  ? CircleAvatar(
+                                      radius: 30,
+                                      backgroundColor: DynamicColor.white,
+                                      backgroundImage: NetworkImage(imageType),
+                                    )
+                                  : Container(
+                                      alignment: Alignment.center,
+                                      decoration: BoxDecoration(
+                                          color: Color(0xffE6E6E6),
+                                          borderRadius:
+                                              BorderRadius.circular(100)),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            title,
+                                            style: textStyle,
+                                            textAlign: TextAlign.center,
+                                          ),
+                                          title2.isEmpty
+                                              ? Container()
+                                              : Text(
+                                                  title2,
+                                                  style: textStyle,
+                                                  textAlign: TextAlign.center,
+                                                ),
+                                        ],
+                                      ),
+                                    )
+                          //  Container(
+                          //     alignment: Alignment.center,
+                          //     decoration: BoxDecoration(
+                          //         color: checkApprove == 2 &&
+                          //                 imageType.contains('https')
+                          //             ? DynamicColor.blue
+                          //             : DynamicColor.darkBlue,
+                          //         borderRadius: BorderRadius.circular(100)),
+                          //     child: Text(
+                          //       checkApprove == 2 && imageType.contains('https')
+                          //           ? 'Verified'
+                          //           : checkApprove == 3
+                          //               ? 'Not Verified'
+                          //               : 'Pending',
+                          //       style: TextStyle(
+                          //           fontWeight: FontWeight.w500,
+                          //           fontSize: 12,
+                          //           color: DynamicColor.white),
+                          //       textAlign: TextAlign.center,
+                          //     ),
+                          //   )
                           : Container(
                               alignment: Alignment.center,
                               decoration: BoxDecoration(
@@ -532,7 +577,7 @@ class CircleBox extends StatelessWidget {
                           ),
                         )
                       : CircleAvatar(
-                          radius: 28,
+                          radius: 30,
                           backgroundColor: DynamicColor.white,
                           backgroundImage: FileImage(File(imageType)),
                         ),

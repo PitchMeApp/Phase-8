@@ -15,6 +15,9 @@ import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../Profile/Biography/biography.dart';
+import '../Profile/Pitches/pitches_list.dart';
+
 class CustomAppbar extends StatefulWidget {
   final String title;
   VoidCallback onPressad;
@@ -211,7 +214,9 @@ class _CustomAppbarState extends State<CustomAppbar>
                                                             .result![index]
                                                             .senderID!,
                                                       ));
-                                                } else {
+                                                } else if (value.post
+                                                        ?.result![index].type ==
+                                                    6) {
                                                   PageNavigateScreen().push(
                                                       context,
                                                       FeedbackPage(
@@ -222,6 +227,24 @@ class _CustomAppbarState extends State<CustomAppbar>
                                                             .sId!,
                                                         data: value.post!
                                                             .result![index],
+                                                      ));
+                                                } else if (value.post
+                                                        ?.result![index].type ==
+                                                    7) {
+                                                  PageNavigateScreen().push(
+                                                      context,
+                                                      PitchesListPage(
+                                                          notifyID: value
+                                                              .post!
+                                                              .result![index]
+                                                              .sId!));
+                                                } else if (value.post
+                                                        ?.result![index].type ==
+                                                    8) {
+                                                  PageNavigateScreen().push(
+                                                      context,
+                                                      BiographyPage(
+                                                        type: '',
                                                       ));
                                                 }
                                               },
@@ -240,17 +263,23 @@ class _CustomAppbarState extends State<CustomAppbar>
                                                             Color(0xff000a5e)),
                                                     Padding(
                                                       padding: EdgeInsets.only(
-                                                          left: sizeW * 0.03,
-                                                          top: sizeH * 0.01),
+                                                        left: sizeW * 0.03,
+                                                        //top: sizeH * 0.01
+                                                      ),
                                                       child: Column(
                                                         crossAxisAlignment:
                                                             CrossAxisAlignment
                                                                 .start,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
                                                         children: [
                                                           Container(
                                                             height:
                                                                 sizeH * 0.02,
                                                             width: sizeW * 0.45,
+                                                            alignment: Alignment
+                                                                .centerLeft,
                                                             // color: Color
                                                             //     .fromARGB(
                                                             //         255,
@@ -276,25 +305,25 @@ class _CustomAppbarState extends State<CustomAppbar>
                                                                           .bold),
                                                             ),
                                                           ),
-                                                          Text(
-                                                            value
-                                                                    .post
-                                                                    ?.result?[
-                                                                        index]
-                                                                    .text!
-                                                                    .toString() ??
-                                                                "",
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: TextStyle(
-                                                                color: Colors
-                                                                    .white,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                fontSize: 10),
-                                                          ),
+                                                          // Text(
+                                                          //   value
+                                                          //           .post
+                                                          //           ?.result?[
+                                                          //               index]
+                                                          //           .text!
+                                                          //           .toString() ??
+                                                          //       "",
+                                                          //   overflow:
+                                                          //       TextOverflow
+                                                          //           .ellipsis,
+                                                          //   style: TextStyle(
+                                                          //       color: Colors
+                                                          //           .white,
+                                                          //       fontWeight:
+                                                          //           FontWeight
+                                                          //               .bold,
+                                                          //       fontSize: 10),
+                                                          // ),
                                                         ],
                                                       ),
                                                     ),
@@ -310,6 +339,7 @@ class _CustomAppbarState extends State<CustomAppbar>
                                             left: sizeW * 0.02,
                                             right: sizeW * 0.02),
                                         child: Divider(
+                                          height: 2,
                                           color: Color(0xff000a5e),
                                         ),
                                       );

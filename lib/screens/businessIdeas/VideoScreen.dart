@@ -1,11 +1,11 @@
 // ignore_for_file: unnecessary_brace_in_string_interps
 
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Feedback/feedback_detail.dart';
+import 'package:pitch_me_app/View/Profile/Biography/biography.dart';
 import 'package:pitch_me_app/View/posts/model.dart';
 import 'package:pitch_me_app/controller/businessIdeas/dashBoardController.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/noti.dart';
@@ -19,6 +19,7 @@ import 'package:pitch_me_app/utils/widgets/text/text.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../View/Profile/Pitches/pitches_list.dart';
 import '../../controller/businessIdeas/postPageController.dart';
 import '../../utils/extras/extras.dart';
 import '../../utils/widgets/containers/containers.dart';
@@ -98,7 +99,7 @@ class _mainHome_TwoState extends State<mainHome_Two>
       newUser = prefs.getString('new_user').toString();
     });
 
-    log(" ADGL ${businesstype}");
+    // log(" ADGL ${businesstype}");
   }
 
   @override
@@ -235,14 +236,18 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                                                                       userID: '',
                                                                                       notifyID: value.post!.result![index].sId!,
                                                                                     ));
-                                                                              } else {
-                                                                                PageNavigateScreen().normalpushReplesh(
+                                                                              } else if (value.post?.result![index].type == 6) {
+                                                                                PageNavigateScreen().push(
                                                                                     context,
                                                                                     FeedbackPage(
-                                                                                      type: 'watch',
-                                                                                      data: value.post!.result![index],
+                                                                                      type: 'home',
                                                                                       notifyID: value.post!.result![index].sId!,
+                                                                                      data: value.post!.result![index],
                                                                                     ));
+                                                                              } else if (value.post?.result![index].type == 7) {
+                                                                                PageNavigateScreen().push(context, PitchesListPage(notifyID: value.post!.result![index].sId!));
+                                                                              } else if (value.post?.result![index].type == 8) {
+                                                                                PageNavigateScreen().push(context, BiographyPage(type: ''));
                                                                               }
                                                                             },
                                                                             child:
@@ -255,13 +260,18 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                                                                 child: Row(children: [
                                                                                   Icon(Icons.notifications_active_outlined, color: Color(0xff000a5e)),
                                                                                   Padding(
-                                                                                    padding: EdgeInsets.only(left: sizeW * 0.03, top: sizeH * 0.01),
+                                                                                    padding: EdgeInsets.only(
+                                                                                      left: sizeW * 0.03,
+                                                                                      //top: sizeH * 0.01
+                                                                                    ),
                                                                                     child: Column(
                                                                                       crossAxisAlignment: CrossAxisAlignment.start,
+                                                                                      mainAxisAlignment: MainAxisAlignment.center,
                                                                                       children: [
                                                                                         Container(
                                                                                           height: sizeH * 0.02,
                                                                                           width: sizeW * 0.45,
+                                                                                          alignment: Alignment.centerLeft,
                                                                                           // color: Color
                                                                                           //     .fromARGB(
                                                                                           //         255,
@@ -274,11 +284,11 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                                                                             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                                                                           ),
                                                                                         ),
-                                                                                        Text(
-                                                                                          value.post?.result?[index].text.toString() ?? "",
-                                                                                          overflow: TextOverflow.ellipsis,
-                                                                                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10),
-                                                                                        ),
+                                                                                        // Text(
+                                                                                        //   value.post?.result?[index].text.toString() ?? "",
+                                                                                        //   overflow: TextOverflow.ellipsis,
+                                                                                        //   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10),
+                                                                                        // ),
                                                                                       ],
                                                                                     ),
                                                                                   ),
@@ -299,6 +309,8 @@ class _mainHome_TwoState extends State<mainHome_Two>
                                                                               sizeW * 0.02),
                                                                       child:
                                                                           Divider(
+                                                                        height:
+                                                                            2,
                                                                         color: Color(
                                                                             0xff000a5e),
                                                                       ),

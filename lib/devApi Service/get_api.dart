@@ -1,7 +1,6 @@
 // dev
 
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:http/http.dart' as http;
 import 'package:pitch_me_app/View/Profile/Biography/model/model.dart';
@@ -122,6 +121,7 @@ class GetApiService {
     // log('userdata = ' + data.toString());
     return data;
   }
+
   // DELETE
 
   Future deleteSalesPittchApi(id) async {
@@ -138,11 +138,11 @@ class GetApiService {
   Future deleteLikeVideoApi(id) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String url = '${BASE_URL}feedback/post/$id/${prefs.get('user_id')}';
-    log(url);
+    // log(url);
     final response = await http.delete(Uri.parse(url), headers: {
       'Content-Type': 'application/json',
     });
-    log(response.body);
+    //log(response.body);
     dynamic data = jsonDecode(response.body);
 
     return data;

@@ -164,6 +164,7 @@ class MessageMessage {
   String createdAt;
   String updatedAt;
   int v;
+  int time;
 
   MessageMessage({
     required this.id,
@@ -177,21 +178,22 @@ class MessageMessage {
     required this.createdAt,
     required this.updatedAt,
     required this.v,
+    required this.time,
   });
 
   factory MessageMessage.fromJson(Map<String, dynamic> json) => MessageMessage(
-        id: json["_id"],
-        sendorid: json["sendorid"],
-        chatid: json["chatid"],
-        message: json["message"],
-        image: json["image"],
-        voice: json["voice"],
-        video: json["video"],
-        read: json["read"],
-        createdAt: json["createdAt"],
-        updatedAt: json["updatedAt"],
-        v: json["__v"],
-      );
+      id: json["_id"],
+      sendorid: json["sendorid"],
+      chatid: json["chatid"],
+      message: json["message"],
+      image: json["image"],
+      voice: json["voice"],
+      video: json["video"],
+      read: json["read"],
+      createdAt: json["createdAt"],
+      updatedAt: json["updatedAt"],
+      v: json["__v"],
+      time: json['time']);
 
   Map<String, dynamic> toJson() => {
         "_id": id,
@@ -205,5 +207,6 @@ class MessageMessage {
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "__v": v,
+        "time": time,
       };
 }

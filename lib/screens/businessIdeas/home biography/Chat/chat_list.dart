@@ -39,6 +39,7 @@ class _ChatListPageState extends State<ChatListPage>
   dynamic adminchatlist;
   dynamic adminmessage;
   dynamic adminunread = 0;
+  String datetime = '';
   @override
   void initState() {
     //Colors.white.withOpacity(0.3)
@@ -76,6 +77,7 @@ class _ChatListPageState extends State<ChatListPage>
     socket.on('receive_users', (data) {
       ChatListModel chatListModel = ChatListModel.fromJson(data);
       controller.add(chatListModel);
+      log(data.toString());
     });
   }
 
@@ -220,7 +222,7 @@ class _ChatListPageState extends State<ChatListPage>
                 );
               default:
                 if (snapshot.hasError) {
-                  log(snapshot.error.toString());
+                  // log(snapshot.error.toString());
                   return Padding(
                       padding: EdgeInsets.only(
                           bottom: SizeConfig.getSize60(context: context)),
@@ -238,7 +240,14 @@ class _ChatListPageState extends State<ChatListPage>
                       itemCount: snapshot.data!.messages.length,
                       itemBuilder: (context, index) {
                         Message data = snapshot.data!.messages[index];
-                        // log('cht = ' + data.toJson().toString());
+                        //log('cht = ' + data.toJson().toString());
+                        if (data.message != null) {
+                          int ts = data.message!.time;
+                          DateTime tsdate =
+                              DateTime.fromMillisecondsSinceEpoch(ts * 1000);
+                          datetime = DateFormat('h:mm a').format(tsdate);
+                        }
+
                         return Column(
                           children: [
                             ListTile(
@@ -247,9 +256,11 @@ class _ChatListPageState extends State<ChatListPage>
                                     context,
                                     ChatPage(
                                       id: data.chat.id,
-                                      recieverid: data.chat.recieverid,
+                                      recieverid: data.user.id,
                                       img: data.user.profilePic,
                                       name: data.user.username,
+                                      userID: data.user.id,
+                                      back: 'back',
                                     ));
                               },
                               contentPadding: EdgeInsets.zero,
@@ -349,10 +360,7 @@ class _ChatListPageState extends State<ChatListPage>
                                               0.01,
                                     ),
                                     child: Text(
-                                      DateFormat('h:mm a').format(
-                                          DateTime.parse((data.message) != null
-                                              ? data.message!.updatedAt
-                                              : data.chat.updatedAt)),
+                                      datetime,
                                       style: TextStyle(
                                           fontSize: 12,
                                           color: DynamicColor.hintclr),
@@ -410,6 +418,7 @@ class _ChatListPageState extends State<ChatListPage>
                     name: 'Pitch Me App',
                     id: adminchatlist,
                     recieverid: 'admin',
+                    back: 'back',
                   ));
             },
             contentPadding: EdgeInsets.zero,

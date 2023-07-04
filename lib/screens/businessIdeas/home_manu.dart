@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/under_progress_limitation.dart';
 import 'package:pitch_me_app/View/Deals%20Page/deals_page.dart';
-import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
+
+import 'home biography/Chat/chat_list.dart';
 
 class HomeManuPage extends StatefulWidget {
   HomeManuPage({super.key});
@@ -60,8 +61,7 @@ class _HomeManuPageState extends State<HomeManuPage> {
                   icon: '',
                   title: TextStrings.textKey['contact']!,
                   onPressad: () {
-                    PageNavigateScreen()
-                        .push(context, UnderDevLimitationPage());
+                    PageNavigateScreen().push(context, ChatListPage());
                   }),
             ],
           )

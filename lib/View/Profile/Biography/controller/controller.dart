@@ -25,7 +25,7 @@ class BiographyController extends GetxController {
   File proofImagePath = File('');
   File signature = File('');
 
-  String proofFilePath = "";
+  //String proofFilePath = "";
   String userID = '';
   String nda = '';
 
@@ -69,10 +69,10 @@ class BiographyController extends GetxController {
           .pickFiles(allowedExtensions: ['pdf', 'doc'], type: FileType.custom);
 
       if (result != null) {
-        PlatformFile file = result.files.first;
-        proofFilePath = result.files.first.name.toString();
+        // PlatformFile file = result.files.first;
+        //proofFilePath = result.files.first.name.toString();
         proofImagePath = File(result.files.single.path!);
-        log(proofFilePath);
+        // log(proofFilePath);
       } else {}
     } on PlatformException {}
 
@@ -86,7 +86,7 @@ class BiographyController extends GetxController {
 
     try {
       signature = await writeToFile(bytes);
-      log(signature.path);
+      // log(signature.path);
       Get.to(() => ConfirmationBio());
       update();
     } catch (e) {}
@@ -97,7 +97,7 @@ class BiographyController extends GetxController {
     Directory tempDir = await getTemporaryDirectory();
     String tempPath = tempDir.path;
     var filePath = tempPath + '/file_01.jpg';
-    log(filePath); // file_01.tmp is dump file, can be anything
+    // log(filePath); // file_01.tmp is dump file, can be anything
     return File(filePath).writeAsBytes(
         buffer.asUint8List(data.offsetInBytes, data.lengthInBytes));
   }
@@ -147,12 +147,12 @@ class BiographyController extends GetxController {
           filename: skillImagePath.path..split('/').last,
         ));
       }
-      if (proofFilePath.isNotEmpty &&
-          proofFilePath.contains('https') == false) {
+      if (proofImagePath.path.isNotEmpty &&
+          proofImagePath.path.contains('https') == false) {
         request.files.add(await http.MultipartFile.fromPath(
           'ProofFunds',
-          profileImagePath.path,
-          filename: profileImagePath.path.split('/').last,
+          proofImagePath.path,
+          filename: proofImagePath.path.split('/').last,
         ));
       }
       if (signature.path.contains('https') == false) {
@@ -167,7 +167,7 @@ class BiographyController extends GetxController {
       var response = await res.stream.bytesToString();
       isLoading.value = false;
       var jsonData = jsonDecode(response);
-      log('responce = ' + jsonData.toString());
+      // log('responce = ' + jsonData.toString());
       if (res.statusCode == 201) {
         Fluttertoast.showToast(
             msg: jsonData['message'], gravity: ToastGravity.CENTER);

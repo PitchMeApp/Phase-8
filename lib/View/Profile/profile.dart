@@ -47,7 +47,11 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: 'assets/images/ic_toc_24px@4x.png',
                     title: TextStrings.textKey['pitches']!,
                     onPressad: () {
-                      PageNavigateScreen().push(context, PitchesListPage());
+                      PageNavigateScreen().push(
+                          context,
+                          PitchesListPage(
+                            notifyID: '',
+                          ));
                     }),
                 CustomListBox(
                     icon: 'assets/images/Group 12260@4x.png',

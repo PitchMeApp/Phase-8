@@ -7,10 +7,11 @@ import 'package:flutter/services.dart';
 class FirebaseApi {
   static UploadTask? uploadFile(String desti, File file) {
     try {
+      print('check = ' + File(file.path).toString());
       final ref = FirebaseStorage.instance.ref(desti);
       return ref.putFile(File(file.path));
     } on FirebaseException catch (e) {
-      log('error = ' + e.toString());
+      log('file error = ' + e.toString());
       return null;
     }
   }

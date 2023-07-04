@@ -6,7 +6,10 @@ import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
 import 'package:pitch_me_app/View/Feedback/controller.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
+import 'package:pitch_me_app/devApi%20Service/post_api.dart';
+import 'package:pitch_me_app/main.dart';
 import 'package:pitch_me_app/screens/businessIdeas/BottomNavigation.dart';
+import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/confirmation_chat.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
@@ -16,6 +19,7 @@ import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomeBiographyPage extends StatefulWidget {
   String type;
@@ -34,11 +38,46 @@ class HomeBiographyPage extends StatefulWidget {
 class _HomeBiographyPageState extends State<HomeBiographyPage> {
   HomeBiographyController controller = Get.put(HomeBiographyController());
   FeebackController feebackController = Get.put(FeebackController());
+  List getChat = [];
+  dynamic chatData;
   @override
   void initState() {
-    feebackController.readAllNotiApi(widget.notifyID);
+    if (widget.notifyID.isNotEmpty) {
+      feebackController.readAllNotiApi(widget.notifyID);
+    }
+
     controller.getBioApi(widget.userID);
+    getChatApi(widget.userID);
+
     super.initState();
+  }
+
+  Future getChatApi(reseverID) async {
+    try {
+      await PostApiServer().getChatDetailApi(reseverID).then((value) {
+        getChat = value['result'];
+        if (getChat.isNotEmpty) {
+          createChat();
+        }
+        // isLoading.value = false;
+        //log(getChat.toString());
+      });
+    } catch (e) {
+      getChat = [];
+      //isLoading.value = false;
+    }
+  }
+
+  void createChat() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var senderID = prefs.get('user_id').toString();
+
+    var onCreate = {'sendorid': senderID, 'recieverid': widget.userID};
+    socket.emit('createchat', onCreate);
+    socket.on('receive_user', (data) {
+      chatData = data;
+      //log('chat create = ' + chatData.toString());
+    });
   }
 
   @override
@@ -115,33 +154,55 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
                     }
                   },
                   icon: Icons.arrow_back_ios),
-              BackArrow(
-                  alignment: Alignment.centerRight,
-                  onPressed: () {
-                    if (controller.bioDoc != null) {
-                      PageNavigateScreen().push(
-                          context,
-                          ConfirmationChat(
-                            id: controller.bioDoc == null
-                                ? null
-                                : controller.bioDoc!.userid,
-                            recieverid: controller.bioDoc == null
-                                ? null
-                                : controller.bioDoc!.userid,
-                            name: controller.bioDoc == null
-                                ? null
-                                : controller.bioDoc!.user.username,
-                            img: controller.bioDoc == null
-                                ? null
-                                : controller.bioDoc!.picture,
-                          ));
-                    } else {
-                      Fluttertoast.showToast(
-                          msg: 'Profile not verified for chat',
-                          gravity: ToastGravity.CENTER);
-                    }
-                  },
-                  icon: Icons.arrow_forward_ios),
+              widget.type == 'back'
+                  ? Container()
+                  : BackArrow(
+                      alignment: Alignment.centerRight,
+                      onPressed: () {
+                        if (controller.bioDoc != null) {
+                          if (getChat.isNotEmpty) {
+                            PageNavigateScreen().normalpushReplesh(
+                                context,
+                                ChatPage(
+                                  id: chatData['messages']['_id'],
+                                  recieverid: controller.bioDoc == null
+                                      ? ''
+                                      : controller.bioDoc!.userid,
+                                  name: controller.bioDoc == null
+                                      ? null
+                                      : controller.bioDoc!.user.username,
+                                  img: controller.bioDoc == null
+                                      ? null
+                                      : controller.bioDoc!.picture,
+                                  userID: controller.bioDoc == null
+                                      ? ''
+                                      : controller.bioDoc!.userid,
+                                ));
+                          } else {
+                            PageNavigateScreen().normalpushReplesh(
+                                context,
+                                ConfirmationChat(
+                                  id: controller.bioDoc == null
+                                      ? null
+                                      : controller.bioDoc!.userid,
+                                  recieverid: controller.bioDoc == null
+                                      ? null
+                                      : controller.bioDoc!.userid,
+                                  name: controller.bioDoc == null
+                                      ? null
+                                      : controller.bioDoc!.user.username,
+                                  img: controller.bioDoc == null
+                                      ? null
+                                      : controller.bioDoc!.picture,
+                                ));
+                          }
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: 'Profile not verified for chat',
+                              gravity: ToastGravity.CENTER);
+                        }
+                      },
+                      icon: Icons.arrow_forward_ios),
             ],
           ),
         ],

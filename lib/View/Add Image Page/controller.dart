@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
@@ -62,7 +61,6 @@ class AddImageController extends GetxController {
         }
       }
 
-      log(listImagePaths.toString());
       update();
     } on PlatformException catch (e) {}
   }

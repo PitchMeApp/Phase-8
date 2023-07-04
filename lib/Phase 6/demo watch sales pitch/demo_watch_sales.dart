@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/user_type_limitation.dart';
@@ -24,7 +22,6 @@ class _DemoWatchSalesPitchState extends State<DemoWatchSalesPitch> {
   String businesstype = '';
   @override
   void initState() {
-    log('check');
     getUserType();
     super.initState();
   }
@@ -126,7 +123,6 @@ class _DemoWatchSalesPitchState extends State<DemoWatchSalesPitch> {
 
   @override
   void dispose() {
-    log('check 2');
     videoViewerController.dispose();
 
     super.dispose();

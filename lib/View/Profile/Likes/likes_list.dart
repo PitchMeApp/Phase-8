@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
@@ -90,7 +88,7 @@ class _LikesListPageState extends State<LikesListPage> {
                 ));
               default:
                 if (snapshot.hasError) {
-                  log(snapshot.error.toString());
+                  // log(snapshot.error.toString());
                   return const Center(child: Text('No likes available'));
                 } else if (snapshot.data!.result.isEmpty) {
                   return const Center(child: Text('No likes available'));

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:pitch_me_app/View/Feedback/feedback_detail.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
+import 'package:pitch_me_app/View/Profile/Biography/biography.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/noti.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/home_page_biography.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
@@ -15,6 +16,8 @@ import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:provider/provider.dart';
 import 'package:sizer/sizer.dart';
+
+import '../Profile/Pitches/pitches_list.dart';
 
 class CustomHeaderView extends StatefulWidget {
   String title;
@@ -150,7 +153,11 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                                                               .result![index]
                                                               .senderID!,
                                                         ));
-                                                  } else {
+                                                  } else if (value
+                                                          .post
+                                                          ?.result![index]
+                                                          .type ==
+                                                      6) {
                                                     PageNavigateScreen().push(
                                                         context,
                                                         FeedbackPage(
@@ -161,6 +168,28 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                                                               .sId!,
                                                           data: value.post!
                                                               .result![index],
+                                                        ));
+                                                  } else if (value
+                                                          .post
+                                                          ?.result![index]
+                                                          .type ==
+                                                      7) {
+                                                    PageNavigateScreen().push(
+                                                        context,
+                                                        PitchesListPage(
+                                                            notifyID: value
+                                                                .post!
+                                                                .result![index]
+                                                                .sId!));
+                                                  } else if (value
+                                                          .post
+                                                          ?.result![index]
+                                                          .type ==
+                                                      8) {
+                                                    PageNavigateScreen().push(
+                                                        context,
+                                                        BiographyPage(
+                                                          type: '',
                                                         ));
                                                   }
                                                 },
@@ -180,20 +209,25 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                                                       Padding(
                                                         padding:
                                                             EdgeInsets.only(
-                                                                left: sizeW *
-                                                                    0.03,
-                                                                top: sizeH *
-                                                                    0.01),
+                                                          left: sizeW * 0.03,
+                                                          // top: sizeH *
+                                                          //     0.01
+                                                        ),
                                                         child: Column(
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
                                                                   .start,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
                                                           children: [
                                                             Container(
                                                               height:
                                                                   sizeH * 0.02,
                                                               width:
                                                                   sizeW * 0.45,
+                                                              alignment: Alignment
+                                                                  .centerLeft,
                                                               // color: Color
                                                               //     .fromARGB(
                                                               //         255,
@@ -219,25 +253,25 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                                                                             .bold),
                                                               ),
                                                             ),
-                                                            Text(
-                                                              value
-                                                                      .post
-                                                                      ?.result?[
-                                                                          index]
-                                                                      .text!
-                                                                      .toString() ??
-                                                                  "",
-                                                              overflow:
-                                                                  TextOverflow
-                                                                      .ellipsis,
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 10),
-                                                            ),
+                                                            // Text(
+                                                            //   value
+                                                            //           .post
+                                                            //           ?.result?[
+                                                            //               index]
+                                                            //           .text!
+                                                            //           .toString() ??
+                                                            //       "",
+                                                            //   overflow:
+                                                            //       TextOverflow
+                                                            //           .ellipsis,
+                                                            //   style: TextStyle(
+                                                            //       color: Colors
+                                                            //           .white,
+                                                            //       fontWeight:
+                                                            //           FontWeight
+                                                            //               .bold,
+                                                            //       fontSize: 10),
+                                                            // ),
                                                           ],
                                                         ),
                                                       ),
@@ -253,6 +287,7 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                                               left: sizeW * 0.02,
                                               right: sizeW * 0.02),
                                           child: Divider(
+                                            height: 2,
                                             color: Color(0xff000a5e),
                                           ),
                                         );

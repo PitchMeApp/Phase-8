@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/devApi%20Service/get_api.dart';
@@ -107,7 +105,7 @@ class NeedPageController extends GetxController {
         isLoading.value = false;
       });
     } catch (e) {
-      log('check = ' + e.toString());
+      //log('check = ' + e.toString());
       searchingItems.value = [];
       isLoading.value = false;
     }

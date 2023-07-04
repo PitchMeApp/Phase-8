@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
@@ -21,8 +20,8 @@ class PostApiServer {
             'Content-Type': 'application/json',
           });
       dynamic data = jsonDecode(response.body);
-      log(url);
-      log('check = ' + data.toString());
+      // log(url);
+      // log('check = ' + data.toString());
       return data;
     } catch (e) {}
   }
@@ -50,6 +49,23 @@ class PostApiServer {
     } catch (e) {}
   }
 
+  Future getChatDetailApi(receiverid) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String url = '${BASE_URL}feedback/getchats';
+
+    final response = await http.post(Uri.parse(url),
+        body: jsonEncode({
+          "senderid": prefs.get('user_id').toString(),
+          "recieverid": receiverid,
+        }),
+        headers: {
+          'Content-Type': 'application/json',
+        });
+
+    dynamic data = jsonDecode(response.body);
+
+    return data;
+  }
   // Future getSavedIntroVideoApi() async {
   //   SharedPreferences prefs = await SharedPreferences.getInstance();
   //   String url = '${BASE_URL}feedback/getintro';

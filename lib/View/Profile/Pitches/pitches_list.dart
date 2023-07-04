@@ -14,8 +14,11 @@ import 'package:pitch_me_app/utils/widgets/Alert%20Box/delete_sales_post.dart';
 import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
+import '../../Feedback/controller.dart';
+
 class PitchesListPage extends StatefulWidget {
-  const PitchesListPage({super.key});
+  String notifyID;
+  PitchesListPage({super.key, required this.notifyID});
 
   @override
   State<PitchesListPage> createState() => _PitchesListPageState();
@@ -25,19 +28,16 @@ class _PitchesListPageState extends State<PitchesListPage> {
   // late VideoPlayerController _videoPlayerController;
 
   PitcheController controller = Get.put(PitcheController());
+  FeebackController feebackController = Get.put(FeebackController());
 
-  // Future _initVideoPlayer(List list) async {
-  //   //videoViewerControllerList = [];
-  //   try {
+  @override
+  void initState() {
+    if (widget.notifyID.isNotEmpty) {
+      feebackController.readAllNotiApi(widget.notifyID);
+    }
 
-  //     // _videoPlayerController = VideoPlayerController.network(url);
-  //     // await _videoPlayerController.initialize();
-  //     // await _videoPlayerController.setLooping(true);
-  //     // await _videoPlayerController.pause();
-  //   } catch (e) {
-
-  //   }
-  // }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,9 +97,19 @@ class _PitchesListPageState extends State<PitchesListPage> {
                 );
               default:
                 if (snapshot.hasError) {
-                  return const Center(child: Text('No pitches available'));
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.getSize100(context: context) +
+                            SizeConfig.getSize100(context: context)),
+                    child: const Center(child: Text('No pitches available')),
+                  );
                 } else if (snapshot.data!.result.isEmpty) {
-                  return const Center(child: Text('No pitches available'));
+                  return Padding(
+                    padding: EdgeInsets.only(
+                        top: SizeConfig.getSize100(context: context) +
+                            SizeConfig.getSize100(context: context)),
+                    child: const Center(child: Text('No pitches available')),
+                  );
                 } else {
                   return ListView.builder(
                       shrinkWrap: true,

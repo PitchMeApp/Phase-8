@@ -1,7 +1,6 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
@@ -100,7 +99,7 @@ class _CameraPageState extends State<CameraPage> {
         setState(() => _isRecording = true);
       }
     } catch (e) {
-      log('video = ' + e.toString());
+      // log('video = ' + e.toString());
     }
   }
 
