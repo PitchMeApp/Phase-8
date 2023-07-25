@@ -4,7 +4,6 @@ import 'package:pitch_me_app/Phase%206/Guest%20UI/Profile/manu.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:video_viewer/video_viewer.dart';
@@ -45,19 +44,35 @@ class _WatchSalesPitchState extends State<WatchSalesPitch>
         children: [
           video(),
           header(),
-          BackArrow(
-              onPressed: () {
-                videoViewerController.pause();
-                PageNavigateScreen()
-                    .push(context, LoginLimitationPage())
-                    .then((value) {
-                  setState(() {
-                    videoViewerController.play();
-                  });
-                });
-              },
-              alignment: Alignment.centerRight,
-              icon: Icons.arrow_forward_ios)
+          // Align(
+          //   alignment: Alignment.centerRight,
+          //   child: InkWell(
+          //     onTap: () {
+          //       videoViewerController.pause();
+          //       PageNavigateScreen()
+          //           .push(context, LoginLimitationPage())
+          //           .then((value) {
+          //         setState(() {
+          //           videoViewerController.play();
+          //         });
+          //       });
+          //     },
+          //     child: RotatedBox(
+          //       quarterTurns: 3,
+          //       child: Image.asset(
+          //         "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
+          //         height: 30,
+          //         width: 30,
+          //       ),
+          //     ),
+          //   ),
+          // )
+          // BackArrow(
+          //     onPressed: () {
+
+          //     },
+          //     alignment: Alignment.centerRight,
+          //     icon: Icons.arrow_forward_ios)
         ],
       ),
     );
@@ -106,7 +121,7 @@ class _WatchSalesPitchState extends State<WatchSalesPitch>
             ),
             thumbnail: Image.network(''),
             loading: CircularProgressIndicator(
-              color: Colors.blue,
+              color: DynamicColor.gredient1,
             )),
         source: {
           "Source": VideoSource(
@@ -134,11 +149,13 @@ class _WatchSalesPitchState extends State<WatchSalesPitch>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 AppBarIconContainer(
-                  height: SizeConfig.getSize50(context: context),
-                  width: SizeConfig.getSize50(context: context),
-                  colorTween: _colorTween,
+                  height: SizeConfig.getSize38(context: context),
+                  width: SizeConfig.getSize38(context: context),
+                  borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(10),
+                      bottomLeft: Radius.circular(10)),
                   child: Padding(
-                    padding: const EdgeInsets.all(12.0),
+                    padding: const EdgeInsets.all(8.0),
                     child: loadSvg(
                       image: 'assets/image/notifications.svg',
                     ),
@@ -164,7 +181,7 @@ class _WatchSalesPitchState extends State<WatchSalesPitch>
                     child: Text(
                       'Sales Pitch Tutorial',
                       style: TextStyle(
-                          color: DynamicColor.blue,
+                          color: DynamicColor.gredient1,
                           fontWeight: FontWeight.bold,
                           fontSize: 15),
                       maxLines: 1,
@@ -175,11 +192,10 @@ class _WatchSalesPitchState extends State<WatchSalesPitch>
                 Column(
                   children: [
                     AppBarIconContainer(
-                      height: SizeConfig.getSize50(context: context),
-                      width: SizeConfig.getSize50(context: context),
-                      colorTween: _colorTween,
+                      height: SizeConfig.getSize38(context: context),
+                      width: SizeConfig.getSize38(context: context),
                       child: Padding(
-                        padding: const EdgeInsets.all(12.0),
+                        padding: const EdgeInsets.all(8.0),
                         child: loadSvg(
                           image: 'assets/image/menu.svg',
                         ),
@@ -202,13 +218,19 @@ class _WatchSalesPitchState extends State<WatchSalesPitch>
                     ),
                     SizedBox(height: 10),
                     AppBarIconContainer(
-                      height: SizeConfig.getSize50(context: context),
-                      width: SizeConfig.getSize50(context: context),
-                      colorTween: _colorTween,
+                      height: SizeConfig.getSize38(context: context),
+                      width: SizeConfig.getSize38(context: context),
+                      color: DynamicColor.green,
                       child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: loadSvg(
-                          image: 'assets/image/setting.svg',
+                        padding: const EdgeInsets.all(8.0),
+                        child: RotatedBox(
+                          quarterTurns: 3,
+                          child: Image.asset(
+                            "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
+                            height: 30,
+                            width: 30,
+                            color: DynamicColor.white,
+                          ),
                         ),
                       ),
                       onTap: () {

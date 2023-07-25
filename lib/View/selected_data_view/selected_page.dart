@@ -6,7 +6,6 @@ import 'package:pitch_me_app/View/Add%20Image%20Page/addImage_page.dart';
 import 'package:pitch_me_app/View/Add%20Image%20Page/controller.dart';
 import 'package:pitch_me_app/View/Fund%20Page/fund_neccessar_controller.dart';
 import 'package:pitch_me_app/View/Fund%20Page/funds_page_edit.dart';
-import 'package:pitch_me_app/View/Location%20Page/location_page.dart';
 import 'package:pitch_me_app/View/Location%20Page/location_page_con.dart';
 import 'package:pitch_me_app/View/Need%20page/need_page_controller.dart';
 import 'package:pitch_me_app/View/Need%20page/need_page_edit.dart';
@@ -21,7 +20,10 @@ import 'package:pitch_me_app/View/what%20need/who_need_page_controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
+import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
+
+import '../../utils/strings/images.dart';
 
 class SelectedPage extends StatefulWidget {
   int showIcon;
@@ -49,6 +51,8 @@ class _SelectedPageState extends State<SelectedPage> {
   final AddImageController _addImageController = Get.put(AddImageController());
   final NavigationController _navigationController =
       Get.put(NavigationController());
+
+  int isSelect = 0;
   @override
   Widget build(BuildContext context) {
     _whoNeedController.checkType.value = '';
@@ -56,7 +60,8 @@ class _SelectedPageState extends State<SelectedPage> {
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: BoxDecoration(color: Color.fromARGB(255, 255, 255, 255)),
+        decoration: BoxDecoration(
+            image: DecorationImage(image: AssetImage(Assets.backgroundImage))),
         child: Stack(
           children: [
             Column(
@@ -68,6 +73,7 @@ class _SelectedPageState extends State<SelectedPage> {
                     children: [
                       Column(
                         children: [
+                          Text('Details Editing', style: gredient116bold),
                           GestureDetector(
                             onTap: () {
                               widget.pageController.previousPage(
@@ -81,7 +87,6 @@ class _SelectedPageState extends State<SelectedPage> {
                                   quarterTurns: 6,
                                   child: Image.asset(
                                     "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
-                                    color: Color(0xff377EB4),
                                     height:
                                         SizeConfig.getSize35(context: context),
                                     width:
@@ -108,8 +113,12 @@ class _SelectedPageState extends State<SelectedPage> {
       child: Center(
           child: Column(
         children: [
-          customWidget("assets/images/industry-mdpi.png",
-              insdustryController.selectedIndustry.value, onPressad: () {
+          customWidget(
+              "What Industry", insdustryController.selectedIndustry.value, 1,
+              onPressad: () {
+            setState(() {
+              isSelect = 1;
+            });
             _navigationController.navigationType.value = 'Edit';
             PageNavigateScreen()
                 .push(context, SelectIndustryPage())
@@ -117,20 +126,21 @@ class _SelectedPageState extends State<SelectedPage> {
               setState(() {});
             });
           }),
-          customWidget(
-              "assets/images/ic_place_24px-mdpi.png",
-              _locationPageController.selectedType.value == 'Place'
-                  ? _locationPageController.searchController.text
-                  : _locationPageController.selectedType.value, onPressad: () {
-            _navigationController.navigationType.value = 'Edit';
-            PageNavigateScreen().push(context, LocationPage()).then((value) {
-              setState(() {});
-            });
-          }),
+          // customWidget(
+          //     "",
+          //     _locationPageController.selectedType.value == 'Place'
+          //         ? _locationPageController.searchController.text
+          //         : _locationPageController.selectedType.value, onPressad: () {
+          //   _navigationController.navigationType.value = 'Edit';
+          //   PageNavigateScreen().push(context, LocationPage()).then((value) {
+          //     setState(() {});
+          //   });
+          // }),
           _whoNeedController.checkColor == 1
-              ? customWidget(
-                  "assets/images/ic_local_atm_24-mdpi (1).png", "Investor",
-                  onPressad: () {
+              ? customWidget("Who is Needed", "Investor", 2, onPressad: () {
+                  setState(() {
+                    isSelect = 2;
+                  });
                   _navigationController.navigationType.value = 'Edit';
                   PageNavigateScreen()
                       .push(context, WhatNeedPageEdit())
@@ -141,9 +151,13 @@ class _SelectedPageState extends State<SelectedPage> {
               : Container(),
           _fundNacessaryController.selectedValue.value.isNotEmpty
               ? Obx(() {
-                  return customWidget("assets/images/ic_monetization.png",
+                  return customWidget(
+                      "How much",
                       _fundNacessaryController.selectedValue.value,
-                      onPressad: () {
+                      3, onPressad: () {
+                    setState(() {
+                      isSelect = 3;
+                    });
                     _navigationController.navigationType.value = 'Edit';
                     PageNavigateScreen()
                         .push(
@@ -159,8 +173,10 @@ class _SelectedPageState extends State<SelectedPage> {
                 })
               : Container(),
           _whoNeedController.checkColor2 == 2
-              ? customWidget("assets/images/_Group_-mdpi.png", "Facilitator",
-                  onPressad: () {
+              ? customWidget("Who is Needed", "Facilitator", 4, onPressad: () {
+                  setState(() {
+                    isSelect = 4;
+                  });
                   _navigationController.navigationType.value = 'Edit';
                   PageNavigateScreen()
                       .push(context, WhatNeedPageEdit())
@@ -181,9 +197,13 @@ class _SelectedPageState extends State<SelectedPage> {
                           _needPageController.selectedNeedType.value.length,
                       itemBuilder: (context, index) {
                         return customWidget(
-                            "assets/images/ic_content_past-mdpi.png",
+                            "What is Needed",
                             _needPageController.selectedNeedType.value[index]
-                                ['value'], onPressad: () {
+                                ['value'],
+                            5, onPressad: () {
+                          setState(() {
+                            isSelect = 5;
+                          });
                           _navigationController.navigationType.value = 'Edit';
                           PageNavigateScreen()
                               .push(context,
@@ -205,9 +225,13 @@ class _SelectedPageState extends State<SelectedPage> {
                           .searchingSelectedItems.value.length,
                       itemBuilder: (context, index) {
                         return customWidget(
-                            "assets/images/ic_check_circle-mdpi.png",
-                            _needPageController.searchingSelectedItems
-                                .value[index], onPressad: () {
+                            "What is Needed",
+                            _needPageController
+                                .searchingSelectedItems.value[index],
+                            6, onPressad: () {
+                          setState(() {
+                            isSelect = 6;
+                          });
                           _navigationController.navigationType.value = 'Edit';
                           PageNavigateScreen()
                               .push(context,
@@ -219,6 +243,16 @@ class _SelectedPageState extends State<SelectedPage> {
                       });
                 })
               : Container(),
+          customWidget("Initial Offer",
+              _offerPageController.offrerTextController.text, 7, onPressad: () {
+            setState(() {
+              isSelect = 7;
+            });
+            _navigationController.navigationType.value = 'Edit';
+            PageNavigateScreen().push(context, OfferPage()).then((value) {
+              setState(() {});
+            });
+          }),
           _offerPageController.selectedPersonType.value.isNotEmpty
               ? Obx(() {
                   return ListView.builder(
@@ -231,9 +265,13 @@ class _SelectedPageState extends State<SelectedPage> {
                         // log(_offerPageController.selectedPersonType.value
                         //     .toString());
                         return customWidget(
-                            "assets/images/ic_visibility_24px.png",
+                            "Who can see",
                             _offerPageController.selectedPersonType.value[index]
-                                ['value'], onPressad: () {
+                                ['value'],
+                            8, onPressad: () {
+                          setState(() {
+                            isSelect = 8;
+                          });
                           _navigationController.navigationType.value = 'Edit';
                           PageNavigateScreen()
                               .push(context, SelectionPersonPage())
@@ -244,15 +282,9 @@ class _SelectedPageState extends State<SelectedPage> {
                       });
                 })
               : Container(),
-          customWidget("", _offerPageController.offrerTextController.text,
-              onPressad: () {
-            _navigationController.navigationType.value = 'Edit';
-            PageNavigateScreen().push(context, OfferPage()).then((value) {
-              setState(() {});
-            });
-          }),
+          spaceHeight(SizeConfig.getSize20(context: context)),
           _imagesGridView(),
-          spaceHeight(SizeConfig.getSize80(context: context)),
+          spaceHeight(SizeConfig.getSize100(context: context)),
         ],
       )),
     );
@@ -285,15 +317,15 @@ class _SelectedPageState extends State<SelectedPage> {
                           });
                         },
                         child: Container(
-                          height: 120,
-                          width: 90,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30)),
-                          padding: EdgeInsets.only(bottom: 10),
-                          child: Image.asset(
-                            'assets/images/pdf.png',
-                            fit: BoxFit.cover,
-                          ),
+                              gradient: LinearGradient(colors: const [
+                                Color(0xff5388C0),
+                                Color(0xff67C8B5)
+                              ]),
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                  fit: BoxFit.cover,
+                                  image: AssetImage('assets/images/pdf.png'))),
                         ),
                       )
                     : Container();
@@ -308,61 +340,72 @@ class _SelectedPageState extends State<SelectedPage> {
                   });
                 },
                 child: Container(
-                  decoration:
-                      BoxDecoration(borderRadius: BorderRadius.circular(30)),
-                  child: Image.file(
-                    File(_addImageController.listImagePaths[index].toString()),
-                    fit: BoxFit.contain,
-                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: FileImage(File(_addImageController
+                              .listImagePaths[index].path
+                              .toString())))),
                 ),
               );
             },
           );
   }
 
-  Widget customWidget(iconImage, name, {required VoidCallback onPressad}) {
+  Widget customWidget(title, name, int selected,
+      {required VoidCallback onPressad}) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
     return InkWell(
       onTap: onPressad,
-      child: Container(
-          height: sizeH * 0.068,
-          margin: EdgeInsets.only(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(title, style: black14w5),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
               left: SizeConfig.getFontSize25(context: context),
               right: SizeConfig.getFontSize25(context: context),
-              bottom: sizeH * 0.015),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Color(0xff377EB4),
+            ),
+            child: Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: Container(
+                  height: sizeH * 0.068,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(
+                    left: 5,
+                    right: 5,
+                  ),
+                  decoration: BoxDecoration(
+                      gradient: isSelect == selected
+                          ? null
+                          : DynamicColor.gradientColorChange,
+                      color: isSelect == selected ? DynamicColor.white : null,
+                      borderRadius: BorderRadius.circular(10),
+                      border: isSelect == selected
+                          ? Border.all(color: DynamicColor.gredient2)
+                          : null),
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                        color: isSelect == selected
+                            ? DynamicColor.gredient1
+                            : DynamicColor.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  )),
+            ),
           ),
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: SizeConfig.getFontSize14(context: context),
-              right: SizeConfig.getFontSize14(context: context),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                iconImage.isNotEmpty
-                    ? Image.asset(
-                        iconImage,
-                        height: sizeH * 0.04,
-                        width: sizeW * 0.08,
-                        alignment: Alignment.centerLeft,
-                        color: DynamicColor.white,
-                      )
-                    : Container(width: 30),
-                Text(
-                  name,
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Container(width: 30)
-              ],
-            ),
-          )),
+        ],
+      ),
     );
   }
 }

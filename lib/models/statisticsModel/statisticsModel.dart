@@ -7,7 +7,7 @@ class StatisticsModel {
   StatisticsModel.fromJson(Map<String, dynamic> json) {
     message = json['message'];
     result =
-    json['result'] != null ? new Result.fromJson(json['result']) : null;
+        json['result'] != null ? new Result.fromJson(json['result']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -28,19 +28,23 @@ class Result {
   Investors? cities;
   Investors? countries;
   Continents? continents;
+  Investors? businessIdea;
+  Investors? facilitator;
   String? sId;
   int? iV;
 
   Result(
       {this.investors,
-        this.business,
-        this.raisedFunds,
-        this.verifiedFunds,
-        this.cities,
-        this.countries,
-        this.continents,
-        this.sId,
-        this.iV});
+      this.business,
+      this.raisedFunds,
+      this.verifiedFunds,
+      this.cities,
+      this.countries,
+      this.continents,
+      this.businessIdea,
+      this.facilitator,
+      this.sId,
+      this.iV});
 
   Result.fromJson(Map<String, dynamic> json) {
     investors = json['investors'] != null
@@ -56,12 +60,18 @@ class Result {
         ? new Investors.fromJson(json['verified_funds'])
         : null;
     cities =
-    json['cities'] != null ? new Investors.fromJson(json['cities']) : null;
+        json['cities'] != null ? new Investors.fromJson(json['cities']) : null;
     countries = json['countries'] != null
         ? new Investors.fromJson(json['countries'])
         : null;
     continents = json['continents'] != null
         ? new Continents.fromJson(json['continents'])
+        : null;
+    businessIdea = json['businessideas'] != null
+        ? new Investors.fromJson(json['businessideas'])
+        : null;
+    facilitator = json['facilitator'] != null
+        ? new Investors.fromJson(json['facilitator'])
         : null;
     sId = json['_id'];
     iV = json['__v'];
@@ -89,6 +99,12 @@ class Result {
     }
     if (this.continents != null) {
       data['continents'] = this.continents!.toJson();
+    }
+    if (this.businessIdea != null) {
+      data['businessideas'] = this.businessIdea!.toJson();
+    }
+    if (this.facilitator != null) {
+      data['facilitator'] = this.facilitator!.toJson();
     }
     data['_id'] = this.sId;
     data['__v'] = this.iV;

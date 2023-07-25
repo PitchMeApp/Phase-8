@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/login_limitation.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Profile/manu.dart';
-import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Deals%20Page/deals_page.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
+
+import '../../../View/Custom header view/appbar_with_white_bg.dart';
+import '../../../utils/sizeConfig/sizeConfig.dart';
+import '../../../utils/strings/images.dart';
+import '../../../utils/widgets/containers/containers.dart';
+import '../../../utils/widgets/extras/backgroundWidget.dart';
 
 class GuestDealsPage extends StatefulWidget {
   const GuestDealsPage({super.key});
@@ -15,66 +20,113 @@ class GuestDealsPage extends StatefulWidget {
 }
 
 class _GuestDealsPageState extends State<GuestDealsPage> {
+  int isSelect = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: DynamicColor.white,
-      body: Stack(
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: BackGroundWidget(
+        backgroundImage: Assets.backgroundImage,
+        bannerRequired: false,
+        fit: BoxFit.fill,
+        child: Stack(
+          children: [
+            Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                // CustomAppbar(title: TextStrings.textKey['deals']!),
-                CustomListBox(
-                    icon: 'assets/images/ic_message_24px@4x.png',
-                    title: TextStrings.textKey['chat']!,
-                    onPressad: () {
-                      PageNavigateScreen().push(context, LoginLimitationPage());
-                    }),
-                CustomListBox(
-                    icon: 'assets/images/ic_import_contacts_24px@4x.png',
-                    title: TextStrings.textKey['contract']!,
-                    onPressad: () {
-                      PageNavigateScreen().push(context, LoginLimitationPage());
-                    }),
-                CustomListBox(
-                    icon: 'assets/images/ic_local_atm_24-mdpi (1).png',
-                    title: TextStrings.textKey['investment']!,
-                    onPressad: () {
-                      PageNavigateScreen().push(context, LoginLimitationPage());
-                    }),
-                CustomListBox(
-                    icon: 'assets/images/pie-chart.png',
-                    title: TextStrings.textKey['share']!,
-                    imageHight: 40.0,
-                    onPressad: () {
-                      PageNavigateScreen().push(context, LoginLimitationPage());
-                    }),
-                CustomListBox(
-                    icon: 'assets/images/ic_compare_arrows_24px@4x.png',
-                    title: TextStrings.textKey['update']!,
-                    onPressad: () {
-                      PageNavigateScreen().push(context, LoginLimitationPage());
-                    }),
+                ClipPath(
+                  clipper: CurveClipper(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        gradient: DynamicColor.gradientColorChange),
+                    height: MediaQuery.of(context).size.height * 0.235,
+                  ),
+                ),
+                whiteBorderContainer(
+                    child: Image.asset(Assets.handshakeImage),
+                    color: Colors.transparent,
+                    height:
+                        SizeConfig.getSizeHeightBy(context: context, by: 0.12),
+                    width:
+                        SizeConfig.getSizeHeightBy(context: context, by: 0.12),
+                    cornerRadius: 25),
               ],
             ),
-          ),
-          CustomAppbar(
-            title: TextStrings.textKey['deals']!,
-            onPressad: () {
-              PageNavigateScreen().push(
-                  context,
-                  GuestManuPage(
-                    title: TextStrings.textKey['deals']!,
-                    pageIndex: 3,
-                  ));
-            },
-            onPressadForNotify: () {
-              PageNavigateScreen().push(context, LoginLimitationPage());
-            },
-          ),
-        ],
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // CustomAppbar(title: TextStrings.textKey['deals']!),
+                  CustomListBox(
+                      title: TextStrings.textKey['chat']!,
+                      singleSelectColor: isSelect,
+                      isSingleSelect: 1,
+                      onPressad: () {
+                        setState(() {
+                          isSelect = 1;
+                        });
+                        PageNavigateScreen()
+                            .push(context, LoginLimitationPage());
+                      }),
+                  CustomListBox(
+                      title: TextStrings.textKey['contract']!,
+                      singleSelectColor: isSelect,
+                      isSingleSelect: 2,
+                      onPressad: () {
+                        setState(() {
+                          isSelect = 2;
+                        });
+                        PageNavigateScreen()
+                            .push(context, LoginLimitationPage());
+                      }),
+                  CustomListBox(
+                      title: TextStrings.textKey['investment']!,
+                      singleSelectColor: isSelect,
+                      isSingleSelect: 3,
+                      onPressad: () {
+                        setState(() {
+                          isSelect = 3;
+                        });
+                        PageNavigateScreen()
+                            .push(context, LoginLimitationPage());
+                      }),
+                  CustomListBox(
+                      title: TextStrings.textKey['share']!,
+                      singleSelectColor: isSelect,
+                      isSingleSelect: 4,
+                      onPressad: () {
+                        setState(() {
+                          isSelect = 4;
+                        });
+                        PageNavigateScreen()
+                            .push(context, LoginLimitationPage());
+                      }),
+                  CustomListBox(
+                      title: TextStrings.textKey['update']!,
+                      singleSelectColor: isSelect,
+                      isSingleSelect: 5,
+                      onPressad: () {
+                        setState(() {
+                          isSelect = 5;
+                        });
+                        PageNavigateScreen()
+                            .push(context, LoginLimitationPage());
+                      }),
+                ],
+              ),
+            ),
+            CustomAppbarWithWhiteBg(
+              title: TextStrings.textKey['deals']!,
+              onPressad: () {
+                PageNavigateScreen().push(
+                    context,
+                    GuestManuPage(
+                      title: TextStrings.textKey['deals']!,
+                      pageIndex: 3,
+                    ));
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

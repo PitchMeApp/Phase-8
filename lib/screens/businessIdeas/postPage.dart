@@ -5,11 +5,16 @@ import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
 import 'package:pitch_me_app/screens/businessIdeas/feedbackscreen.dart';
 import 'package:pitch_me_app/screens/businessIdeas/interestedSwipe.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
+import 'package:pitch_me_app/utils/styles/styles.dart';
+import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/extras/directVideoViewer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 import 'package:video_viewer/video_viewer.dart';
+
+import '../../utils/colors/colors.dart';
+import '../../utils/widgets/containers/containers.dart';
 
 class PostPageWidget extends StatefulWidget {
   const PostPageWidget({
@@ -96,7 +101,6 @@ class _PostPageWidgetState extends State<PostPageWidget>
                 controller.updateProgressOfCard(0.0);
                 controller.updateDirectionOfCard(null);
               });
-              //if (businesstype == '3' || businesstype == '4') {
               print('index is $index, direction is $direction');
               controller.label =
                   direction == SwipeDirection.right ? 'Saved' : 'Seen';
@@ -198,33 +202,10 @@ class _PostPageWidgetState extends State<PostPageWidget>
 
               return Stack(
                 children: [
-                  // if (businesstype == '3' || businesstype == '4')
                   controller.getSliderWidget2(
                       post: widget.postModel.result.docs[itemIndex],
                       context: context,
                       itemIndex: itemIndex),
-                  // if (businesstype == '1' || businesstype == '2')
-                  //   directionn == SwipeDirection.left
-                  //       ? controller.left.value == false
-                  //           ? controller.getSliderWidget2(
-                  //               post: widget.postModel.result.docs[itemIndex],
-                  //               context: context,
-                  //               itemIndex: itemIndex)
-                  //           : UserTypeLimitationPage(
-                  //               title1:
-                  //                   'Only Investors or Facilitators can access "Watch Sales Pitch" Page',
-                  //               title2:
-                  //                   'Make sure after Signing Up with different email, you select Investors or Facilitators')
-                  //       : controller.right.value == true
-                  //           ? UserTypeLimitationPage(
-                  //               title1:
-                  //                   'Only Investors or Facilitators can access "Watch Sales Pitch" Page',
-                  //               title2:
-                  //                   'Make sure after Signing Up with different email, you select Investors or Facilitators')
-                  //           : controller.getSliderWidget2(
-                  //               post: widget.postModel.result.docs[itemIndex],
-                  //               context: context,
-                  //               itemIndex: itemIndex)
                 ],
               );
             },
@@ -233,8 +214,6 @@ class _PostPageWidgetState extends State<PostPageWidget>
         Align(
             alignment: Alignment.center,
             child: controller.progressOfCard.value.toStringAsFixed(2) == "0.00"
-                /* &&
-                      controller.direction == null */
                 ? SizedBox()
                 : AnimatedDefaultTextStyle(
                     duration: Duration(milliseconds: 200),
@@ -253,112 +232,101 @@ class _PostPageWidgetState extends State<PostPageWidget>
                               : 'Interested',
                     ),
                   )),
-        Align(
-          alignment: Alignment.bottomCenter,
-          child: widget.postModel.result.docs[0].id
-                  .contains('6448e9494ff8f4cb69599465')
-              ? Container()
-              : Padding(
-                  padding: EdgeInsets.only(
-                      bottom: SizeConfig.getSize5(context: context), right: 8),
-                  child: GestureDetector(
-                    onTap: () {
-                      widget.postModel.result.docs[0].id
-                              .contains('6448e9494ff8f4cb69599465')
-                          ? null
-                          : widget.controller.nextPage(
-                              duration: Duration(milliseconds: 200),
-                              curve: Curves.linear);
-                    },
-                    child: Container(
-                      height: SizeConfig.getSize35(context: context),
-                      width: SizeConfig.getSize35(context: context),
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                              color: Color.fromARGB(70, 51, 50, 50)
-                                  .withOpacity(0.2),
-                              blurRadius: 20,
-                              offset: Offset(
-                                0,
-                                0,
-                              ))
-                        ],
-                      ),
-                      child: Image.asset(
-                        "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        Column(
+          mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            widget.postModel.result.docs[0].id
-                    .contains('6448e9494ff8f4cb69599465')
-                ? Container()
-                : Center(
-                    child: GestureDetector(
+            Text('Business details', style: gredient116bold),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: widget.postModel.result.docs[0].id
+                      .contains('6448e9494ff8f4cb69599465')
+                  ? Container()
+                  : GestureDetector(
                       onTap: () {
-                        controller.swipableStackController
-                            .next(swipeDirection: SwipeDirection.right);
+                        widget.postModel.result.docs[0].id
+                                .contains('6448e9494ff8f4cb69599465')
+                            ? null
+                            : widget.controller.nextPage(
+                                duration: Duration(milliseconds: 200),
+                                curve: Curves.linear);
                       },
                       child: Container(
                         height: SizeConfig.getSize35(context: context),
                         width: SizeConfig.getSize35(context: context),
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Color.fromARGB(71, 60, 60, 60)
-                                    .withOpacity(0.2),
-                                blurRadius: 20,
-                                offset: Offset(
-                                  0,
-                                  0,
-                                ))
-                          ],
-                        ),
-                        child: RotatedBox(
-                          quarterTurns: 1,
-                          child: Image.asset(
-                              "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png"),
+                        margin: EdgeInsets.only(
+                            top: 5,
+                            bottom: SizeConfig.getSize60(context: context) +
+                                SizeConfig.getSize15(context: context)),
+                        child: Image.asset(
+                          "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
                         ),
                       ),
                     ),
-                  ),
-            Center(
-              child: GestureDetector(
-                onTap: () {
-                  controller.swipableStackController
-                      .next(swipeDirection: SwipeDirection.left);
-                },
-                child: Container(
-                  height: SizeConfig.getSize35(context: context),
-                  width: SizeConfig.getSize35(context: context),
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color:
-                              Color.fromARGB(71, 60, 60, 60).withOpacity(0.2),
-                          blurRadius: 20,
-                          offset: Offset(
-                            0,
-                            0,
-                          ))
-                    ],
-                  ),
-                  child: RotatedBox(
-                    quarterTurns: 3,
-                    child: Image.asset(
-                        "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png"),
-                  ),
-                ),
-              ),
             ),
           ],
+        ),
+        Padding(
+          padding: EdgeInsets.only(
+              top: SizeConfig.getSize30(context: context) +
+                  SizeConfig.getSize55(context: context) +
+                  SizeConfig.getSize5(context: context),
+              left: SizeConfig.getFontSize25(context: context),
+              right: SizeConfig.getFontSize25(context: context)),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              widget.postModel.result.docs[0].id
+                      .contains('6448e9494ff8f4cb69599465')
+                  ? Container()
+                  : Align(
+                      alignment: Alignment.topLeft,
+                      child: AppBarIconContainer(
+                        height: SizeConfig.getSize38(context: context),
+                        width: SizeConfig.getSize38(context: context),
+                        borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            bottomLeft: Radius.circular(10)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: RotatedBox(
+                            quarterTurns: 1,
+                            child: Image.asset(
+                              "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
+                              height: 30,
+                              width: 30,
+                              color: DynamicColor.white,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          controller.swipableStackController
+                              .next(swipeDirection: SwipeDirection.left);
+                        },
+                      ),
+                    ),
+              // BackArrow(
+              //   alignment: Alignment.topLeft,
+              //   direction: 1,
+              //   onPressed: () {
+              //     controller.swipableStackController
+              //         .next(swipeDirection: SwipeDirection.right);
+              //   },
+              // ),
+              BackArrow(
+                alignment: Alignment.topRight,
+                borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10)),
+                direction: 3,
+                onPressed: () {
+                  controller.swipableStackController
+                      .next(swipeDirection: SwipeDirection.right);
+                },
+              ),
+            ],
+          ),
         ),
       ],
     );

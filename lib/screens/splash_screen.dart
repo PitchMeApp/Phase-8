@@ -9,6 +9,7 @@ import 'package:pitch_me_app/core/extras.dart';
 import 'package:pitch_me_app/screens/auth/loginScreen.dart';
 import 'package:pitch_me_app/screens/businessIdeas/BottomNavigation.dart';
 import 'package:pitch_me_app/screens/selectionScreen.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/images.dart';
 import 'package:pitch_me_app/utils/strings/keys.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
@@ -64,10 +65,49 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BackGroundWidget(
-        bannerRequired: false,
         backgroundImage: Assets.backgroundImage,
-        fit: BoxFit.fill,
-        child: Center(child: appLogoImage(isDark: false)),
+        fit: BoxFit.cover,
+        child: Padding(
+          padding:
+              EdgeInsets.only(left: SizeConfig.getSize15(context: context)),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              appLogoImage(
+                  isDark: false,
+                  height: SizeConfig.getSize100(context: context) +
+                      SizeConfig.getSize55(context: context)),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Image.asset(
+                  'assets/imagess/PITCH ME.png',
+                  height: SizeConfig.getSize60(context: context) +
+                      SizeConfig.getSize25(context: context),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: Padding(
+                  padding: EdgeInsets.only(
+                      right: SizeConfig.getSize35(context: context) +
+                          SizeConfig.getSize5(context: context)),
+                  child: Image.asset(
+                    'assets/imagess/MOTO (1).png',
+                    height: SizeConfig.getSize40(context: context),
+                  ),
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20),
+                child: Image.asset(
+                  'assets/imagess/MOTO.png',
+                  height: SizeConfig.getSize100(context: context),
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

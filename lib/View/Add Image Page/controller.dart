@@ -4,6 +4,9 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:image_pickers/image_pickers.dart';
+
+import '../../utils/colors/colors.dart';
 // import 'package:image_pickers/image_pickers.dart';
 
 class AddImageController extends GetxController {
@@ -14,35 +17,35 @@ class AddImageController extends GetxController {
     {'check': false},
     {'check': false},
   ];
-  //GalleryMode _galleryMode = GalleryMode.image;
+  GalleryMode _galleryMode = GalleryMode.image;
 
   int count = 4;
   String filePath = "";
   File fileFullPath = File('');
 
-  // Future<void> selectImages() async {
-  //   try {
-  //     _galleryMode = GalleryMode.image;
-  //     listImagePaths = await ImagePickers.pickerPaths(
-  //       galleryMode: _galleryMode,
-  //       showGif: true,
-  //       selectCount: 4,
-  //       showCamera: true,
-  //       cropConfig: CropConfig(enableCrop: true, height: 1, width: 1),
-  //       compressSize: 500,
-  //       uiConfig: UIConfig(
-  //         uiThemeColor: DynamicColor.blue,
-  //       ),
-  //     );
+  Future<void> selectImages() async {
+    try {
+      _galleryMode = GalleryMode.image;
+      listImagePaths = await ImagePickers.pickerPaths(
+        galleryMode: _galleryMode,
+        showGif: true,
+        selectCount: 3,
+        showCamera: true,
+        cropConfig: CropConfig(enableCrop: true, height: 1, width: 1),
+        compressSize: 500,
+        uiConfig: UIConfig(
+          uiThemeColor: DynamicColor.gredient1,
+        ),
+      );
 
-  // if (_listImagePaths.length > 0) {
-  //   _listImagePaths.forEach((media) {
-  //     print(media.path.toString());
-  //   });
-  // }
-  //     update();
-  //   } on PlatformException {}
-  // }
+      if (listImagePaths.length > 0) {
+        listImagePaths.forEach((media) {
+          print(media.path.toString());
+        });
+      }
+      update();
+    } on PlatformException {}
+  }
 
   Future<void> selectImage(int index) async {
     try {

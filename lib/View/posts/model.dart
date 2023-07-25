@@ -100,6 +100,7 @@ class SalesDoc {
     required this.comment,
     required this.status,
     this.userid,
+    this.whocanwatch,
     required this.user,
   });
 
@@ -121,6 +122,7 @@ class SalesDoc {
   String comment;
   int status;
   dynamic userid;
+  dynamic whocanwatch;
   UserData user;
 
   factory SalesDoc.fromJson(Map<String, dynamic> json) => SalesDoc(
@@ -142,6 +144,7 @@ class SalesDoc {
         comment: json["comment"],
         status: json["status"],
         userid: json['userid'],
+        whocanwatch: json['whocanwatch'],
         user: UserData.fromJson(json["user"]),
       );
 
@@ -164,6 +167,7 @@ class SalesDoc {
         "comment": comment,
         "status": status,
         "userid": userid,
+        "whocanwatch": whocanwatch,
         "user": user.toJson(),
       };
 }

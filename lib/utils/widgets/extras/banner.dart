@@ -8,18 +8,14 @@ class BannerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 50,
-      width: MediaQuery.of(context).size.width - 40,
+      height: MediaQuery.of(context).size.height * 0.10,
       child: InkWell(
         onTap: null,
         child: Align(
           alignment: Alignment.bottomCenter,
           child: Container(
-            // width: Get.width,
-            // height: Get.height * 0.065,
             alignment: Alignment.bottomCenter,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
               color: colors.bannerColor,
             ),
             child: Center(

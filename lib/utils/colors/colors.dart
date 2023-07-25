@@ -31,13 +31,19 @@ class DynamicColor {
   static const Color lightColor = Color(0xFFE5E9FB);
   static const Color yellowColor = Color(0xFFFFBD3E);
   static const Color redColor = Color(0xFFFF0000);
+  static const Color gredient1 = Color(0xFF12A4D7);
+  static const Color gredient2 = Color(0xFF21C8D1);
+  static const Color green = Color(0xff44D223);
+  static const Color textColor = Color(0xff214252);
 
   // gradientColor
-  static const gradientColorNoBegin = LinearGradient(
-    colors: [DynamicColor.blue, DynamicColor.sky],
+  static const gradientColorOnBegin = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [DynamicColor.gredient1, DynamicColor.gredient2],
   );
   static const gradientColorChange = LinearGradient(
-    colors: [DynamicColor.butnClr, DynamicColor.butnClr2],
+    colors: [DynamicColor.gredient1, DynamicColor.gredient2],
   );
 }
 

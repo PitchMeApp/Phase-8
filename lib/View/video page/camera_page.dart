@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/video%20page/video_play_page.dart';
+import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 
 import '../../utils/colors/colors.dart';
 
@@ -97,6 +98,7 @@ class _CameraPageState extends State<CameraPage> {
         await _cameraController.prepareForVideoRecording();
         await _cameraController.startVideoRecording();
         setState(() => _isRecording = true);
+        WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
       }
     } catch (e) {
       // log('video = ' + e.toString());
@@ -120,93 +122,146 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
+  ScrollController _scrollController = ScrollController();
+  _scrollToBottom() {
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: Duration(seconds: 30), curve: Curves.linear);
+  }
+
   @override
   Widget build(BuildContext context) {
+    // WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+    String val = '''
+The person making the pitch, or the Application, as the case maybe, shall retain sole and proprietary ownership in the Confidential Information, which includes all intellectual property rights therein, such as patents, trademarks and copyrights. Nothing in this Policy shall be deemed to be construed as granting any right or authority whatsoever to the Users in connection with the Confidential Information, which includes but is not limited to licenses, assignment or any right to use or claim ownership of the Confidential Information.
+''';
     if (_isLoading) {
       return Container(
         color: Colors.white,
         child: const Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: DynamicColor.gredient1,
+          ),
         ),
       );
     } else {
-      return Column(
-        children: [
-          Expanded(child: CameraPreview(_cameraController)),
-          Container(
-            width: double.infinity,
-            color: DynamicColor.white,
-            child: _isRecording
-                ? Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: Container(
-                          padding: EdgeInsets.all(15),
-                          alignment: Alignment.centerRight,
-                          color: DynamicColor.white,
+      return Scaffold(
+        body: Column(
+          children: [
+            Expanded(
+                child: Stack(
+              children: [
+                CameraPreview(_cameraController),
+                _isRecording
+                    ? SingleChildScrollView(
+                        controller: _scrollController,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: SizeConfig.getSizeHeightBy(
+                                  context: context, by: 0.15)),
                           child: Text(
-                            secondsRemaining != 0
-                                ? secondsRemaining < 10
-                                    ? '0:0$secondsRemaining'
-                                    : '0:$secondsRemaining'
-                                : '0:00',
+                            val,
+                            maxLines: 1000,
+                            textScaleFactor: 2.2,
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                                color: DynamicColor.blue),
+                              fontSize:
+                                  MediaQuery.of(context).size.height * 0.020,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 0.6,
+                              color: DynamicColor.gredient2,
+                            ),
                           ),
                         ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Container(
+                      )
+                    : Container(),
+              ],
+            )),
+            Container(
+              width: double.infinity,
+              color: DynamicColor.white,
+              child: _isRecording
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            alignment: Alignment.centerRight,
+                            color: DynamicColor.white,
+                            child: Text(
+                              secondsRemaining != 0
+                                  ? secondsRemaining < 10
+                                      ? '0:0$secondsRemaining'
+                                      : '0:$secondsRemaining'
+                                  : '0:00',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                  color: DynamicColor.gredient1),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Container(
+                            padding: const EdgeInsets.all(15),
+                            alignment: Alignment.centerLeft,
+                            child: FloatingActionButton(
+                              heroTag: 1,
+                              backgroundColor: Colors.red,
+                              child: Icon(
+                                _isRecording
+                                    ? Icons.stop
+                                    : Icons.radio_button_checked,
+                                size: 40,
+                              ),
+                              onPressed: () {
+                                _recordVideo();
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Padding(
                           padding: const EdgeInsets.all(15),
-                          alignment: Alignment.centerLeft,
                           child: FloatingActionButton(
                             heroTag: 1,
                             backgroundColor: Colors.red,
                             child: Icon(
-                                _isRecording ? Icons.stop : Icons.video_call),
+                              _isRecording
+                                  ? Icons.stop
+                                  : Icons.radio_button_checked,
+                              size: 40,
+                            ),
                             onPressed: () {
                               _recordVideo();
+                              timeOutVideo();
                             },
                           ),
                         ),
-                      ),
-                    ],
-                  )
-                : Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: FloatingActionButton(
-                          heroTag: 1,
-                          backgroundColor: Colors.red,
-                          child: Icon(
-                              _isRecording ? Icons.stop : Icons.video_call),
-                          onPressed: () {
-                            _recordVideo();
-                            timeOutVideo();
-                          },
+                        Padding(
+                          padding: const EdgeInsets.all(15),
+                          child: FloatingActionButton(
+                            heroTag: 2,
+                            backgroundColor: DynamicColor.gredient1,
+                            child: const Icon(
+                              Icons.change_circle,
+                              size: 40,
+                            ),
+                            onPressed: () => _toggleCameraLens(),
+                          ),
                         ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(15),
-                        child: FloatingActionButton(
-                          heroTag: 2,
-                          backgroundColor: DynamicColor.darkBlue,
-                          child: const Icon(Icons.change_circle),
-                          onPressed: () => _toggleCameraLens(),
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
-        ],
+                      ],
+                    ),
+            ),
+          ],
+        ),
       );
     }
   }

@@ -9,6 +9,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:pitch_me_app/View/posts/post_binding.dart';
 import 'package:pitch_me_app/screens/businessIdeas/Apicall.dart/noti.dart';
 import 'package:pitch_me_app/screens/splash_screen.dart';
+import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:provider/provider.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:sizer/sizer.dart';
@@ -94,6 +95,48 @@ class MyHttpOverrides extends HttpOverrides {
   }
 }
 
-    // fb key
-      //786165039121807
-      //89ee216e202b0435a33d7e59d9e8e508
+// fb key
+//786165039121807
+//89ee216e202b0435a33d7e59d9e8e508
+
+class DemoScrollPage extends StatefulWidget {
+  const DemoScrollPage({super.key});
+
+  @override
+  State<DemoScrollPage> createState() => _DemoScrollPageState();
+}
+
+class _DemoScrollPageState extends State<DemoScrollPage> {
+  ScrollController _scrollController = ScrollController();
+  _scrollToBottom() {
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: Duration(seconds: 30), curve: Curves.linear);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
+    String val = '''
+The person making the pitch, or the Application, as the case maybe, shall retain sole and proprietary ownership in the Confidential Information, which includes all intellectual property rights therein, such as patents, trademarks and copyrights. Nothing in this Policy shall be deemed to be construed as granting any right or authority whatsoever to the Users in connection with the Confidential Information, which includes but is not limited to licenses, assignment or any right to use or claim ownership of the Confidential Information.
+''';
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Lyrics'),
+      ),
+      body: SingleChildScrollView(
+        controller: _scrollController,
+        child: Text(
+          val,
+          maxLines: 1000,
+          // textScaleFactor: 4,
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.height * 0.020,
+            fontWeight: FontWeight.bold,
+            letterSpacing: 0.6,
+            color: DynamicColor.gredient1,
+          ),
+        ),
+      ),
+    );
+  }
+}

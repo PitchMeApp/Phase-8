@@ -6,12 +6,14 @@ import 'package:pitch_me_app/View/Add%20Image%20Page/controller.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
 import 'package:pitch_me_app/View/navigation_controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
+import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 
+import '../../utils/strings/images.dart';
 import '../../utils/widgets/Navigation/custom_navigation.dart';
+import '../../utils/widgets/extras/backgroundWidget.dart';
 import '../Custom header view/custom_header_view.dart';
 import '../video page/video_page.dart';
 
@@ -32,177 +34,160 @@ class _AddImagePageState extends State<AddImagePage> {
   Widget build(BuildContext context) {
     return GetBuilder<AddImageController>(builder: (controller) {
       return Scaffold(
-          body: Stack(
-        children: [
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: SizeConfig.getSize100(context: context) +
-                      SizeConfig.getSize55(context: context),
-                ),
+          body: BackGroundWidget(
+        backgroundImage: Assets.backgroundImage,
+        fit: BoxFit.fill,
+        child: Stack(
+          children: [
+            SingleChildScrollView(
+              child: Column(
+                children: [
+                  SizedBox(
+                    height: SizeConfig.getSize100(context: context) +
+                        SizeConfig.getSize55(context: context),
+                  ),
+                  const SizedBox(height: 30),
 
-                selectImages(),
-                const SizedBox(height: 20),
-                _imagesGridView(),
-                // const SizedBox(height: 10),
-                // Text(_addImageController.filePath)
-                // _addFileButton()
-              ],
+                  Container(
+                    decoration: BoxDecoration(
+                        border: Border(
+                            bottom: BorderSide(color: DynamicColor.black))),
+                    child: Text(
+                      TextStrings.textKey['attechment']!,
+                      style: textColor22,
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  uploadImage(),
+                  const SizedBox(height: 10),
+                  uploadFile(),
+                  // selectImages(),
+                  const SizedBox(height: 20),
+                  _imagesGridView(),
+                  spaceHeight(
+                      SizeConfig.getSizeHeightBy(context: context, by: 0.15))
+                  // Text(_addImageController.filePath)
+                  // _addFileButton()
+                ],
+              ),
             ),
-          ),
-          CustomHeaderView(
-            title: TextStrings.textKey['add_image']!,
-            icon: 'assets/images/add image.png',
-            subTitle: TextStrings.textKey["add_image_sub"]!,
-            progressPersent: 0.7,
-            padding: 0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              BackArrow(
-                  alignment: Alignment.centerLeft,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: Icons.arrow_back_ios),
-              _addImageController.listImagePaths.isNotEmpty ||
+            CustomHeaderView(
+              progressPersent: 0.7,
+              checkNext: _addImageController.listImagePaths.isNotEmpty ||
                       _addImageController.filePath.isNotEmpty
-                  ? BackArrow(
-                      alignment: Alignment.centerRight,
-                      onPressed: () {
-                        if (_navigationController.navigationType.value ==
-                            'Post') {
-                          PageNavigateScreen().push(
-                              context,
-                              VideoPageMain(
-                                key: abcKey,
-                              ));
-                        } else {
-                          Navigator.of(context).pop();
-                        }
-                      },
-                      icon: Icons.arrow_forward_ios)
-                  : Container(),
-            ],
-          ),
-          NewCustomBottomBar(
-            index: 2,
-          ),
-        ],
+                  ? 'next'
+                  : null,
+              nextOnTap: () {
+                try {
+                  if (_navigationController.navigationType.value == 'Post') {
+                    PageNavigateScreen().push(
+                        context,
+                        VideoPageMain(
+                          key: abcKey,
+                        ));
+                  } else {
+                    Navigator.of(context).pop();
+                  }
+                } catch (e) {}
+              },
+            ),
+            NewCustomBottomBar(
+              index: 2,
+            ),
+          ],
+        ),
       ));
     });
   }
 
-  Widget selectImages() {
-    return Column(
-      children: [
-        InkWell(
-          onTap: () {
-            _addImageController.selectImage(0);
-          },
-          child: Container(
-            height: 44,
-            // width: MediaQuery.of(context).size.width - 55,
-            margin: EdgeInsets.only(
-                top: 10,
-                left: SizeConfig.getFontSize25(context: context),
-                right: SizeConfig.getFontSize25(context: context)),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: DynamicColor.blue,
-                borderRadius: BorderRadius.circular(10)),
-            child: Text(
-              'Picture 1',
-              style: _addImageController.ischackIndex[0]['check']
-                  ? darkBlue19
-                  : white17wBold,
+  Widget uploadImage() {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: SizeConfig.getSize50(context: context),
+        right: SizeConfig.getSize50(context: context),
+      ),
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.2,
+          alignment: Alignment.center,
+          child: InkWell(
+            onTap: () {
+              _addImageController.selectImages();
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                  height: 50,
+                  width: 50,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      gradient: DynamicColor.gradientColorChange,
+                      borderRadius: BorderRadius.circular(50)),
+                  child: Icon(
+                    Icons.add,
+                    color: DynamicColor.white,
+                    size: 30,
+                  ),
+                ),
+                SizedBox(height: 5),
+                Text(
+                  'Upload up to 3 Images',
+                  style: TextStyle(color: DynamicColor.textColor),
+                )
+              ],
             ),
           ),
         ),
-        InkWell(
-          onTap: () {
-            _addImageController.selectImage(1);
-          },
-          child: Container(
-            height: 44,
-            width: MediaQuery.of(context).size.width - 55,
-            margin: EdgeInsets.only(top: 10),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: DynamicColor.blue,
-                borderRadius: BorderRadius.circular(10)),
-            child: Text(
-              'Picture 2',
-              style: _addImageController.ischackIndex[1]['check']
-                  ? darkBlue19
-                  : white17wBold,
+      ),
+    );
+  }
+
+  Widget uploadFile() {
+    return Padding(
+      padding: EdgeInsets.only(
+        left: SizeConfig.getSize50(context: context),
+        right: SizeConfig.getSize50(context: context),
+      ),
+      child: Card(
+        elevation: 5,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        child: Container(
+          height: MediaQuery.of(context).size.height * 0.2,
+          alignment: Alignment.center,
+          child: InkWell(
+            onTap: () {
+              _addImageController.getDocumnetFile();
+            },
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Container(
+                    height: 50,
+                    width: 50,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        gradient: DynamicColor.gradientColorChange,
+                        borderRadius: BorderRadius.circular(50)),
+                    child: Image.asset(
+                      'assets/imagess/Path 103.png',
+                      height: 25,
+                      width: 25,
+                    )),
+                SizedBox(height: 5),
+                Text(
+                  'Upload 1 Pdf',
+                  style: TextStyle(color: DynamicColor.textColor),
+                )
+              ],
             ),
           ),
         ),
-        InkWell(
-          onTap: () {
-            _addImageController.selectImage(2);
-          },
-          child: Container(
-            height: 44,
-            width: MediaQuery.of(context).size.width - 55,
-            margin: EdgeInsets.only(top: 10),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: DynamicColor.blue,
-                borderRadius: BorderRadius.circular(10)),
-            child: Text(
-              'Picture 3',
-              style: _addImageController.ischackIndex[2]['check']
-                  ? darkBlue19
-                  : white17wBold,
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            _addImageController.selectImage(3);
-          },
-          child: Container(
-            height: 44,
-            width: MediaQuery.of(context).size.width - 55,
-            margin: EdgeInsets.only(top: 10),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: DynamicColor.blue,
-                borderRadius: BorderRadius.circular(10)),
-            child: Text(
-              'Picture 4',
-              style: _addImageController.ischackIndex[3]['check']
-                  ? darkBlue19
-                  : white17wBold,
-            ),
-          ),
-        ),
-        InkWell(
-          onTap: () {
-            _addImageController.getDocumnetFile();
-          },
-          child: Container(
-            height: 44,
-            width: MediaQuery.of(context).size.width - 55,
-            margin: EdgeInsets.only(top: 10),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: DynamicColor.blue,
-                borderRadius: BorderRadius.circular(10)),
-            child: Text(
-              'File',
-              style: _addImageController.filePath.isNotEmpty
-                  ? darkBlue19
-                  : white17wBold,
-            ),
-          ),
-        ),
-      ],
+      ),
     );
   }
 
@@ -210,48 +195,109 @@ class _AddImagePageState extends State<AddImagePage> {
     return _addImageController.listImagePaths.isEmpty &&
             _addImageController.filePath.isEmpty
         ? Container()
-        : Padding(
-            padding: const EdgeInsets.only(left: 10),
-            child: GridView.builder(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                shrinkWrap: true,
-                physics: NeverScrollableScrollPhysics(),
-                itemCount: _addImageController.listImagePaths.length + 1,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 0,
-                  mainAxisSpacing: 10,
-                  mainAxisExtent: 130,
-                ),
-                itemBuilder: (context, index) {
-                  if (index == _addImageController.listImagePaths.length) {
-                    return _addImageController.filePath.isNotEmpty
-                        ? Container(
-                            height: 120,
-                            width: 90,
+        : GridView.builder(
+            padding: EdgeInsets.only(
+              left: SizeConfig.getSize50(context: context),
+              right: SizeConfig.getSize50(context: context),
+            ),
+            shrinkWrap: true,
+            physics: NeverScrollableScrollPhysics(),
+            itemCount: _addImageController.listImagePaths.length + 1,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              mainAxisExtent: 130,
+            ),
+            itemBuilder: (context, index) {
+              if (index == _addImageController.listImagePaths.length) {
+                return _addImageController.filePath.isNotEmpty
+                    ? Stack(
+                        children: [
+                          Container(
                             decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(30)),
-                            padding: EdgeInsets.only(bottom: 10),
-                            child: Image.asset(
-                              'assets/images/pdf.png',
-                              fit: BoxFit.cover,
+                                gradient: LinearGradient(colors: const [
+                                  Color(0xff5388C0),
+                                  Color(0xff67C8B5)
+                                ]),
+                                borderRadius: BorderRadius.circular(10),
+                                image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image:
+                                        AssetImage('assets/images/pdf.png'))),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Align(
+                              alignment: Alignment.topRight,
+                              child: InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    _addImageController.filePath = '';
+                                  });
+                                },
+                                child: Container(
+                                  height: 20,
+                                  width: 20,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(2),
+                                      gradient:
+                                          DynamicColor.gradientColorChange),
+                                  child: Icon(
+                                    Icons.close,
+                                    color: DynamicColor.white,
+                                    size: 15,
+                                  ),
+                                ),
+                              ),
                             ),
-                          )
-                        : Container();
-                  }
-                  return Container(
-                    height: 100,
-                    width: 100,
-                    decoration:
-                        BoxDecoration(borderRadius: BorderRadius.circular(30)),
-                    child: Image.file(
-                      File(
-                          _addImageController.listImagePaths[index].toString()),
-                      fit: BoxFit.contain,
+                          ),
+                        ],
+                      )
+                    : Container();
+              }
+              return Stack(
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        image: DecorationImage(
+                            fit: BoxFit.cover,
+                            image: FileImage(File(_addImageController
+                                .listImagePaths[index].path
+                                .toString())))),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: InkWell(
+                        onTap: () {
+                          setState(() {
+                            _addImageController.listImagePaths.remove(
+                                _addImageController.listImagePaths[index]);
+                          });
+                        },
+                        child: Container(
+                          height: 20,
+                          width: 20,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(2),
+                              gradient: DynamicColor.gradientColorChange),
+                          child: Icon(
+                            Icons.close,
+                            color: DynamicColor.white,
+                            size: 15,
+                          ),
+                        ),
+                      ),
                     ),
-                  );
-                }),
-          );
+                  ),
+                ],
+              );
+            });
   }
 
   // Widget _addButton() {

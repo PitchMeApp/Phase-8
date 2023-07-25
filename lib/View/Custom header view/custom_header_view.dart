@@ -15,25 +15,23 @@ import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:provider/provider.dart';
-import 'package:sizer/sizer.dart';
 
+import '../../utils/strings/images.dart';
+import '../../utils/widgets/Arrow Button/back_arrow.dart';
 import '../Profile/Pitches/pitches_list.dart';
 
 class CustomHeaderView extends StatefulWidget {
-  String title;
-  String subTitle;
-  var subTitle2;
-  String icon;
   double progressPersent;
-  double padding;
+
+  VoidCallback? backOnTap;
+  VoidCallback nextOnTap;
+  dynamic checkNext;
   CustomHeaderView({
     super.key,
-    required this.title,
-    required this.icon,
-    required this.subTitle,
-    this.subTitle2,
     required this.progressPersent,
-    required this.padding,
+    this.backOnTap,
+    required this.nextOnTap,
+    this.checkNext,
   });
 
   @override
@@ -74,6 +72,14 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
     return Container(
       child: Stack(
         children: [
+          ClipPath(
+            clipper: CurveClipper(),
+            child: Container(
+              decoration:
+                  BoxDecoration(gradient: DynamicColor.gradientColorChange),
+              height: MediaQuery.of(context).size.height * 0.27,
+            ),
+          ),
           Column(
             children: [
               iconsAndTitle(),
@@ -92,19 +98,24 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                     animation: _colorTween,
                     builder: (context, child) {
                       return AnimatedContainer(
-                        height: _isInitialValue ? sizeH * 0.5 : sizeH * 0.06,
+                        height: _isInitialValue
+                            ? sizeH * 0.5
+                            : SizeConfig.getSize38(context: context),
                         width: _isInitialValue
-                            ? sizeW * 0.65
-                            : SizeConfig.getSize50(context: context),
+                            ? sizeW * 0.70
+                            : SizeConfig.getSize38(context: context),
                         decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(_isInitialValue ? 20 : 10),
-                          color:
-                              //_colorTween.value
-                              _isInitialValue
-                                  ? DynamicColor.blue
-                                  : _colorTween.value,
-                        ),
+                            borderRadius: _isInitialValue == false
+                                ? BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10))
+                                : BorderRadius.circular(20),
+                            gradient: _isInitialValue == false
+                                ? null
+                                : DynamicColor.gradientColorChange,
+                            color: _isInitialValue == false
+                                ? DynamicColor.white
+                                : null),
                         duration: Duration(milliseconds: 300),
                         child: InkWell(
                           onTap: () {
@@ -112,12 +123,12 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                               _isInitialValue = !_isInitialValue;
                             });
                           },
-                          child: Padding(
-                            padding: EdgeInsets.all(12),
-                            child: _isInitialValue
-                                ? Consumer<DataClass>(builder:
-                                    (BuildContext context, value,
-                                        Widget? child) {
+                          child: _isInitialValue
+                              ? Padding(
+                                  padding: const EdgeInsets.all(12.0),
+                                  child: Consumer<DataClass>(builder:
+                                      (BuildContext context, value,
+                                          Widget? child) {
                                     return ListView.separated(
                                       shrinkWrap: true,
                                       padding: EdgeInsets.zero,
@@ -204,8 +215,8 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                                                       Icon(
                                                           Icons
                                                               .notifications_active_outlined,
-                                                          color: Color(
-                                                              0xff000a5e)),
+                                                          color: DynamicColor
+                                                              .white),
                                                       Padding(
                                                         padding:
                                                             EdgeInsets.only(
@@ -222,18 +233,13 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                                                                   .center,
                                                           children: [
                                                             Container(
-                                                              height:
-                                                                  sizeH * 0.02,
+                                                              // height:
+                                                              //     sizeH * 0.02,
                                                               width:
-                                                                  sizeW * 0.45,
+                                                                  sizeW * 0.50,
                                                               alignment: Alignment
                                                                   .centerLeft,
-                                                              // color: Color
-                                                              //     .fromARGB(
-                                                              //         255,
-                                                              //         39,
-                                                              //         221,
-                                                              //         23),
+
                                                               child: Text(
                                                                 value
                                                                         .post
@@ -245,6 +251,7 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                                                                 overflow:
                                                                     TextOverflow
                                                                         .ellipsis,
+                                                                maxLines: 2,
                                                                 style: TextStyle(
                                                                     color: Colors
                                                                         .white,
@@ -288,16 +295,20 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                                               right: sizeW * 0.02),
                                           child: Divider(
                                             height: 2,
-                                            color: Color(0xff000a5e),
+                                            color: DynamicColor.white,
                                           ),
                                         );
                                       },
                                     );
-                                  })
-                                : loadSvg(
+                                  }),
+                                )
+                              : Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: loadSvg(
                                     image: 'assets/image/notifications.svg',
+                                    color: DynamicColor.gredient1,
                                   ),
-                          ),
+                                ),
                         ),
                       );
                     }),
@@ -310,11 +321,11 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
                           child: Container(
                             height: 20,
                             width: 20,
-                            margin: const EdgeInsets.only(left: 25, bottom: 20),
+                            margin: const EdgeInsets.only(left: 35, bottom: 25),
                             padding: const EdgeInsets.only(left: 3, right: 3),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
-                                color: DynamicColor.darkBlue,
+                                color: DynamicColor.redColor,
                                 borderRadius: BorderRadius.circular(50)),
                             child: FittedBox(
                               child: Text(
@@ -335,196 +346,127 @@ class _CustomHeaderViewState extends State<CustomHeaderView>
 
   Widget iconsAndTitle() {
     return Padding(
-      padding: EdgeInsets.only(
-          top: SizeConfig.getSize30(context: context) +
-              MediaQuery.of(context).size.height * 0.021,
-          left: SizeConfig.getFontSize25(context: context),
-          right: SizeConfig.getFontSize25(context: context)),
-      child: AnimatedBuilder(
-          animation: _colorTween,
-          builder: (context, child) {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  height: SizeConfig.getSize50(context: context),
-                  width: SizeConfig.getSize50(context: context),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.04,
-                  width: MediaQuery.of(context).size.width * 0.35,
-                  alignment: Alignment.center,
-                  // decoration: BoxDecoration(
-                  //     color: DynamicColor.blue,
-                  //     borderRadius: BorderRadius.circular(10.0)),
-                  child: Text(
-                    TextStrings.textKey['add_seles_pitch']!,
-                    style: blue16bold,
-                  ),
-                ),
-                AppBarIconContainer(
-                  onTap: () {
-                    PageNavigateScreen().push(
-                        context,
-                        ManuPage(
-                          title: 'Add Sales Pitch',
-                          pageIndex: 2,
-                        ));
-                  },
-                  height: SizeConfig.getSize50(context: context),
-                  width: SizeConfig.getSize50(context: context),
-                  colorTween: _colorTween,
-                  child: Padding(
-                    padding: EdgeInsets.all(12.0),
-                    child: loadSvg(
-                      image: 'assets/image/menu.svg',
-                    ),
-                  ),
-                ),
-              ],
-            );
-          }),
-    );
+        padding: EdgeInsets.only(
+            top: SizeConfig.getSize30(context: context) +
+                MediaQuery.of(context).size.height * 0.021,
+            left: SizeConfig.getFontSize25(context: context),
+            right: SizeConfig.getFontSize25(context: context)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              height: SizeConfig.getSize38(context: context),
+              width: SizeConfig.getSize38(context: context),
+            ),
+            Container(
+              // height: MediaQuery.of(context).size.height * 0.04,
+              // width: MediaQuery.of(context).size.width * 0.35,
+              alignment: Alignment.center,
+              // decoration: BoxDecoration(
+              //     color: DynamicColor.blue,
+              //     borderRadius: BorderRadius.circular(10.0)),
+              child: Text(
+                TextStrings.textKey['add_seles_pitch']!.toUpperCase(),
+                style: white15TextStyle,
+              ),
+            ),
+            AppBarIconContainer(
+              onTap: () {
+                PageNavigateScreen().push(
+                    context,
+                    ManuPage(
+                      title: 'Add Sales Pitch',
+                      pageIndex: 2,
+                    ));
+              },
+              height: SizeConfig.getSize38(context: context),
+              width: SizeConfig.getSize38(context: context),
+              color: DynamicColor.white,
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: loadSvg(
+                    image: 'assets/image/menu.svg',
+                    color: DynamicColor.gredient2),
+              ),
+            ),
+          ],
+        ));
   }
 
   Widget iconAndProgressBar() {
     return Padding(
-      padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
+      padding: EdgeInsets.only(
+          top: 5,
+          left: SizeConfig.getFontSize25(context: context),
+          right: SizeConfig.getFontSize25(context: context)),
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         //alignment: Alignment.center,
         children: [
           Row(
-            mainAxisAlignment: widget.progressPersent == 0.0
-                ? MainAxisAlignment.center
-                : MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
+              BackArrow(
+                alignment: Alignment.topLeft,
+                direction: 1,
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
               widget.progressPersent == 0.0
                   ? Container(
-                      height: 6.h,
-                      width: 12.w,
-                    )
-                  : AnimatedBuilder(
-                      animation: _colorTween,
-                      builder: (context, child) {
-                        return InkWell(
-                          onTap: () {
-                            // Navigator.of(context).pop();
-                          },
-                          child: Container(
-                            height: SizeConfig.getSize50(context: context),
-                            width: SizeConfig.getSize50(context: context),
-                            // alignment: Alignment.center,
-                            // decoration: BoxDecoration(
-                            //     color: _colorTween.value,
-                            //     boxShadow: [
-                            //       BoxShadow(
-                            //         color: Color.fromARGB(108, 148, 147, 147)
-                            //             .withOpacity(0.3),
-                            //         blurRadius: 100.0,
-                            //         spreadRadius: 10,
-                            //         offset: Offset(
-                            //           10,
-                            //           10,
-                            //         ),
-                            //       )
-                            //     ],
-                            //     borderRadius: BorderRadius.circular(8.0)),
-                            // child: const Icon(
-                            //   Icons.arrow_back,
-                            //   color: DynamicColor.white,
-                            // ),
-                          ),
-                        );
-                      }),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  widget.progressPersent == 0.0
-                      ? Container(
-                          height: 5,
-                          width: MediaQuery.of(context).size.width - 150,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(5),
-                              color: DynamicColor.lightGrey),
-                        )
-                      : LinearPercentIndicator(
-                          width: MediaQuery.of(context).size.width - 150,
-                          lineHeight: 5.0,
-                          percent: widget.progressPersent,
-                          backgroundColor: DynamicColor.lightGrey,
-                          progressColor: DynamicColor.blue,
-                          barRadius: const Radius.circular(10),
-                        ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10),
-                    child: Container(
+                      height: 5,
+                      width: MediaQuery.of(context).size.width - 150,
                       alignment: Alignment.center,
-                      width: MediaQuery.of(context).size.width - 170,
-                      child: Text(
-                        widget.title,
-                        style: blue19,
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 1,
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                  widget.icon.isNotEmpty
-                      ? Padding(
-                          padding: EdgeInsets.only(top: 8.0),
-                          child: Image.asset(
-                            widget.icon,
-                            height: 30,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(5),
+                          color: DynamicColor.black),
+                    )
+                  : Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 2),
+                          child: Text(
+                            '${widget.progressPersent.toString().replaceAll('0.', '')}0%',
+                            style: TextStyle(
+                                fontSize: 12.0, color: DynamicColor.white),
                           ),
-                        )
-                      : Container(
-                          height: 30,
                         ),
-                ],
-              ),
-              SizedBox(
-                height: 6.h,
-                width: 12.w,
-              )
+                        Align(
+                          alignment: Alignment.center,
+                          child: LinearPercentIndicator(
+                            width: MediaQuery.of(context).size.width - 150,
+                            lineHeight: 6.0,
+                            percent: widget.progressPersent,
+                            backgroundColor: DynamicColor.gredient1,
+                            progressColor: DynamicColor.green,
+                            barRadius: const Radius.circular(10),
+                          ),
+                        ),
+                      ],
+                    ),
+              widget.checkNext == null
+                  ? SizedBox(
+                      height: SizeConfig.getSize38(context: context),
+                      width: SizeConfig.getSize38(context: context),
+                    )
+                  : BackArrow(
+                      alignment: Alignment.topRight,
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(10),
+                          bottomRight: Radius.circular(10)),
+                      onPressed: widget.nextOnTap,
+                    ),
             ],
           ),
-          subText(),
-          widget.subTitle2 != null ? subText2() : Container()
+          whiteBorderContainer(
+              child: Image.asset(Assets.handshakeImage),
+              color: Colors.transparent,
+              height: SizeConfig.getSizeHeightBy(context: context, by: 0.11),
+              width: SizeConfig.getSizeHeightBy(context: context, by: 0.11),
+              cornerRadius: 25),
         ],
-      ),
-    );
-  }
-
-  Widget subText() {
-    return Container(
-      alignment:
-          widget.subTitle2 != null ? Alignment.topLeft : Alignment.center,
-      width: MediaQuery.of(context).size.width - 80,
-      margin: EdgeInsets.only(top: 8),
-      child: Text(
-        widget.subTitle,
-        style: blue12,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 2,
-        textAlign: TextAlign.start,
-      ),
-    );
-  }
-
-  Widget subText2() {
-    return Container(
-      alignment: Alignment.topLeft,
-      width: MediaQuery.of(context).size.width - 80,
-      //margin: EdgeInsets.only(top: 0),
-      child: Text(
-        widget.subTitle2,
-        style: blue12,
-        overflow: TextOverflow.ellipsis,
-        maxLines: 2,
-        textAlign: TextAlign.start,
       ),
     );
   }

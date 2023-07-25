@@ -4,6 +4,7 @@ import 'package:pitch_me_app/controller/businessIdeas/dashBoardController.dart';
 import 'package:pitch_me_app/controller/businessIdeas/home_filter_controller.dart';
 import 'package:pitch_me_app/screens/businessIdeas/HomepageCard.dart';
 import 'package:pitch_me_app/screens/businessIdeas/statisticsPage.dart';
+import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/widgets/text/text.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -61,7 +62,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
         scrollDirection: Axis.vertical,
         children: [
           controller.isLoadingPost.value == true
-              ? Center(child: CircularProgressIndicator())
+              ? Center(
+                  child: CircularProgressIndicator(
+                  color: DynamicColor.gredient1,
+                ))
               : controller.hasError.value
                   ? Center(child: roboto(size: 20, text: 'No post available'))
                   : controller.isFinish.value
@@ -118,7 +122,10 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
                           postModel: controller.postModel.value,
                         ),
           controller.isLoadingStats.value == true
-              ? Center(child: CircularProgressIndicator())
+              ? Center(
+                  child: CircularProgressIndicator(
+                  color: DynamicColor.gredient1,
+                ))
               : StatisticsPage(
                   pagecont: _controller,
                   statisticsModel: controller.staticModel.value,

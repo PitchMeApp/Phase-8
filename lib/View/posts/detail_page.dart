@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/View/Profile/Pitches/controller.dart';
@@ -7,12 +5,15 @@ import 'package:pitch_me_app/devApi%20Service/get_api.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/home_page_biography.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
+import 'package:pitch_me_app/utils/strings/images.dart';
 import 'package:pitch_me_app/utils/widgets/Alert%20Box/show_image_popup.dart';
 import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
+import 'package:pitch_me_app/utils/widgets/extras/backgroundWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../utils/colors/colors.dart';
+import '../../utils/styles/styles.dart';
 
 class PostDetailPage extends StatefulWidget {
   final data;
@@ -35,7 +36,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
   List typeList = [];
   List serviceList = [];
   List serviceDetailList = [];
-  //List whocanwatchList = [];
+  List whocanwatchList = [];
 
   String userType = '';
   final PitcheController pitcheController = Get.put(PitcheController());
@@ -101,10 +102,9 @@ class _PostDetailPageState extends State<PostDetailPage> {
     return Scaffold(
       // // floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       // floatingActionButton: BannerWidget(onPressad: () {}),
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(color: Color.fromARGB(255, 255, 255, 255)),
+      body: BackGroundWidget(
+        backgroundImage: Assets.backgroundImage,
+        fit: BoxFit.cover,
         child: Stack(
           children: [
             SingleChildScrollView(
@@ -121,13 +121,12 @@ class _PostDetailPageState extends State<PostDetailPage> {
                                 child: GestureDetector(
                                   onTap: widget.onPressad,
                                   child: Padding(
-                                      padding:
-                                          EdgeInsets.only(top: 10, right: 7),
+                                      padding: EdgeInsets.only(top: 10),
                                       child: RotatedBox(
                                         quarterTurns: 1,
                                         child: Icon(
                                           Icons.arrow_back_ios,
-                                          color: DynamicColor.blue,
+                                          color: DynamicColor.gredient1,
                                           size: 30,
                                         ),
                                       )),
@@ -158,7 +157,7 @@ class _PostDetailPageState extends State<PostDetailPage> {
                       Navigator.of(context).pop();
                     },
                     alignment: Alignment.centerLeft,
-                    icon: Icons.arrow_back_ios)
+                  )
                 : Container(),
           ],
         ),
@@ -170,30 +169,26 @@ class _PostDetailPageState extends State<PostDetailPage> {
     return Center(
         child: Column(
       children: [
-        customWidget("assets/images/industry-mdpi.png", data.industry,
-            onPressad: () {
+        customWidget("What Industry", data.industry, onPressad: () {
           //PageNavigateScreen().push(context, SelectIndustryPage());
         }),
-        customWidget("assets/images/ic_place_24px-mdpi.png", data.location,
-            onPressad: () {
-          // PageNavigateScreen().push(context, LocationPage());
-        }),
+        // customWidget("assets/images/ic_place_24px-mdpi.png", data.location,
+        //     onPressad: () {
+        //   // PageNavigateScreen().push(context, LocationPage());
+        // }),
         typeList.length > 0
-            ? customWidget("assets/images/ic_local_atm_24-mdpi (1).png",
-                typeList[0].replaceAll(',', ''), onPressad: () {
+            ? customWidget("Who is Needed", typeList[0].replaceAll(',', ''),
+                onPressad: () {
                 //PageNavigateScreen().push(context, WhatNeedPage());
               })
             : Container(),
         data.valueamount.isNotEmpty
-            ? customWidget(
-                "assets/images/ic_monetization.png", data.valueamount,
-                onPressad: () {
+            ? customWidget("How much", data.valueamount, onPressad: () {
                 // PageNavigateScreen().push(context, FundsPage());
               })
             : Container(),
         typeList.length > 1 && typeList[1].isNotEmpty
-            ? customWidget("assets/images/_Group_-mdpi.png", typeList[1],
-                onPressad: () {
+            ? customWidget("Who is Needed", typeList[1], onPressad: () {
                 // PageNavigateScreen().push(context, WhatNeedPage());
               })
             : Container(),
@@ -204,8 +199,8 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 padding: EdgeInsets.zero,
                 itemCount: serviceList.length,
                 itemBuilder: (context, index) {
-                  return customWidget("assets/images/ic_content_past-mdpi.png",
-                      serviceList[index], onPressad: () {
+                  return customWidget("What is Needed", serviceList[index],
+                      onPressad: () {
                     //PageNavigateScreen().push(context, NeedPage());
                   });
                 })
@@ -217,32 +212,34 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 padding: EdgeInsets.zero,
                 itemCount: serviceDetailList.length,
                 itemBuilder: (context, index) {
-                  return customWidget("assets/images/ic_check_circle-mdpi.png",
-                      serviceDetailList[index], onPressad: () {
+                  return customWidget(
+                      "What is Needed", serviceDetailList[index],
+                      onPressad: () {
                     //PageNavigateScreen().push(context, NeedPage());
                   });
                 })
             : Container(),
-        // whocanwatchList.isNotEmpty
-        //     ? ListView.builder(
-        //         shrinkWrap: true,
-        //         primary: false,
-        //         padding: EdgeInsets.zero,
-        //         itemCount: whocanwatchList.length,
-        //         itemBuilder: (context, index) {
-        //           return customWidget("assets/images/ic_visibility_24px.png",
-        //               whocanwatchList[index], onPressad: () {
-        //             //PageNavigateScreen().push(context, NeedPage());
-        //           });
-        //         })
-        //     : Container(),
-        customWidget("", data.description, onPressad: () {
+
+        customWidget("Initial Offer", data.description, onPressad: () {
           //PageNavigateScreen().push(context, OfferPage());
         }),
-        customWidget("", userType, onPressad: () {
+        whocanwatchList.isNotEmpty
+            ? ListView.builder(
+                shrinkWrap: true,
+                primary: false,
+                padding: EdgeInsets.zero,
+                itemCount: whocanwatchList.length,
+                itemBuilder: (context, index) {
+                  return customWidget("Who can see", whocanwatchList[index],
+                      onPressad: () {
+                    //PageNavigateScreen().push(context, NeedPage());
+                  });
+                })
+            : Container(),
+        customWidget("User Type", userType, onPressad: () {
           //PageNavigateScreen().push(context, OfferPage());
         }),
-        customWidget("", 'Biography', onPressad: () {
+        customWidget("Your Profile", 'Biography', onPressad: () {
           PageNavigateScreen().normalpushReplesh(
               context,
               HomeBiographyPage(
@@ -251,51 +248,51 @@ class _PostDetailPageState extends State<PostDetailPage> {
                 notifyID: '',
               ));
         }),
-        _imagesGridView()
+        spaceHeight(SizeConfig.getSize20(context: context)),
+        _imagesGridView(),
+        spaceHeight(SizeConfig.getSize50(context: context)),
       ],
     ));
   }
 
   Widget _imagesGridView() {
     return Align(
-      alignment: Alignment.topLeft,
-      child: Padding(
-        padding: const EdgeInsets.only(left: 15, right: 15),
-        child: Wrap(
-          runSpacing: 10,
-          children: [
-            data.img1.isNotEmpty
-                ? imageWidget(data.img1)
-                : Container(
-                    height: 0,
-                    width: 0,
-                  ),
-            data.img2.isNotEmpty
-                ? imageWidget(data.img2)
-                : Container(
-                    height: 0,
-                    width: 0,
-                  ),
-            data.img3.isNotEmpty
-                ? imageWidget(data.img3)
-                : Container(
-                    height: 0,
-                    width: 0,
-                  ),
-            data.img4.isNotEmpty
-                ? imageWidget(data.img4)
-                : Container(
-                    height: 0,
-                    width: 0,
-                  ),
-            data.file.isNotEmpty
-                ? pdfWidget(data.file)
-                : Container(
-                    height: 0,
-                    width: 0,
-                  ),
-          ],
-        ),
+      alignment: Alignment.center,
+      child: Wrap(
+        runSpacing: 10,
+        spacing: 10,
+        children: [
+          data.img1.isNotEmpty
+              ? imageWidget(data.img1)
+              : Container(
+                  height: 0,
+                  width: 0,
+                ),
+          data.img2.isNotEmpty
+              ? imageWidget(data.img2)
+              : Container(
+                  height: 0,
+                  width: 0,
+                ),
+          data.img3.isNotEmpty
+              ? imageWidget(data.img3)
+              : Container(
+                  height: 0,
+                  width: 0,
+                ),
+          // data.img4.isNotEmpty
+          //     ? imageWidget(data.img4)
+          //     : Container(
+          //         height: 0,
+          //         width: 0,
+          //       ),
+          data.file.isNotEmpty
+              ? pdfWidget(data.file)
+              : Container(
+                  height: 0,
+                  width: 0,
+                ),
+        ],
       ),
     );
   }
@@ -308,13 +305,14 @@ class _PostDetailPageState extends State<PostDetailPage> {
             builder: (context) => ShowFullImagePopup(image_url: url));
       },
       child: Container(
-        height: 100,
-        width: 100,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-        child: Image.network(
-          url,
-          fit: BoxFit.contain,
-        ),
+        height: SizeConfig.getSizeHeightBy(context: context, by: 0.16),
+        width: SizeConfig.getSizeWidthBy(context: context, by: 0.43),
+        // height: 140,
+        // width: 160,
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image:
+                DecorationImage(image: NetworkImage(url), fit: BoxFit.cover)),
       ),
     );
   }
@@ -325,65 +323,61 @@ class _PostDetailPageState extends State<PostDetailPage> {
         launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
       },
       child: Container(
-        height: 120,
-        width: 90,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-        padding: EdgeInsets.only(bottom: 10),
-        child: Image.asset(
-          'assets/images/pdf.png',
-          fit: BoxFit.cover,
-        ),
+        height: SizeConfig.getSizeHeightBy(context: context, by: 0.16),
+        width: SizeConfig.getSizeWidthBy(context: context, by: 0.43),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: const [Color(0xff5388C0), Color(0xff67C8B5)]),
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+                fit: BoxFit.cover, image: AssetImage('assets/images/pdf.png'))),
       ),
     );
   }
 
-  Widget customWidget(iconImage, name, {required VoidCallback onPressad}) {
+  Widget customWidget(title, name, {required VoidCallback onPressad}) {
     final sizeH = MediaQuery.of(context).size.height;
     final sizeW = MediaQuery.of(context).size.width;
-    return InkWell(
-      onTap: onPressad,
-      child: Container(
-          height: sizeH * 0.068,
-          margin: EdgeInsets.only(
-              left: SizeConfig.getFontSize25(context: context),
-              right: SizeConfig.getFontSize25(context: context),
-              bottom: sizeH * 0.015),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Color(0xff377EB4),
-          ),
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: SizeConfig.getFontSize14(context: context),
-              right: SizeConfig.getFontSize14(context: context),
+    return Padding(
+      padding: EdgeInsets.only(
+        left: SizeConfig.getFontSize20(context: context),
+        right: SizeConfig.getFontSize20(context: context),
+      ),
+      child: InkWell(
+        onTap: onPressad,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Text(title, style: black14w5),
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                iconImage.isNotEmpty
-                    ? Image.asset(
-                        iconImage,
-                        height: sizeH * 0.04,
-                        width: sizeW * 0.08,
-                        color: DynamicColor.white,
-                        alignment: Alignment.centerLeft,
-                      )
-                    : Container(
-                        width: 30,
-                      ),
-                Text(
-                  name,
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Container(
-                  width: 30,
-                )
-              ],
+            Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: Container(
+                  height: sizeH * 0.068,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: DynamicColor.gradientColorChange),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 5, top: 5),
+                    child: Text(
+                      name,
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500),
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  )),
             ),
-          )),
+          ],
+        ),
+      ),
     );
   }
 }

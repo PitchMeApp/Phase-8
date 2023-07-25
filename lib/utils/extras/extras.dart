@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -102,6 +101,6 @@ myToast({required String msg}) {
 
 //dev
 OutlineInputBorder outlineInputBorderBlue = OutlineInputBorder(
-  borderSide: const BorderSide(color: DynamicColor.blue),
+  borderSide: const BorderSide(color: DynamicColor.gredient1),
   borderRadius: BorderRadius.circular(10),
 );

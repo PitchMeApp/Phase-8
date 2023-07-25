@@ -9,11 +9,12 @@ import 'package:pitch_me_app/View/what%20need/who_need_page_controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../utils/strings/images.dart';
 import '../../utils/styles/styles.dart';
+import '../../utils/widgets/extras/backgroundWidget.dart';
 import '../Custom header view/custom_header_view.dart';
 import '../Need page/need_page.dart';
 
@@ -36,99 +37,96 @@ class _FundsPageState extends State<FundsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          Column(
-            children: [
-              SizedBox(
-                height: SizeConfig.getSize100(context: context) +
-                    SizeConfig.getSize55(context: context),
-              ),
-              const SizedBox(height: 10),
-              GridView(
-                padding: EdgeInsets.only(
-                    left: SizeConfig.getFontSize25(context: context),
-                    right: SizeConfig.getFontSize25(context: context)),
-                shrinkWrap: true,
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    crossAxisSpacing: 2,
-                    mainAxisSpacing: 9.0,
-                    mainAxisExtent: 40),
-                children: List.generate(_fundNacessaryController.data.length,
-                    (index) {
-                  return customBox(
-                      10.0,
-                      10.0,
-                      10.0,
-                      10.0,
-                      _fundNacessaryController.data[index]['value'],
-                      _fundNacessaryController.data[index]['isSelected'],
-                      onPressad: () => setState(() {
-                            isIndex = index;
-                            _fundNacessaryController.onselectAmount(
-                                _fundNacessaryController.data[index], index);
-                          }));
-                }),
-              ),
-              _amountList(),
-            ],
-          ),
-          CustomHeaderView(
-            title: TextStrings.textKey['funds']!,
-            icon: 'assets/images/doller sign.png',
-            subTitle: TextStrings.textKey['syb_funds']!,
-            progressPersent: 0.4,
-            padding: 0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              BackArrow(
-                  alignment: Alignment.centerLeft,
-                  onPressed: () {
+      body: BackGroundWidget(
+        backgroundImage: Assets.backgroundImage,
+        fit: BoxFit.fill,
+        child: Stack(
+          children: [
+            Column(
+              children: [
+                SizedBox(
+                  height: SizeConfig.getSize100(context: context) +
+                      SizeConfig.getSize55(context: context),
+                ),
+                const SizedBox(height: 30),
+                Container(
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(color: DynamicColor.black))),
+                  child: Text(
+                    TextStrings.textKey['funds']!,
+                    style: textColor22,
+                  ),
+                ),
+                const SizedBox(height: 10),
+                GridView(
+                  padding: EdgeInsets.only(
+                      left: SizeConfig.getFontSize25(context: context),
+                      right: SizeConfig.getFontSize25(context: context)),
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      crossAxisSpacing: 2,
+                      mainAxisSpacing: 9.0,
+                      mainAxisExtent: 40),
+                  children: List.generate(_fundNacessaryController.data.length,
+                      (index) {
+                    return customBox(
+                        10.0,
+                        10.0,
+                        10.0,
+                        10.0,
+                        _fundNacessaryController.data[index]['value'],
+                        _fundNacessaryController.data[index]['isSelected'],
+                        onPressad: () => setState(() {
+                              isIndex = index;
+                              _fundNacessaryController.onselectAmount(
+                                  _fundNacessaryController.data[index], index);
+                            }));
+                  }),
+                ),
+                _amountList(),
+              ],
+            ),
+            CustomHeaderView(
+              progressPersent: 0.4,
+              checkNext: _fundNacessaryController.getValueList.value.isNotEmpty
+                  ? 'next'
+                  : null,
+              nextOnTap: () {
+                try {
+                  if (_navigationController.navigationType.value == 'Post') {
+                    if (_whoNeedController.checkColor2 == 2) {
+                      PageNavigateScreen().push(
+                          context,
+                          NeedPage(
+                            key: abcKey,
+                          ));
+                    } else if (_whoNeedController.checkColor == 1) {
+                      PageNavigateScreen().push(
+                          context,
+                          OfferPage(
+                            key: abcKey,
+                          ));
+                    } else {
+                      PageNavigateScreen().push(
+                          context,
+                          NeedPage(
+                            key: abcKey,
+                          ));
+                    }
+                  } else {
                     Navigator.of(context).pop();
-                  },
-                  icon: Icons.arrow_back_ios),
-              _fundNacessaryController.getValueList.value.isEmpty
-                  ? Container()
-                  : BackArrow(
-                      alignment: Alignment.centerRight,
-                      onPressed: () {
-                        try {
-                          if (_navigationController.navigationType.value ==
-                              'Post') {
-                            if (_whoNeedController.checkColor2 == 2) {
-                              PageNavigateScreen().push(
-                                  context,
-                                  NeedPage(
-                                    key: abcKey,
-                                  ));
-                            } else if (_whoNeedController.checkColor == 1) {
-                              PageNavigateScreen().push(
-                                  context,
-                                  OfferPage(
-                                    key: abcKey,
-                                  ));
-                            } else {
-                              PageNavigateScreen().push(
-                                  context,
-                                  NeedPage(
-                                    key: abcKey,
-                                  ));
-                            }
-                          } else {
-                            Navigator.of(context).pop();
-                          }
-                        } catch (e) {}
-                      },
-                      icon: Icons.arrow_forward_ios),
-            ],
-          ),
-          NewCustomBottomBar(
-            index: 2,
-          ),
-        ],
+                  }
+                } catch (e) {}
+              },
+            ),
+            NewCustomBottomBar(
+              index: 2,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -138,16 +136,17 @@ class _FundsPageState extends State<FundsPage> {
       return _fundNacessaryController.getValueList.value.isEmpty
           ? Container()
           : SizedBox(
-              height: MediaQuery.of(context).size.height * 0.4,
+              height: MediaQuery.of(context).size.height * 0.5,
               child: Padding(
-                padding: const EdgeInsets.only(bottom: 70),
+                padding: const EdgeInsets.only(bottom: 20),
                 child: ClickableListWheelScrollView(
                   scrollController: _fundNacessaryController.scrollController,
                   itemHeight: 10,
                   itemCount: _fundNacessaryController.getValueList.value.length,
                   child: ListWheelScrollView.useDelegate(
                     controller: _fundNacessaryController.scrollController,
-                    itemExtent: 50,
+                    itemExtent: 30,
+                    diameterRatio: 1.5,
                     physics: const FixedExtentScrollPhysics(),
                     overAndUnderCenterOpacity: 0.8,
                     perspective: 0.004,
@@ -165,32 +164,32 @@ class _FundsPageState extends State<FundsPage> {
                           _fundNacessaryController.getValueList.value.length,
                       builder: (context, index) {
                         if (_fundNacessaryController.chengeIndexColor.value ==
-                            0) {
+                            3) {
                           _fundNacessaryController.selectedValue.value =
-                              _fundNacessaryController.getValueList[0]['range']
+                              _fundNacessaryController.getValueList[3]['range']
                                   .toString();
                         }
 
-                        return Container(
-                          width: MediaQuery.of(context).size.width - 50,
-                          // margin: EdgeInsets.only(
-                          //     left: SizeConfig.getSize35(context: context),
-                          //     right: SizeConfig.getSize35(context: context)),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                              color: _fundNacessaryController
+                        return Center(
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: _fundNacessaryController
+                                            .chengeIndexColor.value ==
+                                        index
+                                    ? Border(
+                                        top: BorderSide(
+                                            color: DynamicColor.gredient1),
+                                        bottom: BorderSide(
+                                            color: DynamicColor.gredient1))
+                                    : null),
+                            child: Text(
+                              '${_fundNacessaryController.getValueList.value[index]['range']}',
+                              style: _fundNacessaryController
                                           .chengeIndexColor.value ==
                                       index
-                                  ? DynamicColor.blue
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(8.0)),
-                          child: Text(
-                            '${_fundNacessaryController.getValueList.value[index]['range']}',
-                            style: _fundNacessaryController
-                                        .chengeIndexColor.value ==
-                                    index
-                                ? white17wBold
-                                : blue17,
+                                  ? gredient122bold
+                                  : textColor15,
+                            ),
                           ),
                         );
                       },
@@ -206,38 +205,42 @@ class _FundsPageState extends State<FundsPage> {
       {required VoidCallback onPressad}) {
     return InkWell(
       onTap: onPressad,
-      child: Container(
-        height: 30.h,
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-            color: DynamicColor.blue,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(topLeft),
-              bottomLeft: Radius.circular(bottomLeft),
-              topRight: Radius.circular(topRight),
-              bottomRight: Radius.circular(bottomRight),
-            )),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Image.asset(
-              'assets/images/mony.png',
-              width: 15,
-            ),
-            const SizedBox(width: 3),
-            Text(
-              string,
-              style: TextStyle(
-                fontSize: 15.0,
-                color: i ? DynamicColor.darkBlue : DynamicColor.white,
-                fontWeight: FontWeight.bold,
-                //fontFamily: poppies,
+      child: Card(
+        elevation: 10,
+        child: Container(
+          height: 35.h,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: DynamicColor.white,
+              // borderRadius: BorderRadius.only(
+              //   topLeft: Radius.circular(topLeft),
+              //   bottomLeft: Radius.circular(bottomLeft),
+              //   topRight: Radius.circular(topRight),
+              //   bottomRight: Radius.circular(bottomRight),
+              // )
+              border: i ? Border.all(color: DynamicColor.gredient2) : null),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/imagess/Path 486.png',
+                width: 15,
               ),
-              overflow: TextOverflow.ellipsis,
-              maxLines: 1,
-            ),
-          ],
+              const SizedBox(width: 3),
+              Text(
+                string,
+                style: TextStyle(
+                  fontSize: 15.0,
+                  color: i ? DynamicColor.gredient2 : DynamicColor.black,
+                  fontWeight: i ? FontWeight.bold : FontWeight.normal,
+                  //fontFamily: poppies,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 1,
+              ),
+            ],
+          ),
         ),
       ),
     );

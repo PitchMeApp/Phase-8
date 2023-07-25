@@ -36,7 +36,7 @@ class _DeleteSalesPostPopUpState extends State<DeleteSalesPostPopUp> {
                       ? TextStrings.textKey['delete_likes']!
                       : TextStrings.textKey['delete_sales']!,
           style: const TextStyle(
-              color: DynamicColor.blue, fontWeight: FontWeight.bold),
+              color: DynamicColor.gredient1, fontWeight: FontWeight.bold),
         ),
       ),
       content: Text(
@@ -61,7 +61,7 @@ class _DeleteSalesPostPopUpState extends State<DeleteSalesPostPopUp> {
                         },
                         child: Text(
                           TextStrings.textKey['no']!,
-                          style: blue15,
+                          style: gredient115,
                         )),
                     TextButton(
                         onPressed: () {
@@ -82,7 +82,7 @@ class _DeleteSalesPostPopUpState extends State<DeleteSalesPostPopUp> {
               )
             : const Center(
                 child: CircularProgressIndicator(
-                  color: DynamicColor.blue,
+                  color: DynamicColor.gredient1,
                 ),
               )
       ],

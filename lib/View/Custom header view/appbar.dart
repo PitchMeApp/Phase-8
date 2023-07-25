@@ -99,32 +99,32 @@ class _CustomAppbarState extends State<CustomAppbar>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  height: SizeConfig.getSize50(context: context),
-                  width: SizeConfig.getSize50(context: context),
+                  height: SizeConfig.getSize38(context: context),
+                  width: SizeConfig.getSize38(context: context),
                 ),
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.04,
-                  width: MediaQuery.of(context).size.width * 0.35,
-                  alignment: Alignment.center,
+                  // height: MediaQuery.of(context).size.height * 0.04,
+                  // width: MediaQuery.of(context).size.width * 0.35,
+                  padding: EdgeInsets.only(top: 15),
+                  alignment: Alignment.topCenter,
                   // decoration: widget.title != 'Profile'
                   //     ? BoxDecoration(
                   //         color: DynamicColor.blue,
                   //         borderRadius: BorderRadius.circular(8.0))
                   //     : null,
                   child: Text(
-                    widget.title,
+                    widget.title.toUpperCase(),
                     style: widget.colorTween == 'BIOGRAPHY'
                         ? white17wBold
-                        : blue16bold,
+                        : gredient116bold,
                   ),
                 ),
                 AppBarIconContainer(
                   onTap: widget.onPressad,
-                  height: SizeConfig.getSize50(context: context),
-                  width: SizeConfig.getSize50(context: context),
-                  colorTween: _colorTween,
+                  height: SizeConfig.getSize38(context: context),
+                  width: SizeConfig.getSize38(context: context),
                   child: Padding(
-                    padding: EdgeInsets.all(12.0),
+                    padding: EdgeInsets.all(8.0),
                     child: loadSvg(
                         image: 'assets/image/menu.svg',
                         color: widget.colorTween == 'BIOGRAPHY'
@@ -150,19 +150,19 @@ class _CustomAppbarState extends State<CustomAppbar>
                   animation: _colorTween,
                   builder: (context, child) {
                     return AnimatedContainer(
-                      height: _isInitialValue ? sizeH * 0.5 : sizeH * 0.06,
+                      height: _isInitialValue
+                          ? sizeH * 0.5
+                          : SizeConfig.getSize38(context: context),
                       width: _isInitialValue
-                          ? sizeW * 0.65
-                          : SizeConfig.getSize50(context: context),
+                          ? sizeW * 0.70
+                          : SizeConfig.getSize38(context: context),
                       decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(_isInitialValue ? 20 : 10),
-                        color:
-                            //_colorTween.value
-                            _isInitialValue
-                                ? DynamicColor.blue
-                                : _colorTween.value,
-                      ),
+                          borderRadius: _isInitialValue == false
+                              ? BorderRadius.only(
+                                  topRight: Radius.circular(10),
+                                  bottomLeft: Radius.circular(10))
+                              : BorderRadius.circular(20),
+                          gradient: DynamicColor.gradientColorChange),
                       duration: Duration(milliseconds: 300),
                       child: InkWell(
                         onTap: () {
@@ -175,11 +175,12 @@ class _CustomAppbarState extends State<CustomAppbar>
                             Get.to(() => LoginLimitationPage());
                           }
                         },
-                        child: Padding(
-                          padding: EdgeInsets.all(12),
-                          child: _isInitialValue
-                              ? Consumer<DataClass>(builder:
-                                  (BuildContext context, value, Widget? child) {
+                        child: _isInitialValue
+                            ? Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Consumer<DataClass>(builder:
+                                    (BuildContext context, value,
+                                        Widget? child) {
                                   return ListView.separated(
                                     shrinkWrap: true,
                                     padding: EdgeInsets.zero,
@@ -260,7 +261,7 @@ class _CustomAppbarState extends State<CustomAppbar>
                                                         Icons
                                                             .notifications_active_outlined,
                                                         color:
-                                                            Color(0xff000a5e)),
+                                                            DynamicColor.white),
                                                     Padding(
                                                       padding: EdgeInsets.only(
                                                         left: sizeW * 0.03,
@@ -275,17 +276,12 @@ class _CustomAppbarState extends State<CustomAppbar>
                                                                 .center,
                                                         children: [
                                                           Container(
-                                                            height:
-                                                                sizeH * 0.02,
-                                                            width: sizeW * 0.45,
+                                                            // height:
+                                                            //     sizeH * 0.02,
+                                                            width: sizeW * 0.50,
                                                             alignment: Alignment
                                                                 .centerLeft,
-                                                            // color: Color
-                                                            //     .fromARGB(
-                                                            //         255,
-                                                            //         39,
-                                                            //         221,
-                                                            //         23),
+
                                                             child: Text(
                                                               value
                                                                       .post
@@ -297,6 +293,7 @@ class _CustomAppbarState extends State<CustomAppbar>
                                                               overflow:
                                                                   TextOverflow
                                                                       .ellipsis,
+                                                              maxLines: 2,
                                                               style: TextStyle(
                                                                   color: Colors
                                                                       .white,
@@ -340,18 +337,21 @@ class _CustomAppbarState extends State<CustomAppbar>
                                             right: sizeW * 0.02),
                                         child: Divider(
                                           height: 2,
-                                          color: Color(0xff000a5e),
+                                          color: DynamicColor.white,
                                         ),
                                       );
                                     },
                                   );
-                                })
-                              : loadSvg(
-                                  image: 'assets/image/notifications.svg',
-                                  color: widget.colorTween == 'BIOGRAPHY'
-                                      ? DynamicColor.blue
-                                      : null),
-                        ),
+                                }),
+                              )
+                            : Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: loadSvg(
+                                    image: 'assets/image/notifications.svg',
+                                    color: widget.colorTween == 'BIOGRAPHY'
+                                        ? DynamicColor.gredient2
+                                        : null),
+                              ),
                       ),
                     );
                   }),
@@ -364,11 +364,11 @@ class _CustomAppbarState extends State<CustomAppbar>
                         child: Container(
                           height: 20,
                           width: 20,
-                          margin: const EdgeInsets.only(left: 25, bottom: 20),
+                          margin: const EdgeInsets.only(left: 35, bottom: 25),
                           padding: const EdgeInsets.only(left: 3, right: 3),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                              color: DynamicColor.darkBlue,
+                              color: DynamicColor.redColor,
                               borderRadius: BorderRadius.circular(50)),
                           child: FittedBox(
                             child: Text(

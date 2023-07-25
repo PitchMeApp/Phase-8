@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/appbar_with_white_bg.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/main.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/Model/chat_room_model.dart';
@@ -12,7 +12,6 @@ import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/admin_c
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat_list.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
-import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -130,8 +129,9 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
             ClipPath(
               clipper: CurveClipper(),
               child: Container(
-                color: DynamicColor.blue,
-                height: MediaQuery.of(context).size.height * 0.235,
+                decoration:
+                    BoxDecoration(gradient: DynamicColor.gradientColorChange),
+                height: MediaQuery.of(context).size.height * 0.27,
                 child: Stack(
                   alignment: Alignment.bottomCenter,
                   children: [
@@ -161,12 +161,15 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                                 },
                                 height: SizeConfig.getSize50(context: context),
                                 width: SizeConfig.getSize50(context: context),
-                                colorTween: _colorTween,
+                                borderRadius: BorderRadius.only(
+                                    topRight: Radius.circular(10),
+                                    bottomLeft: Radius.circular(10)),
+                                color: DynamicColor.white,
                                 child: Padding(
                                   padding: EdgeInsets.only(left: 0),
                                   child: Icon(
                                     Icons.forum,
-                                    color: DynamicColor.blue,
+                                    color: DynamicColor.gredient1,
                                     size: 28,
                                   ),
                                 ),
@@ -192,7 +195,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                               ),
                         CircleAvatar(
                           radius: 35,
-                          backgroundColor: DynamicColor.blue,
+                          backgroundColor: Colors.transparent,
                           backgroundImage:
                               AssetImage('assets/image/handshake.png'),
                         )
@@ -214,7 +217,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                                 bottom: SizeConfig.getSize60(context: context)),
                             child: const Center(
                                 child: CircularProgressIndicator(
-                              color: DynamicColor.blue,
+                              color: DynamicColor.gredient1,
                             )),
                           );
                         default:
@@ -234,23 +237,25 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                                 child: const Center(
                                     child: Text('Start new chat')));
                           } else {
-                            return chatController.isloading.value == false
-                                ? listData(snapshot.data!)
-                                : Center(
-                                    child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      CircularProgressIndicator(
-                                          color: DynamicColor.blue),
-                                      SizedBox(height: 20),
-                                      Text(
-                                        'Sending',
-                                        style: blue15,
-                                      ),
-                                    ],
-                                  ));
+                            return
+                                // chatController.isloading.value == false
+                                //     ?
+                                listData(snapshot.data!);
+                            // : Center(
+                            //     child: Column(
+                            //     mainAxisAlignment: MainAxisAlignment.center,
+                            //     crossAxisAlignment:
+                            //         CrossAxisAlignment.center,
+                            //     children: [
+                            //       CircularProgressIndicator(
+                            //           color: DynamicColor.gredient1),
+                            //       SizedBox(height: 20),
+                            //       Text(
+                            //         'Sending',
+                            //         style: blue15,
+                            //       ),
+                            //     ],
+                            //   ));
                           }
                       }
                     })),
@@ -262,7 +267,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
             chatController.isKeyboardOpen.value ? textBox() : audioMagAndImage()
           ],
         ),
-        CustomAppbar(
+        CustomAppbarWithWhiteBg(
           title: 'CHAT',
           colorTween: 'BIOGRAPHY',
           onPressad: () {
@@ -274,7 +279,6 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                   isManu: 'Manu',
                 ));
           },
-          onPressadForNotify: () {},
         ),
       ],
     ));
@@ -304,6 +308,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
               child: Image.asset(
                 'assets/images/_1527726586400.png',
                 height: 25,
+                color: DynamicColor.gredient2,
               ),
             ),
           ),
@@ -343,7 +348,9 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
               // },
               child: Icon(
                 Icons.mic,
-                color: changeColore ? DynamicColor.redColor : DynamicColor.blue,
+                color: changeColore
+                    ? DynamicColor.redColor
+                    : DynamicColor.gredient2,
                 size: 30,
               ),
             ),
@@ -365,7 +372,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
               },
               child: Icon(
                 Icons.perm_media,
-                color: DynamicColor.blue,
+                color: DynamicColor.gredient2,
               ),
             ),
           )
@@ -388,14 +395,15 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: DynamicColor.white,
-                border: Border.all(color: DynamicColor.blue)),
+                border: Border.all(color: DynamicColor.gredient1)),
             child: InkWell(
               onTap: () {
                 setState(() {
                   chatController.isKeyboardOpen.value = false;
                 });
               },
-              child: const Icon(Icons.arrow_back_ios, color: DynamicColor.blue),
+              child: const Icon(Icons.arrow_back_ios,
+                  color: DynamicColor.gredient2),
             ),
           ),
           const SizedBox(width: 10),
@@ -417,16 +425,23 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                   filled: true,
                   fillColor: Colors.grey[100],
                   labelText: 'Type new message',
-                  labelStyle: TextStyle(color: DynamicColor.blue),
+                  labelStyle: TextStyle(color: DynamicColor.gredient1),
                   contentPadding: const EdgeInsets.all(10),
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(width: 0),
+                    borderSide: const BorderSide(
+                        width: 2, color: DynamicColor.gredient1),
                     gapPadding: 10,
                     borderRadius: BorderRadius.circular(25),
                   ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        width: 1, color: DynamicColor.gredient1),
+                    gapPadding: 0,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(width: 2, color: DynamicColor.blue),
+                    borderSide: const BorderSide(
+                        width: 2, color: DynamicColor.gredient1),
                     gapPadding: 0,
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -462,8 +477,8 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: DynamicColor.white,
-                  border: Border.all(color: DynamicColor.blue)),
-              child: const Icon(Icons.send, color: DynamicColor.blue),
+                  border: Border.all(color: DynamicColor.gredient1)),
+              child: const Icon(Icons.send, color: DynamicColor.gredient2),
             ),
           ),
         ],
@@ -491,6 +506,14 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
     return VoiceMessage(
       // contactCircleColor: Colors.transparent,
       audioSrc: msg,
+      meBgColor: DynamicColor.lightGrey,
+      contactBgColor: DynamicColor.gredient2,
+      contactCircleColor: DynamicColor.gredient2,
+      contactFgColor: DynamicColor.gredient2,
+      contactPlayIconColor: DynamicColor.white,
+      mePlayIconColor: DynamicColor.white,
+      contactPlayIconBgColor: DynamicColor.gredient2,
+      meFgColor: DynamicColor.gredient2,
       played: false,
       me: true,
       onPlay: () {},
@@ -524,7 +547,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                             borderRadius: BorderRadius.circular(30)),
                         child: Container(
                           decoration: BoxDecoration(
-                              color: DynamicColor.lightGrey,
+                              color: Color(0xffE5E5E5),
                               borderRadius: BorderRadius.circular(30)),
                           padding: EdgeInsets.all(10),
                           constraints: BoxConstraints(
@@ -565,7 +588,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                                       placeholder: (context, url) =>
                                           const Center(
                                               child: CircularProgressIndicator(
-                                        color: DynamicColor.blue,
+                                        color: DynamicColor.gredient1,
                                       )),
                                       errorWidget: (context, url, error) =>
                                           Container(
@@ -579,7 +602,8 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                               message.message != ''
                                   ? Text(message.message,
                                       style: const TextStyle(
-                                          color: Colors.black, fontSize: 16))
+                                          color: DynamicColor.black,
+                                          fontSize: 16))
                                   : Container(
                                       height: 0,
                                       width: 0,
@@ -651,7 +675,7 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                                       placeholder: (context, url) =>
                                           const Center(
                                               child: CircularProgressIndicator(
-                                        color: DynamicColor.blue,
+                                        color: DynamicColor.gredient1,
                                       )),
                                       errorWidget: (context, url, error) =>
                                           Container(
@@ -665,7 +689,8 @@ class _AppSupporterChatPageState extends State<AppSupporterChatPage>
                               message.message != ''
                                   ? Text(message.message,
                                       style: const TextStyle(
-                                          color: Colors.black, fontSize: 16))
+                                          color: DynamicColor.black,
+                                          fontSize: 16))
                                   : Container(
                                       height: 0,
                                       width: 0,

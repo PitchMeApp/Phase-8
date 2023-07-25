@@ -4,6 +4,11 @@ import 'package:pitch_me_app/View/Deals%20Page/deals_page.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
+import '../../utils/colors/colors.dart';
+import '../../utils/sizeConfig/sizeConfig.dart';
+import '../../utils/strings/images.dart';
+import '../../utils/widgets/containers/containers.dart';
+import '../../utils/widgets/extras/backgroundWidget.dart';
 import 'home biography/Chat/chat_list.dart';
 
 class HomeManuPage extends StatefulWidget {
@@ -14,6 +19,7 @@ class HomeManuPage extends StatefulWidget {
 }
 
 class _HomeManuPageState extends State<HomeManuPage> {
+  int isSelect = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,44 +29,86 @@ class _HomeManuPageState extends State<HomeManuPage> {
   }
 
   Widget _buildBodyView() {
-    return SafeArea(
+    return BackGroundWidget(
+      backgroundImage: Assets.backgroundImage,
+      fit: BoxFit.cover,
       child: Column(
         children: [
-          SizedBox(height: MediaQuery.of(context).size.height * 0.2),
+          Stack(
+            alignment: Alignment.bottomCenter,
+            children: [
+              ClipPath(
+                clipper: CurveClipper(),
+                child: Container(
+                  decoration:
+                      BoxDecoration(gradient: DynamicColor.gradientColorChange),
+                  height: MediaQuery.of(context).size.height * 0.27,
+                ),
+              ),
+              whiteBorderContainer(
+                  child: Image.asset(Assets.handshakeImage),
+                  color: Colors.transparent,
+                  height:
+                      SizeConfig.getSizeHeightBy(context: context, by: 0.12),
+                  width: SizeConfig.getSizeHeightBy(context: context, by: 0.12),
+                  cornerRadius: 25)
+            ],
+          ),
+          SizedBox(height: MediaQuery.of(context).size.height * 0.1),
           Column(
             children: [
               CustomListBox(
-                  icon: '',
                   title: TextStrings.textKey['tutorial']!,
+                  singleSelectColor: isSelect,
+                  isSingleSelect: 1,
                   onPressad: () {
+                    setState(() {
+                      isSelect = 1;
+                    });
                     PageNavigateScreen()
                         .push(context, UnderDevLimitationPage());
                   }),
               CustomListBox(
-                  icon: '',
                   title: TextStrings.textKey['faq']!,
+                  singleSelectColor: isSelect,
+                  isSingleSelect: 2,
                   onPressad: () {
+                    setState(() {
+                      isSelect = 2;
+                    });
                     PageNavigateScreen()
                         .push(context, UnderDevLimitationPage());
                   }),
               CustomListBox(
-                  icon: '',
                   title: TextStrings.textKey['advrise']!,
+                  singleSelectColor: isSelect,
+                  isSingleSelect: 3,
                   onPressad: () {
+                    setState(() {
+                      isSelect = 3;
+                    });
                     PageNavigateScreen()
                         .push(context, UnderDevLimitationPage());
                   }),
               CustomListBox(
-                  icon: '',
                   title: TextStrings.textKey['buy_pitch']!,
+                  singleSelectColor: isSelect,
+                  isSingleSelect: 4,
                   onPressad: () {
+                    setState(() {
+                      isSelect = 4;
+                    });
                     PageNavigateScreen()
                         .push(context, UnderDevLimitationPage());
                   }),
               CustomListBox(
-                  icon: '',
                   title: TextStrings.textKey['contact']!,
+                  singleSelectColor: isSelect,
+                  isSingleSelect: 5,
                   onPressad: () {
+                    setState(() {
+                      isSelect = 5;
+                    });
                     PageNavigateScreen().push(context, ChatListPage());
                   }),
             ],

@@ -55,7 +55,7 @@ class BusinessIdeasApi extends GetConnect {
       res = await get('${BASE_URL}salespitch?type=2');
     }
 
-    // log("Res is at getPost ${'${BASE_URL}salespitch?type=2&user=$userID&usertype=$bussinessType'}");
+    //log("Res is at getPost = " + res.body.toString());
     if (res.statusCode == 200) {
       return SalesPitchListModel.fromJson(res.body);
     }
@@ -64,7 +64,7 @@ class BusinessIdeasApi extends GetConnect {
 
   Future<StatisticsModel?> getStatistics() async {
     var res = await get(GET_STASTICS_URL);
-    //log("Res is at getStatistics ${res.body}");
+    print("Res is at getStatistics ${res.body}");
     if (res.statusCode == 200 || res.statusCode == 201) {
       return StatisticsModel.fromJson(res.body);
     }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/appbar_with_white_bg.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/chat_list.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
@@ -10,6 +10,9 @@ import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:sizer/sizer.dart';
 
 import '../../Phase 6/Guest UI/Guest limitation pages/under_progress_limitation.dart';
+import '../../utils/strings/images.dart';
+import '../../utils/widgets/containers/containers.dart';
+import '../../utils/widgets/extras/backgroundWidget.dart';
 
 class DealsPage extends StatefulWidget {
   const DealsPage({super.key});
@@ -19,87 +22,132 @@ class DealsPage extends StatefulWidget {
 }
 
 class _DealsPageState extends State<DealsPage> {
+  int isSelect = 0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: DynamicColor.white,
-      body: Stack(
-        children: [
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+      body: BackGroundWidget(
+        backgroundImage: Assets.backgroundImage,
+        bannerRequired: false,
+        fit: BoxFit.fill,
+        child: Stack(
+          children: [
+            Stack(
+              alignment: Alignment.bottomCenter,
               children: [
-                // CustomAppbar(title: TextStrings.textKey['deals']!),
-                CustomListBox(
-                    icon: 'assets/images/ic_message_24px@4x.png',
-                    title: TextStrings.textKey['chat']!,
-                    onPressad: () {
-                      PageNavigateScreen().push(context, ChatListPage());
-                    }),
-                CustomListBox(
-                    icon: 'assets/images/ic_import_contacts_24px@4x.png',
-                    title: TextStrings.textKey['contract']!,
-                    onPressad: () {
-                      PageNavigateScreen()
-                          .push(context, UnderDevLimitationPage());
-                    }),
-                CustomListBox(
-                    icon: 'assets/images/ic_local_atm_24-mdpi (1).png',
-                    title: TextStrings.textKey['investment']!,
-                    onPressad: () {
-                      PageNavigateScreen()
-                          .push(context, UnderDevLimitationPage());
-                    }),
-                CustomListBox(
-                    icon: 'assets/images/pie-chart.png',
-                    title: TextStrings.textKey['share']!,
-                    imageHight: 40.0,
-                    onPressad: () {
-                      PageNavigateScreen()
-                          .push(context, UnderDevLimitationPage());
-                    }),
-                CustomListBox(
-                    icon: 'assets/images/ic_compare_arrows_24px@4x.png',
-                    title: TextStrings.textKey['update']!,
-                    onPressad: () {
-                      PageNavigateScreen()
-                          .push(context, UnderDevLimitationPage());
-                    }),
+                ClipPath(
+                  clipper: CurveClipper(),
+                  child: Container(
+                    decoration: BoxDecoration(
+                        gradient: DynamicColor.gradientColorChange),
+                    height: MediaQuery.of(context).size.height * 0.235,
+                  ),
+                ),
+                whiteBorderContainer(
+                    child: Image.asset(Assets.handshakeImage),
+                    color: Colors.transparent,
+                    height:
+                        SizeConfig.getSizeHeightBy(context: context, by: 0.12),
+                    width:
+                        SizeConfig.getSizeHeightBy(context: context, by: 0.12),
+                    cornerRadius: 25),
               ],
             ),
-          ),
-          CustomAppbar(
-            title: TextStrings.textKey['deals']!,
-            onPressad: () {
-              PageNavigateScreen().push(
-                  context,
-                  ManuPage(
-                    title: TextStrings.textKey['deals']!,
-                    pageIndex: 3,
-                    isManu: 'Manu',
-                  ));
-            },
-            onPressadForNotify: () {},
-          ),
-        ],
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // CustomAppbar(title: TextStrings.textKey['deals']!),
+                  CustomListBox(
+                      title: TextStrings.textKey['chat']!,
+                      singleSelectColor: isSelect,
+                      isSingleSelect: 1,
+                      onPressad: () {
+                        setState(() {
+                          isSelect = 1;
+                        });
+                        PageNavigateScreen().push(context, ChatListPage());
+                      }),
+                  CustomListBox(
+                      title: TextStrings.textKey['contract']!,
+                      singleSelectColor: isSelect,
+                      isSingleSelect: 2,
+                      onPressad: () {
+                        setState(() {
+                          isSelect = 2;
+                        });
+                        PageNavigateScreen()
+                            .push(context, UnderDevLimitationPage());
+                      }),
+                  CustomListBox(
+                      title: TextStrings.textKey['investment']!,
+                      singleSelectColor: isSelect,
+                      isSingleSelect: 3,
+                      onPressad: () {
+                        setState(() {
+                          isSelect = 3;
+                        });
+                        PageNavigateScreen()
+                            .push(context, UnderDevLimitationPage());
+                      }),
+                  CustomListBox(
+                      title: TextStrings.textKey['share']!,
+                      singleSelectColor: isSelect,
+                      isSingleSelect: 4,
+                      onPressad: () {
+                        setState(() {
+                          isSelect = 4;
+                        });
+                        PageNavigateScreen()
+                            .push(context, UnderDevLimitationPage());
+                      }),
+                  CustomListBox(
+                      title: TextStrings.textKey['update']!,
+                      singleSelectColor: isSelect,
+                      isSingleSelect: 5,
+                      onPressad: () {
+                        setState(() {
+                          isSelect = 5;
+                        });
+                        PageNavigateScreen()
+                            .push(context, UnderDevLimitationPage());
+                      }),
+                ],
+              ),
+            ),
+            CustomAppbarWithWhiteBg(
+              title: TextStrings.textKey['deals']!,
+              onPressad: () {
+                PageNavigateScreen().push(
+                    context,
+                    ManuPage(
+                      title: TextStrings.textKey['deals']!,
+                      pageIndex: 3,
+                      isManu: 'Manu',
+                    ));
+              },
+            ),
+          ],
+        ),
       ),
     );
   }
 }
 
 class CustomListBox extends StatefulWidget {
-  String icon;
   String title;
   bool? titleColor;
+  int? singleSelectColor;
+  int? isSingleSelect;
   VoidCallback onPressad;
-  dynamic imageHight;
+
   CustomListBox({
     super.key,
-    required this.icon,
     required this.title,
     this.titleColor,
+    this.singleSelectColor,
+    this.isSingleSelect,
     required this.onPressad,
-    this.imageHight,
   });
 
   @override
@@ -109,52 +157,77 @@ class CustomListBox extends StatefulWidget {
 class _CustomListBoxState extends State<CustomListBox> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: widget.onPressad,
-      child: Container(
-        height: 5.h,
-        width: MediaQuery.of(context).size.width - 30,
-        margin: EdgeInsets.only(
-            bottom: 15,
+    return Center(
+      child: Padding(
+        padding: EdgeInsets.only(
+            bottom: 5,
             left: SizeConfig.getFontSize25(context: context),
             right: SizeConfig.getFontSize25(context: context)),
-        alignment: Alignment.center,
-        decoration: BoxDecoration(
-          color: DynamicColor.blue,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: widget.icon.isNotEmpty
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    width: 50,
-                    padding: const EdgeInsets.only(left: 10),
-                    child: Image.asset(
-                      widget.icon,
-                      height:
-                          (widget.imageHight == null) ? 25 : widget.imageHight,
+        child: SizedBox(
+          height: 6.5.h,
+          width: MediaQuery.of(context).size.width * 0.7,
+          child: InkWell(
+            onTap: widget.onPressad,
+            child: widget.singleSelectColor != null
+                ? Card(
+                    elevation: widget.singleSelectColor == widget.isSingleSelect
+                        ? 0
+                        : 10,
+                    shape: BeveledRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          gradient:
+                              widget.singleSelectColor == widget.isSingleSelect
+                                  ? null
+                                  : DynamicColor.gradientColorChange,
+                          color:
+                              widget.singleSelectColor == widget.isSingleSelect
+                                  ? DynamicColor.white
+                                  : null,
+                          borderRadius: BorderRadius.circular(10),
+                          border:
+                              widget.singleSelectColor == widget.isSingleSelect
+                                  ? Border.all(color: DynamicColor.gredient2)
+                                  : null),
+                      child: Text(
+                        widget.title.toUpperCase(),
+                        style: widget.singleSelectColor != null
+                            ? widget.singleSelectColor == widget.isSingleSelect
+                                ? gredient116bold
+                                : white16bold
+                            : white16bold,
+                      ),
+                    ),
+                  )
+                : Card(
+                    elevation: widget.titleColor! ? 0 : 10,
+                    shape: BeveledRectangleBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    child: Container(
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          gradient: widget.titleColor!
+                              ? null
+                              : DynamicColor.gradientColorChange,
+                          color: widget.titleColor! ? DynamicColor.white : null,
+                          borderRadius: BorderRadius.circular(10),
+                          border: widget.titleColor!
+                              ? Border.all(color: DynamicColor.gredient2)
+                              : null),
+                      child: Text(
+                        widget.title.toUpperCase(),
+                        style: widget.titleColor != null
+                            ? widget.titleColor == true
+                                ? gredient116bold
+                                : white16bold
+                            : white16bold,
+                      ),
                     ),
                   ),
-                  Text(
-                    widget.title.toUpperCase(),
-                    style: white17wBold,
-                  ),
-                  Container(
-                    width: 50,
-                  ),
-                ],
-              )
-            : Center(
-                child: Text(
-                  widget.title.toUpperCase(),
-                  style: widget.titleColor != null
-                      ? widget.titleColor == true
-                          ? darkBlue19
-                          : white17wBold
-                      : white17wBold,
-                ),
-              ),
+          ),
+        ),
       ),
     );
   }

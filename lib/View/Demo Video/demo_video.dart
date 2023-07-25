@@ -10,12 +10,13 @@ import 'package:pitch_me_app/View/Select%20industry/select_industry.dart';
 import 'package:pitch_me_app/View/navigation_controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:video_viewer/video_viewer.dart';
 
 import '../../Phase 6/Guest UI/Guest limitation pages/user_type_limitation.dart';
+import '../../utils/sizeConfig/sizeConfig.dart';
+import '../../utils/widgets/containers/containers.dart';
 
 class DemoVideoPage extends StatefulWidget {
   const DemoVideoPage({super.key});
@@ -79,10 +80,10 @@ class _DemoVideoPageState extends State<DemoVideoPage> {
       floatingActionButtonLocation: FloatingActionButtonLocation.centerTop,
       body: isCheck == true
           ? UserTypeLimitationPage(
-              title1:
-                  'Only Business Owners or Business Ideas can access "Add Sales Pitch" Page',
-              title2:
-                  'Make sure after Signing Up with different email, you select Business Owner or Business Idea')
+              title1: 'Only Business Idea and',
+              title2: 'Business Owners users',
+              title3: 'can access this page.',
+            )
           : Stack(
               children: [
                 Container(
@@ -122,7 +123,7 @@ class _DemoVideoPageState extends State<DemoVideoPage> {
                         ),
                         thumbnail: Image.network(''),
                         loading: CircularProgressIndicator(
-                          color: Colors.blue,
+                          color: DynamicColor.gredient1,
                         )),
                     source: {
                       "Source": VideoSource(
@@ -131,25 +132,6 @@ class _DemoVideoPageState extends State<DemoVideoPage> {
                       )
                     },
                   ),
-                ),
-                BackArrow(
-                  alignment: Alignment.centerRight,
-                  icon: Icons.arrow_forward_ios,
-                  onPressed: () {
-                    if (checkGuestType.isNotEmpty && checkGuestType != 'null') {
-                      if (businesstype == '3' || businesstype == '4') {
-                        setState(() {
-                          isCheck = true;
-                        });
-                      } else {
-                        videoViewerController.pause();
-                        _navigationController.navigationType.value = 'Post';
-                        Get.to(() => SelectIndustryPage());
-                      }
-                    } else {
-                      Get.to(() => LoginLimitationPage());
-                    }
-                  },
                 ),
                 CustomAppbar(
                   title: 'Add Sales Pitch',
@@ -178,6 +160,49 @@ class _DemoVideoPageState extends State<DemoVideoPage> {
                   },
                   onPressadForNotify: () {},
                 ),
+                Padding(
+                  padding: EdgeInsets.only(
+                      top: SizeConfig.getSize30(context: context) +
+                          SizeConfig.getSize55(context: context) +
+                          SizeConfig.getSize5(context: context),
+                      right: SizeConfig.getFontSize25(context: context)),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: AppBarIconContainer(
+                      height: SizeConfig.getSize38(context: context),
+                      width: SizeConfig.getSize38(context: context),
+                      color: DynamicColor.green,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: RotatedBox(
+                          quarterTurns: 3,
+                          child: Image.asset(
+                            "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
+                            height: 30,
+                            width: 30,
+                            color: DynamicColor.white,
+                          ),
+                        ),
+                      ),
+                      onTap: () {
+                        if (checkGuestType.isNotEmpty &&
+                            checkGuestType != 'null') {
+                          if (businesstype == '3' || businesstype == '4') {
+                            setState(() {
+                              isCheck = true;
+                            });
+                          } else {
+                            videoViewerController.pause();
+                            _navigationController.navigationType.value = 'Post';
+                            Get.to(() => SelectIndustryPage());
+                          }
+                        } else {
+                          Get.to(() => LoginLimitationPage());
+                        }
+                      },
+                    ),
+                  ),
+                )
               ],
             ),
     );

@@ -53,7 +53,7 @@ class _LogoutPopUpState extends State<LogoutPopUp> {
         child: Text(
           TextStrings.textKey['log_out']!,
           style: const TextStyle(
-              color: DynamicColor.blue, fontWeight: FontWeight.bold),
+              color: DynamicColor.gredient1, fontWeight: FontWeight.bold),
         ),
       ),
       content: Text(
@@ -72,7 +72,7 @@ class _LogoutPopUpState extends State<LogoutPopUp> {
                         },
                         child: Text(
                           TextStrings.textKey['no']!,
-                          style: blue15,
+                          style: gredient115,
                         )),
                     TextButton(
                         onPressed: () {
@@ -87,7 +87,7 @@ class _LogoutPopUpState extends State<LogoutPopUp> {
               )
             : const Center(
                 child: CircularProgressIndicator(
-                  color: DynamicColor.blue,
+                  color: DynamicColor.gredient1,
                 ),
               )
       ],

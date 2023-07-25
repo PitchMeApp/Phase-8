@@ -4,9 +4,12 @@ import 'package:pitch_me_app/screens/businessIdeas/home%20biography/home_page_bi
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
+import 'package:pitch_me_app/utils/strings/images.dart';
 import 'package:pitch_me_app/utils/widgets/Alert%20Box/show_image_popup.dart';
+import 'package:pitch_me_app/utils/widgets/extras/backgroundWidget.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../utils/styles/styles.dart';
 import '../../utils/widgets/Navigation/custom_navigation.dart';
 
 class StatisticsPage_Two extends StatefulWidget {
@@ -26,6 +29,7 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
   List typeList = [];
   List serviceList = [];
   List serviceDetailList = [];
+  List whocanwatchList = [];
   late SalesDoc salesDoc;
 
   String userType = '';
@@ -50,6 +54,11 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
     if (serviceDetail.isNotEmpty) {
       serviceDetailList = serviceDetail.split(', ');
     }
+    var whoCanWatch =
+        salesDoc.whocanwatch.replaceAll('[', '').replaceAll(']', '');
+    if (whoCanWatch.isNotEmpty) {
+      whocanwatchList = whoCanWatch.split(', ');
+    }
     checkUserType();
     super.initState();
   }
@@ -69,10 +78,9 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: BoxDecoration(color: Color.fromARGB(255, 255, 255, 255)),
+      body: BackGroundWidget(
+        backgroundImage: Assets.backgroundImage,
+        fit: BoxFit.fill,
         child: Stack(
           children: [
             Column(
@@ -91,13 +99,12 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
                                   curve: Curves.linear);
                             },
                             child: Padding(
-                                padding: EdgeInsets.only(bottom: 10, right: 7),
+                                padding: EdgeInsets.only(bottom: 10),
                                 child: /* SvgPicture.asset(Assets.tiktokPreviousIco),*/
                                     RotatedBox(
                                   quarterTurns: 6,
                                   child: Image.asset(
                                     "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
-                                    color: Color(0xff377EB4),
                                     height:
                                         SizeConfig.getSize35(context: context),
                                     width:
@@ -120,31 +127,23 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
   }
 
   Widget appStatistics({required BuildContext context}) {
-    final sizeH = MediaQuery.of(context).size.height;
-    final sizeW = MediaQuery.of(context).size.width;
-
     return SingleChildScrollView(
       child: Center(
           child: Column(
         children: [
-          customWidget('assets/images/industry-mdpi.png', salesDoc.industry,
-              onPressad: () {}),
-          customWidget(
-              'assets/images/ic_place_24px-mdpi.png', salesDoc.location,
-              onPressad: () {}),
+          customWidget('What Industry', salesDoc.industry, onPressad: () {}),
+          // customWidget(
+          //     'assets/images/ic_place_24px-mdpi.png', salesDoc.location,
+          //     onPressad: () {}),
           typeList.length > 0
-              ? customWidget('assets/images/ic_local_atm_24-mdpi (1).png',
-                  typeList[0].replaceAll(',', ''),
+              ? customWidget('Who is Needed', typeList[0].replaceAll(',', ''),
                   onPressad: () {})
               : Container(),
           salesDoc.valueamount.isNotEmpty
-              ? customWidget(
-                  'assets/images/ic_monetization.png', salesDoc.valueamount,
-                  onPressad: () {})
+              ? customWidget('How much', salesDoc.valueamount, onPressad: () {})
               : Container(),
           typeList.length > 1 && typeList[1].isNotEmpty
-              ? customWidget('assets/images/_Group_-mdpi.png', typeList[1],
-                  onPressad: () {})
+              ? customWidget('Who is Needed', typeList[1], onPressad: () {})
               : Container(),
           serviceList.isNotEmpty
               ? ListView.builder(
@@ -153,9 +152,7 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
                   padding: EdgeInsets.zero,
                   itemCount: serviceList.length,
                   itemBuilder: (context, index) {
-                    return customWidget(
-                        "assets/images/ic_content_past-mdpi.png",
-                        serviceList[index],
+                    return customWidget("What is Needed", serviceList[index],
                         onPressad: () {});
                   })
               : Container(),
@@ -167,13 +164,27 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
                   itemCount: serviceDetailList.length,
                   itemBuilder: (context, index) {
                     return customWidget(
-                        "assets/images/ic_check_circle-mdpi.png",
-                        serviceDetailList[index],
+                        "What is Needed", serviceDetailList[index],
                         onPressad: () {});
                   })
               : Container(),
-          customWidget('', userType, onPressad: () {}),
-          customWidget('', 'Biography', onPressad: () {
+          customWidget('Initial Offer', widget.salesDoc.description,
+              onPressad: () {}),
+          whocanwatchList.isNotEmpty
+              ? ListView.builder(
+                  shrinkWrap: true,
+                  primary: false,
+                  padding: EdgeInsets.zero,
+                  itemCount: whocanwatchList.length,
+                  itemBuilder: (context, index) {
+                    return customWidget("Who can see", whocanwatchList[index],
+                        onPressad: () {
+                      //PageNavigateScreen().push(context, NeedPage());
+                    });
+                  })
+              : Container(),
+          customWidget('User Type', userType, onPressad: () {}),
+          customWidget('Your Profile', 'Biography', onPressad: () {
             PageNavigateScreen().push(
                 context,
                 HomeBiographyPage(
@@ -182,101 +193,90 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
                   notifyID: '',
                 ));
           }),
-          customWidget('', widget.salesDoc.description, onPressad: () {}),
+          SizedBox(height: 10),
           Align(
-            alignment: Alignment.topLeft,
-            child: Padding(
-              padding: const EdgeInsets.only(left: 25, right: 25),
-              child: Wrap(
-                runSpacing: 10,
-                children: [
-                  salesDoc.img1.isNotEmpty
-                      ? imageWidget(salesDoc.img1)
-                      : Container(
-                          height: 0,
-                          width: 0,
-                        ),
-                  salesDoc.img2.isNotEmpty
-                      ? imageWidget(salesDoc.img2)
-                      : Container(
-                          height: 0,
-                          width: 0,
-                        ),
-                  salesDoc.img3.isNotEmpty
-                      ? imageWidget(salesDoc.img3)
-                      : Container(
-                          height: 0,
-                          width: 0,
-                        ),
-                  salesDoc.img4.isNotEmpty
-                      ? imageWidget(salesDoc.img4)
-                      : Container(
-                          height: 0,
-                          width: 0,
-                        ),
-                  salesDoc.file.isNotEmpty
-                      ? pdfWidget(salesDoc.file)
-                      : Container(
-                          height: 0,
-                          width: 0,
-                        ),
-                ],
-              ),
+            alignment: Alignment.center,
+            child: Wrap(
+              runSpacing: 10,
+              spacing: 10,
+              children: [
+                salesDoc.img1.isNotEmpty
+                    ? imageWidget(salesDoc.img1)
+                    : Container(
+                        height: 0,
+                        width: 0,
+                      ),
+                salesDoc.img2.isNotEmpty
+                    ? imageWidget(salesDoc.img2)
+                    : Container(
+                        height: 0,
+                        width: 0,
+                      ),
+                salesDoc.img3.isEmpty
+                    ? imageWidget(salesDoc.img3)
+                    : Container(
+                        height: 0,
+                        width: 0,
+                      ),
+                salesDoc.file.isEmpty
+                    ? pdfWidget(salesDoc.file)
+                    : Container(
+                        height: 0,
+                        width: 0,
+                      ),
+              ],
             ),
           ),
-          spaceHeight(SizeConfig.getSize80(context: context)),
+          spaceHeight(SizeConfig.getSize100(context: context)),
         ],
       )),
     );
   }
 
-  Widget customWidget(iconImage, name, {required VoidCallback onPressad}) {
+  Widget customWidget(title, name, {required VoidCallback onPressad}) {
     final sizeH = MediaQuery.of(context).size.height;
-    final sizeW = MediaQuery.of(context).size.width;
+
     return InkWell(
       onTap: onPressad,
-      child: Container(
-          height: sizeH * 0.068,
-          margin: EdgeInsets.only(
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(title, style: black14w5),
+          ),
+          Padding(
+            padding: EdgeInsets.only(
               left: SizeConfig.getFontSize25(context: context),
               right: SizeConfig.getFontSize25(context: context),
-              bottom: sizeH * 0.015),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(10),
-            color: Color(0xff377EB4),
+            ),
+            child: Card(
+              elevation: 10,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
+              child: Container(
+                  height: sizeH * 0.068,
+                  alignment: Alignment.center,
+                  padding: EdgeInsets.only(
+                    left: 5,
+                    right: 5,
+                  ),
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      gradient: DynamicColor.gradientColorChange),
+                  child: Text(
+                    name,
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500),
+                    textAlign: TextAlign.center,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  )),
+            ),
           ),
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: SizeConfig.getFontSize14(context: context),
-              right: SizeConfig.getFontSize14(context: context),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                iconImage.isNotEmpty
-                    ? Image.asset(
-                        iconImage,
-                        height: sizeH * 0.04,
-                        width: sizeW * 0.08,
-                        alignment: Alignment.centerLeft,
-                        color: DynamicColor.white,
-                      )
-                    : Container(
-                        width: 30,
-                      ),
-                Text(
-                  name,
-                  style: TextStyle(color: Colors.white, fontSize: 15),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                Container(
-                  width: 30,
-                )
-              ],
-            ),
-          )),
+        ],
+      ),
     );
   }
 
@@ -288,13 +288,12 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
             builder: (context) => ShowFullImagePopup(image_url: url));
       },
       child: Container(
-        height: 100,
-        width: 100,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-        child: Image.network(
-          url,
-          fit: BoxFit.contain,
-        ),
+        height: SizeConfig.getSizeHeightBy(context: context, by: 0.16),
+        width: SizeConfig.getSizeWidthBy(context: context, by: 0.43),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            image:
+                DecorationImage(image: NetworkImage(url), fit: BoxFit.cover)),
       ),
     );
   }
@@ -305,14 +304,14 @@ class _StatisticsPage_TwoState extends State<StatisticsPage_Two> {
         launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
       },
       child: Container(
-        height: 120,
-        width: 90,
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(30)),
-        padding: EdgeInsets.only(bottom: 10),
-        child: Image.asset(
-          'assets/images/pdf.png',
-          fit: BoxFit.cover,
-        ),
+        height: SizeConfig.getSizeHeightBy(context: context, by: 0.16),
+        width: SizeConfig.getSizeWidthBy(context: context, by: 0.43),
+        decoration: BoxDecoration(
+            gradient: LinearGradient(
+                colors: const [Color(0xff5388C0), Color(0xff67C8B5)]),
+            borderRadius: BorderRadius.circular(10),
+            image: DecorationImage(
+                fit: BoxFit.cover, image: AssetImage('assets/images/pdf.png'))),
       ),
     );
   }

@@ -21,6 +21,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../View/Profile/Biography/biography.dart';
 import '../../View/Profile/Pitches/pitches_list.dart';
+import '../../utils/styles/styles.dart';
 
 class MainHomeScreen extends StatefulWidget {
   MainHomeScreen({Key? key}) : super(key: key);
@@ -145,23 +146,29 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                   alignment: Alignment.topCenter,
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 3),
-                    child: isFilter
-                        ? Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: roboto(
-                                size:
-                                    SizeConfig.getFontSize20(context: context),
-                                text: "Filter",
-                                fontWeight: FontWeight.w700,
-                                color: DynamicColor.blue),
+                    child: isManu
+                        ? Text(
+                            'MENU',
+                            style: white21wBold,
                           )
-                        : roboto(
-                            size: SizeConfig.getFontSize28(context: context),
-                            text: currentIndexOfDashboard == 0
-                                ? ''
-                                : "App Statistics",
-                            fontWeight: FontWeight.w700,
-                            color: Color.fromARGB(255, 255, 255, 255)),
+                        : isFilter
+                            ? Padding(
+                                padding: const EdgeInsets.only(top: 0),
+                                child: roboto(
+                                    size: SizeConfig.getFontSize20(
+                                        context: context),
+                                    text: "Filter".toUpperCase(),
+                                    fontWeight: FontWeight.w700,
+                                    color: DynamicColor.white),
+                              )
+                            : roboto(
+                                size:
+                                    SizeConfig.getFontSize25(context: context),
+                                text: currentIndexOfDashboard == 0
+                                    ? ''
+                                    : "App Statistics",
+                                fontWeight: FontWeight.w700,
+                                color: Color.fromARGB(255, 255, 255, 255)),
                   ),
                 ),
               ),
@@ -185,15 +192,31 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                     return AnimatedContainer(
                                       height: _isInitialValue
                                           ? sizeH * 0.5
-                                          : sizeH * 0.06,
+                                          : SizeConfig.getSize38(
+                                              context: context),
                                       width: _isInitialValue
-                                          ? sizeW * 0.65
-                                          : SizeConfig.getSize50(
+                                          ? sizeW * 0.70
+                                          : SizeConfig.getSize38(
                                               context: context),
                                       decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              _isInitialValue ? 20 : 10),
-                                          color: _colorTween.value
+                                          borderRadius: _isInitialValue == false
+                                              ? BorderRadius.only(
+                                                  topRight: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10))
+                                              : BorderRadius.circular(10),
+                                          gradient: isManu || isFilter
+                                              ? _isInitialValue
+                                                  ? DynamicColor
+                                                      .gradientColorChange
+                                                  : null
+                                              : DynamicColor
+                                                  .gradientColorChange,
+                                          color: isManu || isFilter
+                                              ? _isInitialValue
+                                                  ? null
+                                                  : DynamicColor.white
+                                              : null
                                           //  _isInitialValue
                                           //     ? Color(0xff377eb4)
                                           //     : _colorTween.value,
@@ -211,12 +234,15 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                             Get.to(() => LoginLimitationPage());
                                           }
                                         },
-                                        child: Padding(
-                                          padding: EdgeInsets.all(12),
-                                          child: _isInitialValue
-                                              ? Consumer<DataClass>(builder:
-                                                  (BuildContext context, value,
-                                                      Widget? child) {
+                                        child: _isInitialValue
+                                            ? Padding(
+                                                padding:
+                                                    const EdgeInsets.all(12.0),
+                                                child: Consumer<DataClass>(
+                                                    builder:
+                                                        (BuildContext context,
+                                                            value,
+                                                            Widget? child) {
                                                   return ListView.separated(
                                                     shrinkWrap: true,
                                                     padding: EdgeInsets.zero,
@@ -322,7 +348,7 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                                                             Icons
                                                                                 .notifications_active_outlined,
                                                                             color:
-                                                                                Color(0xff000a5e)),
+                                                                                DynamicColor.white),
                                                                         Padding(
                                                                           padding:
                                                                               EdgeInsets.only(
@@ -338,18 +364,14 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                                                                 MainAxisAlignment.center,
                                                                             children: [
                                                                               Container(
-                                                                                height: sizeH * 0.02,
-                                                                                width: sizeW * 0.45,
+                                                                                // height: sizeH * 0.02,
+                                                                                width: sizeW * 0.50,
                                                                                 alignment: Alignment.centerLeft,
-                                                                                // color: Color
-                                                                                //     .fromARGB(
-                                                                                //         255,
-                                                                                //         39,
-                                                                                //         221,
-                                                                                //         23),
+
                                                                                 child: Text(
                                                                                   value.post?.result?[index].title.toString() ?? "",
                                                                                   overflow: TextOverflow.ellipsis,
+                                                                                  maxLines: 2,
                                                                                   style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
                                                                                 ),
                                                                               ),
@@ -378,17 +400,24 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                                                     0.02),
                                                         child: Divider(
                                                           height: 2,
-                                                          color:
-                                                              Color(0xff000a5e),
+                                                          color: DynamicColor
+                                                              .white,
                                                         ),
                                                       );
                                                     },
                                                   );
-                                                })
-                                              : loadSvg(
-                                                  image:
-                                                      'assets/image/notifications.svg'),
-                                        ),
+                                                }),
+                                              )
+                                            : Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: loadSvg(
+                                                    image:
+                                                        'assets/image/notifications.svg',
+                                                    color: isManu || isFilter
+                                                        ? DynamicColor.gredient1
+                                                        : null),
+                                              ),
                                       ),
                                     );
                                   }),
@@ -404,12 +433,12 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                           height: 20,
                                           width: 20,
                                           margin: const EdgeInsets.only(
-                                              left: 25, bottom: 20),
+                                              left: 35, bottom: 25),
                                           padding: const EdgeInsets.only(
                                               left: 3, right: 3),
                                           alignment: Alignment.center,
                                           decoration: BoxDecoration(
-                                              color: DynamicColor.darkBlue,
+                                              color: DynamicColor.redColor,
                                               borderRadius:
                                                   BorderRadius.circular(50)),
                                           child: FittedBox(
@@ -425,30 +454,25 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                   : Container()
                             ],
                           )
-                        : buttonContainer(
-                            height: SizeConfig.getSize50(context: context),
-                            width: SizeConfig.getSize50(context: context),
-                            fromAppBar: true,
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: loadSvg(
-                                  image: 'assets/image/notifications.svg'),
-                            )),
+                        : Container(),
                     Column(
                       children: [
                         currentIndexOfDashboard == 0
                             ? AppBarIconContainer(
-                                height: SizeConfig.getSize50(context: context),
-                                width: SizeConfig.getSize50(context: context),
-                                colorTween: _colorTween,
+                                height: SizeConfig.getSize38(context: context),
+                                width: SizeConfig.getSize38(context: context),
+                                color: isManu || isFilter
+                                    ? DynamicColor.white
+                                    : null,
                                 child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   child: loadSvg(
                                       image: 'assets/image/menu.svg',
-                                      color: isManu == true
+                                      color: isManu
                                           ? DynamicColor.darkBlue
-                                          : null),
+                                          : isFilter
+                                              ? DynamicColor.gredient2
+                                              : null),
                                 ),
                                 onTap: () {
                                   setState(() {
@@ -457,31 +481,26 @@ class _MainHomeScreenState extends State<MainHomeScreen>
                                   });
                                 },
                               )
-                            : buttonContainer(
-                                height: SizeConfig.getSize50(context: context),
-                                width: SizeConfig.getSize50(context: context),
-                                fromAppBar: true,
-                                onTap: () {},
-                                child: Padding(
-                                  padding: EdgeInsets.all(12.0),
-                                  child:
-                                      loadSvg(image: 'assets/image/menu.svg'),
-                                )),
-                        spaceHeight(10),
+                            : Container(),
+                        spaceHeight(5),
                         if (currentIndexOfDashboard == 0)
                           Align(
                               alignment: Alignment.bottomRight,
                               child: AppBarIconContainer(
-                                height: SizeConfig.getSize50(context: context),
-                                width: SizeConfig.getSize50(context: context),
-                                colorTween: _colorTween,
+                                height: SizeConfig.getSize38(context: context),
+                                width: SizeConfig.getSize38(context: context),
+                                color: isManu || isFilter
+                                    ? DynamicColor.white
+                                    : null,
                                 child: Padding(
-                                  padding: const EdgeInsets.all(12.0),
+                                  padding: const EdgeInsets.all(8.0),
                                   child: loadSvg(
                                       image: 'assets/image/setting.svg',
                                       color: isFilter == true
                                           ? DynamicColor.darkBlue
-                                          : null),
+                                          : isManu
+                                              ? DynamicColor.gredient2
+                                              : null),
                                 ),
                                 onTap: () {
                                   if (checkGuestType.isNotEmpty &&

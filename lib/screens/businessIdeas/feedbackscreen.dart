@@ -1,12 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/appbar_with_white_bg.dart';
 import 'package:pitch_me_app/controller/businessIdeas/postPageController.dart';
 import 'package:pitch_me_app/screens/businessIdeas/FeedbackApi.dart/postApi.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
+import 'package:pitch_me_app/utils/widgets/extras/backgroundWidget.dart';
 import 'package:pitch_me_app/utils/widgets/extras/banner.dart';
 import 'package:smooth_star_rating_null_safety/smooth_star_rating_null_safety.dart';
+
+import '../../View/Manu/manu.dart';
+import '../../utils/sizeConfig/sizeConfig.dart';
+import '../../utils/strings/images.dart';
+import '../../utils/styles/styles.dart';
+import '../../utils/widgets/Navigation/custom_navigation.dart';
+import '../../utils/widgets/containers/containers.dart';
 
 class ratingScreen extends StatefulWidget {
   String receiverid;
@@ -26,7 +34,7 @@ class _ratingScreenState extends State<ratingScreen> {
   var rating = 0.0;
   var rating_Two = 0.0;
   bool selectbutton = false;
-  bool selectbutton_Two = false;
+  int isCheck = 0;
 
   String description = '';
 
@@ -39,222 +47,273 @@ class _ratingScreenState extends State<ratingScreen> {
     _pageController.notVideo = true;
 
     return Scaffold(
-        resizeToAvoidBottomInset: false,
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-        floatingActionButton: BannerWidget(onPressad: () {}),
-        body: Stack(
-          children: [
-            SingleChildScrollView(
-              child: Form(
-                key: formkey,
-                child: Column(children: [
-                  SizedBox(
-                    height: sizeH * 0.06,
-                  ),
-                  Image.asset(
-                    "assets/image/Group 12262.png",
-                    height: sizeH * 0.09,
-                  ),
-                  Image.asset(
-                    "assets/image/Group 12261.png",
-                    height: sizeH * 0.13,
-                  ),
-                  SizedBox(
-                    height: sizeH * 0.09,
-                  ),
-                  Text(
-                    "Please give a Feedback so they",
-                    style: TextStyle(
-                        fontSize: sizeH * 0.025,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                        color: Color(0xff377EB4)),
-                  ),
-                  Text(
-                    "can improve",
-                    style: TextStyle(
-                        fontSize: sizeH * 0.025,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                        color: Color(0xff377EB4)),
-                  ),
-                  SizedBox(
-                    height: sizeH * 0.02,
-                  ),
-                  Center(
-                    child: Text(
-                      "The Business",
-                      style: TextStyle(
-                          fontSize: sizeH * 0.016,
-                          letterSpacing: 0.5,
-                          color: Color(0xff377EB4)),
-                    ),
-                  ),
-                  SizedBox(
-                    height: sizeH * 0.013,
-                  ),
-                  SmoothStarRating(
-                      allowHalfRating: false,
-                      onRatingChanged: (value) {
-                        setState(() {
-                          rating = value;
-                        });
-                      },
-                      starCount: 5,
-                      rating: rating,
-                      size: 30.0,
-                      filledIconData: Icons.star,
-                      halfFilledIconData: Icons.star_border,
-                      color: Color(0xff377EB4),
-                      borderColor: Color(0xff377EB4),
-                      spacing: 0.0),
-                  SizedBox(
-                    height: sizeH * 0.015,
-                  ),
-                  Center(
-                    child: Text(
-                      "The Sales Pitch",
-                      style: TextStyle(
-                          fontSize: sizeH * 0.016,
-                          letterSpacing: 0.5,
-                          color: Color(0xff377EB4)),
-                    ),
-                  ),
-                  SizedBox(
-                    height: sizeH * 0.013,
-                  ),
-                  SmoothStarRating(
-                      allowHalfRating: false,
-                      onRatingChanged: (value) {
-                        setState(() {
-                          rating_Two = value;
-                        });
-                      },
-                      starCount: 5,
-                      rating: rating_Two,
-                      size: 30.0,
-                      filledIconData: Icons.star,
-                      halfFilledIconData: Icons.star_border,
-                      color: Color(0xff377EB4),
-                      borderColor: Color(0xff377EB4),
-                      spacing: 0.0),
-                  SizedBox(
-                    height: sizeH * 0.02,
-                  ),
-                  SizedBox(
-                    height: 45,
-                    width: sizeW - 40,
-                    child: TextFormField(
-                      autofocus: false,
-                      decoration: InputDecoration(
-                        hintText: 'Give a Brief Advice',
-                        contentPadding:
-                            EdgeInsets.only(top: 5, left: 5, right: 5),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: Color(0xff377EB4),
-                              width: 2,
-                            )),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                              color: Color(0xff377EB4),
-                              width: 2,
-                            )),
+        //resizeToAvoidBottomInset: false,
+        bottomNavigationBar: BannerWidget(onPressad: () {}),
+        body: BackGroundWidget(
+          backgroundImage: Assets.backgroundImage,
+          fit: BoxFit.fill,
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                child: Form(
+                  key: formkey,
+                  child: Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          ClipPath(
+                            clipper: CurveClipper(),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  gradient: DynamicColor.gradientColorChange),
+                              height: MediaQuery.of(context).size.height * 0.27,
+                            ),
+                          ),
+                          whiteBorderContainer(
+                              child: Image.asset(Assets.handshakeImage),
+                              color: Colors.transparent,
+                              height: SizeConfig.getSizeHeightBy(
+                                  context: context, by: 0.12),
+                              width: SizeConfig.getSizeHeightBy(
+                                  context: context, by: 0.12),
+                              cornerRadius: 25),
+                        ],
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          description = value;
-                        });
-                      },
-                    ),
-                  ),
-                  SizedBox(
-                    height: sizeH * 0.04,
-                  ),
-                  InkWell(
-                    onTap: () {
-                      final isvalidation = formkey.currentState!.validate();
-
-                      print(" rating star ${rating_Two}");
-
-                      ///
-                      /// Sign Up
-                      ///
-
-                      if (description.isNotEmpty &&
-                          rating_Two != 0.0 &&
-                          rating != 0.0) {
-                        // Navigator.of(context).pop();
-                        postfeedback(widget.receiverid, widget.postid, rating,
-                            rating_Two, description);
-                        // Get.offAll(Floatbar(1));
-                        // _pageController.swipableStackController
-                        //     .next(swipeDirection: SwipeDirection.left);
-                        // setState(() {
-                        //   _pageController.left = false;
-                        // });
-                      } else {
-                        Fluttertoast.showToast(
-                            msg: "Please give star and feedback",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.CENTER,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: DynamicColor.blue,
-                            textColor: Colors.white,
-                            fontSize: 16.0);
-                        selectbutton = true;
-                      }
-                    },
-                    child: Container(
-                        height: 48,
-                        width: sizeW - 40,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: selectbutton
-                              ? Color(0xff000c61)
-                              : Color(0xff377EB4),
+                      Column(children: [
+                        SizedBox(
+                          height: sizeH * 0.02,
                         ),
-                        child: Text(
-                          "Done",
+                        Text(
+                          "Please give a Feedback",
                           style: TextStyle(
-                              color: Colors.white, fontWeight: FontWeight.bold),
-                        )),
+                              fontSize: sizeH * 0.030,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.5,
+                              color: DynamicColor.gredient1),
+                        ),
+                        Text(
+                          "So They can Improve",
+                          style: TextStyle(
+                              fontSize: sizeH * 0.025,
+                              fontWeight: FontWeight.w500,
+                              letterSpacing: 0.5,
+                              color: DynamicColor.lightBlack),
+                        ),
+                        SizedBox(
+                          height: sizeH * 0.02,
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: SizeConfig.getFontSize25(context: context),
+                              right:
+                                  SizeConfig.getFontSize25(context: context)),
+                          child: Card(
+                            elevation: 5,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            child: Padding(
+                              padding: const EdgeInsets.all(10.0),
+                              child: Column(
+                                children: [
+                                  Center(
+                                    child: Text(
+                                      "The Business",
+                                      style: TextStyle(
+                                          fontSize: sizeH * 0.016,
+                                          letterSpacing: 0.5,
+                                          color: DynamicColor.black),
+                                    ),
+                                  ),
+                                  SmoothStarRating(
+                                      allowHalfRating: false,
+                                      onRatingChanged: (value) {
+                                        setState(() {
+                                          rating = value;
+                                        });
+                                      },
+                                      starCount: 5,
+                                      rating: rating,
+                                      size: 30.0,
+                                      filledIconData: Icons.star,
+                                      halfFilledIconData: Icons.star_border,
+                                      color: Color(0xffF8B706),
+                                      borderColor: Color(0xffF8B706),
+                                      spacing: 0.0),
+                                  SizedBox(
+                                    height: sizeH * 0.015,
+                                  ),
+                                  Center(
+                                    child: Text(
+                                      "The Sales Pitch",
+                                      style: TextStyle(
+                                          fontSize: sizeH * 0.016,
+                                          letterSpacing: 0.5,
+                                          color: DynamicColor.black),
+                                    ),
+                                  ),
+                                  SmoothStarRating(
+                                      allowHalfRating: false,
+                                      onRatingChanged: (value) {
+                                        setState(() {
+                                          rating_Two = value;
+                                        });
+                                      },
+                                      starCount: 5,
+                                      rating: rating_Two,
+                                      size: 30.0,
+                                      filledIconData: Icons.star,
+                                      halfFilledIconData: Icons.star_border,
+                                      color: Color(0xffF8B706),
+                                      borderColor: Color(0xffF8B706),
+                                      spacing: 0.0),
+                                  SizedBox(
+                                    height: sizeH * 0.02,
+                                  ),
+                                  SizedBox(
+                                    width: sizeW - 50,
+                                    child: TextFormField(
+                                      autofocus: false,
+                                      maxLines: 5,
+                                      textInputAction: TextInputAction.done,
+                                      decoration: InputDecoration(
+                                          border: OutlineInputBorder(
+                                              borderSide: BorderSide.none,
+                                              borderRadius:
+                                                  BorderRadius.circular(10)),
+                                          hintText: 'Give a Brief Advice',
+                                          contentPadding: EdgeInsets.only(
+                                              top: 15, left: 5, right: 5),
+                                          fillColor: Color(0xffF4F4F4),
+                                          filled: true),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          description = value;
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: sizeH * 0.04,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              isCheck = 1;
+                            });
+                            final isvalidation =
+                                formkey.currentState!.validate();
+
+                            print(" rating star ${rating_Two}");
+
+                            if (description.isNotEmpty &&
+                                rating_Two != 0.0 &&
+                                rating != 0.0) {
+                              // Navigator.of(context).pop();
+                              postfeedback(widget.receiverid, widget.postid,
+                                  rating, rating_Two, description);
+                              // Get.offAll(Floatbar(1));
+                              // _pageController.swipableStackController
+                              //     .next(swipeDirection: SwipeDirection.left);
+                              // setState(() {
+                              //   _pageController.left = false;
+                              // });
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: "Please give star and feedback",
+                                  toastLength: Toast.LENGTH_SHORT,
+                                  gravity: ToastGravity.CENTER,
+                                  timeInSecForIosWeb: 1,
+                                  backgroundColor: DynamicColor.gredient1,
+                                  textColor: Colors.white,
+                                  fontSize: 16.0);
+                              selectbutton = true;
+                            }
+                          },
+                          child: Container(
+                              height: 48,
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color:
+                                      isCheck == 1 ? DynamicColor.white : null,
+                                  border: isCheck == 1
+                                      ? Border.all(
+                                          color: DynamicColor.gredient2)
+                                      : null,
+                                  gradient: isCheck == 1
+                                      ? null
+                                      : DynamicColor.gradientColorChange),
+                              child: Text(
+                                "DONE",
+                                style: isCheck == 1
+                                    ? gredient216bold
+                                    : white16bold,
+                              )),
+                        ),
+                        SizedBox(height: 10),
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              isCheck = 2;
+                              _pageController.left.value = false;
+                            });
+
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                              height: 48,
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
+                                  color:
+                                      isCheck == 2 ? DynamicColor.white : null,
+                                  border: isCheck == 2
+                                      ? Border.all(
+                                          color: DynamicColor.gredient2)
+                                      : null,
+                                  gradient: isCheck == 2
+                                      ? null
+                                      : DynamicColor.gradientColorChange),
+                              child: Text(
+                                "SKIP",
+                                style: isCheck == 2
+                                    ? gredient216bold
+                                    : white16bold,
+                              )),
+                        ),
+                      ]),
+                    ],
                   ),
-                ]),
+                ),
               ),
-            ),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                BackArrow(
-                  onPressed: () {
-                    // _pageController.swipableStackController
-                    //     .next(swipeDirection: SwipeDirection.left);
+              CustomAppbarWithWhiteBg(
+                  title: 'Review',
+                  backCheckBio: 'back',
+                  backOnTap: () {
                     setState(() {
                       _pageController.left.value = false;
                     });
                     Navigator.of(context).pop();
-                    // Get.offAll(Floatbar(1));
                   },
-                  icon: Icons.arrow_back_ios,
-                  alignment: Alignment.centerLeft,
-                ),
-                BackArrow(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                    // _pageController.swipableStackController
-                    //     .next(swipeDirection: SwipeDirection.left);
-                    // Navigator.of(context).pop();
-                  },
-                  icon: Icons.arrow_forward_ios,
-                  alignment: Alignment.centerRight,
-                ),
-              ],
-            )
-          ],
+                  onPressad: () {
+                    PageNavigateScreen().push(
+                        context,
+                        ManuPage(
+                          title: 'Review',
+                          pageIndex: 1,
+                          isManu: 'Manu',
+                        ));
+                  }),
+            ],
+          ),
         ));
   }
 }

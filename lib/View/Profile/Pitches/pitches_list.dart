@@ -1,7 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/appbar_with_white_bg.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/View/Profile/Pitches/controller.dart';
@@ -11,9 +10,12 @@ import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:pitch_me_app/utils/widgets/Alert%20Box/delete_sales_post.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 
+import '../../../utils/extras/extras.dart';
+import '../../../utils/strings/images.dart';
+import '../../../utils/widgets/containers/containers.dart';
+import '../../../utils/widgets/extras/backgroundWidget.dart';
 import '../../Feedback/controller.dart';
 
 class PitchesListPage extends StatefulWidget {
@@ -42,229 +44,265 @@ class _PitchesListPageState extends State<PitchesListPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        // alignment: Alignment.center,
-        children: [
-          SingleChildScrollView(child: _postListWidget()),
-          BackArrow(
-            alignment: Alignment.centerLeft,
-            icon: Icons.arrow_back_ios,
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
-          CustomAppbar(
-            title: 'Pitches',
-            onPressad: () {
-              PageNavigateScreen().push(
-                  context,
-                  ManuPage(
-                    title: 'Pitches',
-                    pageIndex: 4,
-                    isManu: 'Manu',
-                  ));
-            },
-            onPressadForNotify: () {},
-          ),
-          NewCustomBottomBar(
-            index: 4,
-            isBack: true,
-          ),
-        ],
+      body: BackGroundWidget(
+        backgroundImage: Assets.backgroundImage,
+        bannerRequired: false,
+        fit: BoxFit.fill,
+        child: Stack(
+          // alignment: Alignment.center,
+          children: [
+            Column(
+              children: [
+                Expanded(
+                  child: Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.bottomCenter,
+                        children: [
+                          ClipPath(
+                            clipper: CurveClipper(),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  gradient: DynamicColor.gradientColorChange),
+                              height:
+                                  MediaQuery.of(context).size.height * 0.235,
+                            ),
+                          ),
+                          whiteBorderContainer(
+                              child: Image.asset(Assets.handshakeImage),
+                              color: Colors.transparent,
+                              height: SizeConfig.getSizeHeightBy(
+                                  context: context, by: 0.12),
+                              width: SizeConfig.getSizeHeightBy(
+                                  context: context, by: 0.12),
+                              cornerRadius: 25),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                _postListWidget(),
+              ],
+            ),
+            CustomAppbarWithWhiteBg(
+              title: 'Pitches',
+              checkNext: 'back',
+              onPressad: () {
+                PageNavigateScreen().push(
+                    context,
+                    ManuPage(
+                      title: 'Pitches',
+                      pageIndex: 4,
+                      isManu: 'Manu',
+                    ));
+              },
+            ),
+            NewCustomBottomBar(
+              index: 4,
+              isBack: true,
+            ),
+          ],
+        ),
       ),
     );
   }
 
   Widget _postListWidget() {
-    return Padding(
-      padding: EdgeInsets.only(
-          top: SizeConfig.getSize60(context: context),
-          left: SizeConfig.getSize15(context: context),
-          right: SizeConfig.getSize15(context: context)),
-      child: FutureBuilder<SavedListModel>(
-          future: controller.getUserData(),
-          builder: (context, snapshot) {
-            switch (snapshot.connectionState) {
-              case ConnectionState.waiting:
-                return Padding(
-                  padding: EdgeInsets.only(
-                      top: SizeConfig.getSize100(context: context) +
-                          SizeConfig.getSize100(context: context)),
-                  child: const Center(
-                      child: CircularProgressIndicator(
-                    color: DynamicColor.blue,
-                  )),
-                );
-              default:
-                if (snapshot.hasError) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        top: SizeConfig.getSize100(context: context) +
-                            SizeConfig.getSize100(context: context)),
-                    child: const Center(child: Text('No pitches available')),
-                  );
-                } else if (snapshot.data!.result.isEmpty) {
-                  return Padding(
-                    padding: EdgeInsets.only(
-                        top: SizeConfig.getSize100(context: context) +
-                            SizeConfig.getSize100(context: context)),
-                    child: const Center(child: Text('No pitches available')),
-                  );
-                } else {
-                  return ListView.builder(
-                      shrinkWrap: true,
-                      primary: false,
-                      reverse: true,
-                      itemCount: snapshot.data!.result.length,
-                      itemBuilder: (context, index) {
-                        SavedResult data = snapshot.data!.result[index];
-
+    return Expanded(
+      flex: 3,
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  left: SizeConfig.getSize15(context: context),
+                  right: SizeConfig.getSize15(context: context)),
+              child: FutureBuilder<SavedListModel>(
+                  future: controller.getUserData(),
+                  builder: (context, snapshot) {
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
                         return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.to(() => PitcheShowFullVideoPage(
-                                    url: data.vid1,
-                                    data: data,
-                                  ));
-                            },
-                            child: Stack(
-                              alignment: Alignment.topRight,
-                              children: [
-                                _leadImgeAndTitle(data, index),
-                                _removeButton(index, data.id)
-                              ],
-                            ),
-                          ),
+                          padding: EdgeInsets.only(
+                              top: SizeConfig.getSize100(context: context) +
+                                  SizeConfig.getSize50(context: context)),
+                          child: const Center(
+                              child: CircularProgressIndicator(
+                            color: DynamicColor.gredient1,
+                          )),
                         );
-                      });
-                }
-            }
-          }),
-    );
-  }
+                      default:
+                        if (snapshot.hasError) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                top: SizeConfig.getSize100(context: context) +
+                                    SizeConfig.getSize50(context: context)),
+                            child: const Center(
+                                child: Text('No pitches available')),
+                          );
+                        } else if (snapshot.data!.result.isEmpty) {
+                          return Padding(
+                            padding: EdgeInsets.only(
+                                top: SizeConfig.getSize100(context: context) +
+                                    SizeConfig.getSize50(context: context)),
+                            child: const Center(
+                                child: Text('No pitches available')),
+                          );
+                        } else {
+                          return GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                                childAspectRatio: MediaQuery.of(context)
+                                        .size
+                                        .width /
+                                    (MediaQuery.of(context).size.height * 0.90),
+                              ),
+                              shrinkWrap: true,
+                              primary: false,
+                              //reverse: true,
+                              padding: EdgeInsets.zero,
+                              itemCount: snapshot.data!.result.length,
+                              itemBuilder: (context, index) {
+                                SavedResult data = snapshot.data!.result[index];
 
-  Widget _leadImgeAndTitle(SavedResult data, int index) {
-    return Container(
-      height: 100,
-      width: double.maxFinite,
-      decoration: BoxDecoration(
-          color: DynamicColor.blue, borderRadius: BorderRadius.circular(15)),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Padding(
-              padding: const EdgeInsets.all(8.0),
-              child:
-                  //  data.vid1.isNotEmpty
-                  //     ?
-                  Container(
-                height: 80,
-                width: 80,
-                child: CachedNetworkImage(
-                  fit: BoxFit.cover,
-                  imageUrl: data.img1,
-                  progressIndicatorBuilder: (context, url, downloadProgress) =>
-                      Container(
-                    padding: EdgeInsets.all(20),
-                    child: CircularProgressIndicator(
-                        color: DynamicColor.white,
-                        value: downloadProgress.progress),
-                  ),
-                  errorWidget: (context, url, error) => Image.asset(
-                    'assets/images/image_not.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
-                // VideoViewer(
-                //   controller: VideoViewerController(),
-                //   autoPlay: false,
-                //   enableHorizontalSwapingGesture: false,
-                //   enableVerticalSwapingGesture: false,
-                //   volumeManager: VideoViewerVolumeManager.device,
-                //   onFullscreenFixLandscape: false,
-                //   forwardAmount: 5,
-                //   defaultAspectRatio: 9 / 16,
-                //   rewindAmount: -5,
-                //   looping: true,
-                //   enableShowReplayIconAtVideoEnd: false,
-                //   source: {
-                //     "Source": VideoSource(
-                //       video: VideoPlayerController.network(data.vid1),
-                //     )
-                //   },
-                // ),
-                //VideoPlayer(_videoPlayerController),
-              )
-              // : Image.asset(
-              //     'assets/images/not_video.jpg',
-              //     height: 100,
-              //     width: 100,
-              //     fit: BoxFit.cover,
-              //   ),
-              ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 8.0, right: 8.0, top: 8.0),
-              child: ListTile(
-                minLeadingWidth: 0,
-                contentPadding: EdgeInsets.only(
-                    left: MediaQuery.of(context).size.width * 0.1),
-                title: Text(
-                  data.title,
-                  style: white15TextStyle,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                ),
-                subtitle: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 5),
-                    Text(
-                      data.status == 1 ? 'Pending' : 'Approved',
-                      style: darkBlue12,
-                    ),
-                    const SizedBox(height: 5),
-                    Text(
-                      data.comment,
-                      style: white15TextStyle,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
+                                return Column(
+                                  children: [
+                                    SizedBox(
+                                      height: SizeConfig.getSizeHeightBy(
+                                          context: context, by: 0.16),
+                                      child: Card(
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(15)),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color: DynamicColor.black),
+                                              borderRadius:
+                                                  BorderRadius.circular(15),
+                                              gradient: DynamicColor
+                                                  .gradientColorChange),
+                                          child: data.img1.isNotEmpty
+                                              ? Stack(
+                                                  alignment: Alignment.center,
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              15),
+                                                      child: SizedBox(
+                                                          height: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .height,
+                                                          width: MediaQuery.of(
+                                                                  context)
+                                                              .size
+                                                              .width,
+                                                          child: Image.network(
+                                                            data.img1,
+                                                            fit: BoxFit.cover,
+                                                          )),
+                                                    ),
+                                                    removeButton(
+                                                        index, data.id),
+                                                    InkWell(
+                                                        onTap: () {
+                                                          Get.to(() =>
+                                                              PitcheShowFullVideoPage(
+                                                                url: data.vid1,
+                                                                data: data,
+                                                              ));
+                                                        },
+                                                        child: CircleAvatar(
+                                                          radius: 15,
+                                                          backgroundColor:
+                                                              Colors
+                                                                  .transparent,
+                                                          backgroundImage:
+                                                              AssetImage(
+                                                                  'assets/imagess/ic_play_circle_filled_24px.png'),
+                                                        ))
+                                                  ],
+                                                )
+                                              : ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(20),
+                                                  child: Image.asset(
+                                                    'assets/images/image_not.jpg',
+                                                    height: 100,
+                                                    width: 100,
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                        ),
+                                      ),
+                                    ),
+                                    Text(
+                                      data.title,
+                                      style: textColor15,
+                                    ),
+                                    Text(
+                                      data.status == 1
+                                          ? 'Pending'
+                                          : data.status == 2
+                                              ? 'Approved'
+                                              : 'Rejected',
+                                      style: TextStyle(
+                                        color: data.status == 1
+                                            ? DynamicColor.yellowColor
+                                            : data.status == 2
+                                                ? DynamicColor.green
+                                                : DynamicColor.redColor,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                    Text(
+                                      data.comment,
+                                      style: textColor15,
+                                      maxLines: 3,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.center,
+                                    )
+                                  ],
+                                );
+                              });
+                        }
+                    }
+                  }),
             ),
-          )
-        ],
+            spaceHeight(SizeConfig.getSizeHeightBy(context: context, by: 0.1))
+          ],
+        ),
       ),
     );
   }
 
-  Widget _removeButton(int index, id) {
-    return InkWell(
-      onTap: () {
-        showDialog(
-            context: context,
-            builder: (context) => DeleteSalesPostPopUp(
-                  id: id,
-                  type: 'Pitches',
-                )).then((value) {
-          setState(() {});
-        });
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
+  Widget removeButton(int index, id) {
+    return Align(
+      alignment: Alignment.topRight,
+      child: InkWell(
+        onTap: () {
+          showDialog(
+              context: context,
+              builder: (context) => DeleteSalesPostPopUp(
+                    id: id,
+                    type: 'Pitches',
+                  )).then((value) {
+            setState(() {});
+          });
+        },
         child: Container(
-            height: 20,
-            width: 20,
+            height: 25,
+            width: 25,
             decoration: BoxDecoration(
                 color: DynamicColor.white,
                 borderRadius: BorderRadius.circular(20)),
-            child: Image.asset(
-              "assets/images/ic_add_24px.png",
-              fit: BoxFit.contain,
+            child: Icon(
+              Icons.close,
+              color: DynamicColor.gredient1,
             )),
       ),
     );

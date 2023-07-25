@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/appbar_with_white_bg.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/main.dart';
@@ -106,7 +106,8 @@ class _ChatListPageState extends State<ChatListPage>
                       ClipPath(
                         clipper: CurveClipper(),
                         child: Container(
-                          color: DynamicColor.blue,
+                          decoration: BoxDecoration(
+                              gradient: DynamicColor.gradientColorChange),
                           height: MediaQuery.of(context).size.height * 0.235,
                           child: Stack(
                             alignment: Alignment.bottomCenter,
@@ -133,16 +134,19 @@ class _ChatListPageState extends State<ChatListPage>
                                           onTap: () {
                                             Navigator.of(context).pop();
                                           },
-                                          height: SizeConfig.getSize50(
+                                          height: SizeConfig.getSize38(
                                               context: context),
-                                          width: SizeConfig.getSize50(
+                                          width: SizeConfig.getSize38(
                                               context: context),
-                                          colorTween: _colorTween,
+                                          borderRadius: BorderRadius.only(
+                                              topRight: Radius.circular(10),
+                                              bottomLeft: Radius.circular(10)),
+                                          color: DynamicColor.white,
                                           child: Padding(
                                             padding: EdgeInsets.only(left: 10),
                                             child: Icon(
                                               Icons.arrow_back_ios,
-                                              color: DynamicColor.blue,
+                                              color: DynamicColor.gredient1,
                                               size: 28,
                                             ),
                                           ),
@@ -180,7 +184,7 @@ class _ChatListPageState extends State<ChatListPage>
               ),
             ],
           ),
-          CustomAppbar(
+          CustomAppbarWithWhiteBg(
             title: 'CHATS',
             colorTween: 'BIOGRAPHY',
             onPressad: () {
@@ -192,7 +196,6 @@ class _ChatListPageState extends State<ChatListPage>
                     isManu: 'Manu',
                   ));
             },
-            onPressadForNotify: () {},
           ),
           NewCustomBottomBar(
             index: 3,
@@ -217,7 +220,7 @@ class _ChatListPageState extends State<ChatListPage>
                       bottom: SizeConfig.getSize60(context: context)),
                   child: const Center(
                       child: CircularProgressIndicator(
-                    color: DynamicColor.blue,
+                    color: DynamicColor.gredient1,
                   )),
                 );
               default:
@@ -277,16 +280,16 @@ class _ChatListPageState extends State<ChatListPage>
                                         backgroundImage: imageProvider),
                                 placeholder: (context, url) => const Center(
                                     child: CircularProgressIndicator(
-                                  color: DynamicColor.blue,
+                                  color: DynamicColor.gredient1,
                                 )),
                                 errorWidget: (context, url, error) =>
                                     const CircleAvatar(
                                   radius: 30,
-                                  backgroundColor: DynamicColor.white,
+                                  backgroundColor: DynamicColor.gredient2,
                                   child: Icon(
                                     Icons.person,
                                     size: 28,
-                                    color: DynamicColor.blue,
+                                    color: DynamicColor.white,
                                   ),
                                 ),
                               ),
@@ -427,7 +430,7 @@ class _ChatListPageState extends State<ChatListPage>
             leading: CircleAvatar(
               radius: 23,
               backgroundImage: AssetImage('assets/image/handshake.png'),
-              backgroundColor: DynamicColor.blue,
+              backgroundColor: DynamicColor.gredient2,
             ),
             title: Text(
               'Pitch Me App Support',

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:pitch_me_app/Phase%206/Guest%20UI/Guest%20limitation%20pages/under_progress_limitation.dart';
-import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
 import 'package:pitch_me_app/View/Custom%20header%20view/new_bottom_bar.dart';
 import 'package:pitch_me_app/View/Feedback/controller.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
@@ -16,10 +15,11 @@ import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
 import 'package:pitch_me_app/utils/strings/strings.dart';
 import 'package:pitch_me_app/utils/styles/styles.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../View/Custom header view/appbar_with_white_bg.dart';
 
 class HomeBiographyPage extends StatefulWidget {
   String type;
@@ -95,43 +95,109 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
           ClipPath(
             clipper: CurveClipper(),
             child: Container(
-              color: DynamicColor.blue,
-              height: MediaQuery.of(context).size.height * 0.235,
+              decoration:
+                  BoxDecoration(gradient: DynamicColor.gradientColorChange),
+              height: MediaQuery.of(context).size.height * 0.255,
             ),
           ),
           Obx(() {
             return controller.isLoading.value
                 ? Center(
                     child: CircularProgressIndicator(
-                    color: DynamicColor.blue,
+                    color: DynamicColor.gredient1,
                   ))
                 : Stack(
+                    alignment: Alignment.center,
                     children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                          top: SizeConfig.getSize60(context: context) +
+                              SizeConfig.getSize20(context: context),
+                        ),
+                        child: msgText(),
+                      ),
                       Column(
                         children: [
                           SizedBox(
                             height: SizeConfig.getSize60(context: context) +
-                                SizeConfig.getSize20(context: context),
+                                SizeConfig.getSize60(context: context),
                           ),
-                          msgText(),
+
                           biodata(),
                           //    SizedBox(height: 15),
                           userDataFields()
                         ],
                       ),
-                      CustomAppbar(
-                        title: 'BIOGRAPHY',
-                        colorTween: 'BIOGRAPHY',
-                        onPressad: () {
-                          PageNavigateScreen().push(
-                              context,
-                              ManuPage(
-                                title: 'BIOGRAPHY',
-                                pageIndex: 4,
-                                isManu: 'Manu',
-                              ));
-                        },
-                        onPressadForNotify: () {},
+                      Column(
+                        children: [
+                          CustomAppbarWithWhiteBg(
+                            title: 'BIOGRAPHY',
+                            colorTween: 'BIOGRAPHY',
+                            backCheckBio: 'back',
+                            checkNew: widget.type == 'back' ? null : 'next',
+                            backOnTap: () {
+                              if (widget.type == 'watch') {
+                                PageNavigateScreen()
+                                    .normalpushReplesh(context, Floatbar(1));
+                              } else {
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            nextOnTap: () {
+                              if (controller.bioDoc != null) {
+                                if (getChat.isNotEmpty) {
+                                  PageNavigateScreen().normalpushReplesh(
+                                      context,
+                                      ChatPage(
+                                        id: chatData['messages']['_id'],
+                                        recieverid: controller.bioDoc == null
+                                            ? ''
+                                            : controller.bioDoc!.userid,
+                                        name: controller.bioDoc == null
+                                            ? null
+                                            : controller.bioDoc!.user.username,
+                                        img: controller.bioDoc == null
+                                            ? null
+                                            : controller.bioDoc!.picture,
+                                        userID: controller.bioDoc == null
+                                            ? ''
+                                            : controller.bioDoc!.userid,
+                                      ));
+                                } else {
+                                  PageNavigateScreen().normalpushReplesh(
+                                      context,
+                                      ConfirmationChat(
+                                        id: controller.bioDoc == null
+                                            ? null
+                                            : controller.bioDoc!.userid,
+                                        recieverid: controller.bioDoc == null
+                                            ? null
+                                            : controller.bioDoc!.userid,
+                                        name: controller.bioDoc == null
+                                            ? null
+                                            : controller.bioDoc!.user.username,
+                                        img: controller.bioDoc == null
+                                            ? null
+                                            : controller.bioDoc!.picture,
+                                      ));
+                                }
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg: 'Profile not verified for chat',
+                                    gravity: ToastGravity.CENTER);
+                              }
+                            },
+                            onPressad: () {
+                              PageNavigateScreen().push(
+                                  context,
+                                  ManuPage(
+                                    title: 'BIOGRAPHY',
+                                    pageIndex: 4,
+                                    isManu: 'Manu',
+                                  ));
+                            },
+                          ),
+                        ],
                       ),
                     ],
                   );
@@ -139,71 +205,6 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
           NewCustomBottomBar(
             index: 4,
             isBack: true,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              BackArrow(
-                  alignment: Alignment.centerLeft,
-                  onPressed: () {
-                    if (widget.type == 'watch') {
-                      PageNavigateScreen()
-                          .normalpushReplesh(context, Floatbar(1));
-                    } else {
-                      Navigator.of(context).pop();
-                    }
-                  },
-                  icon: Icons.arrow_back_ios),
-              widget.type == 'back'
-                  ? Container()
-                  : BackArrow(
-                      alignment: Alignment.centerRight,
-                      onPressed: () {
-                        if (controller.bioDoc != null) {
-                          if (getChat.isNotEmpty) {
-                            PageNavigateScreen().normalpushReplesh(
-                                context,
-                                ChatPage(
-                                  id: chatData['messages']['_id'],
-                                  recieverid: controller.bioDoc == null
-                                      ? ''
-                                      : controller.bioDoc!.userid,
-                                  name: controller.bioDoc == null
-                                      ? null
-                                      : controller.bioDoc!.user.username,
-                                  img: controller.bioDoc == null
-                                      ? null
-                                      : controller.bioDoc!.picture,
-                                  userID: controller.bioDoc == null
-                                      ? ''
-                                      : controller.bioDoc!.userid,
-                                ));
-                          } else {
-                            PageNavigateScreen().normalpushReplesh(
-                                context,
-                                ConfirmationChat(
-                                  id: controller.bioDoc == null
-                                      ? null
-                                      : controller.bioDoc!.userid,
-                                  recieverid: controller.bioDoc == null
-                                      ? null
-                                      : controller.bioDoc!.userid,
-                                  name: controller.bioDoc == null
-                                      ? null
-                                      : controller.bioDoc!.user.username,
-                                  img: controller.bioDoc == null
-                                      ? null
-                                      : controller.bioDoc!.picture,
-                                ));
-                          }
-                        } else {
-                          Fluttertoast.showToast(
-                              msg: 'Profile not verified for chat',
-                              gravity: ToastGravity.CENTER);
-                        }
-                      },
-                      icon: Icons.arrow_forward_ios),
-            ],
           ),
         ],
       ),
@@ -240,7 +241,7 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
                 title2: '',
                 checkApprove: controller.idImageStatus,
                 isHttp: (controller.bioDoc != null) ? controller.bioDoc : null,
-                textStyle: blue17,
+                textStyle: gredient116bold,
               ),
               SizedBox(
                 height: 10,
@@ -250,7 +251,7 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
                 title2: 'Check',
                 checkApprove: controller.fackCheckImageStatus,
                 isHttp: (controller.bioDoc != null) ? controller.bioDoc : null,
-                textStyle: blue10,
+                textStyle: gradient110,
               )
             ],
           ),
@@ -262,7 +263,7 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
                 title2: 'Certificate',
                 checkApprove: controller.skillImageStatus,
                 isHttp: (controller.bioDoc != null) ? controller.bioDoc : null,
-                textStyle: blue10,
+                textStyle: gradient110,
               ),
               SizedBox(
                 height: 10,
@@ -272,7 +273,7 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
                 title2: 'Funds',
                 checkApprove: controller.proofImageStatus,
                 isHttp: (controller.bioDoc != null) ? controller.bioDoc : null,
-                textStyle: blue10,
+                textStyle: gradient110,
               )
             ],
           ),
@@ -294,7 +295,7 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
               alignment: Alignment.bottomRight,
               children: [
                 CircleAvatar(
-                  radius: 63,
+                  radius: 68,
                   backgroundColor: DynamicColor.white,
                   backgroundImage: NetworkImage(controller.bioDoc!.picture),
                 ),
@@ -303,7 +304,7 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
                   width: SizeConfig.getSize30(context: context),
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                      color: DynamicColor.blue,
+                      color: DynamicColor.green,
                       borderRadius: BorderRadius.circular(50)),
                   child: Icon(
                     Icons.check,
@@ -320,10 +321,10 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
                   Container(
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
-                        color: DynamicColor.darkBlue,
+                        gradient: DynamicColor.gradientColorChange,
                         borderRadius: BorderRadius.circular(100)),
                     child: Text(
-                      'Pending',
+                      'Profile Picture',
                       style: TextStyle(
                           fontWeight: FontWeight.w500,
                           fontSize: 12,
@@ -354,9 +355,9 @@ class _HomeBiographyPageState extends State<HomeBiographyPage> {
       children: [
         Obx(() {
           return Text(
-            'Name:' + controller.userName.value,
+            'Name: ' + controller.userName.value,
             style: TextStyle(
-              color: DynamicColor.blue,
+              color: DynamicColor.black,
               fontSize: 20,
               fontWeight: FontWeight.normal,
             ),

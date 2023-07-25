@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -90,14 +91,14 @@ class SuccessPageController extends GetxController {
           filename: _videoFirstPageController.videoUrl.value.split('/').last));
       request.files.add(await http.MultipartFile.fromPath(
         'img1',
-        _addImageController.listImagePaths[0],
+        _addImageController.listImagePaths[0].path,
         filename:
             _addImageController.listImagePaths[0].toString().split('/').last,
       ));
       if (_addImageController.listImagePaths.length > 1) {
         request.files.add(await http.MultipartFile.fromPath(
           'img2',
-          _addImageController.listImagePaths[1],
+          _addImageController.listImagePaths[1].path,
           filename:
               _addImageController.listImagePaths[1].toString().split('/').last,
         ));
@@ -105,7 +106,7 @@ class SuccessPageController extends GetxController {
       if (_addImageController.listImagePaths.length > 2) {
         request.files.add(await http.MultipartFile.fromPath(
           'img3',
-          _addImageController.listImagePaths[2],
+          _addImageController.listImagePaths[2].path,
           filename:
               _addImageController.listImagePaths[2].toString().split('/').last,
         ));
@@ -151,7 +152,7 @@ class SuccessPageController extends GetxController {
       }
     } catch (e) {
       isLoading.value = false;
-      // log('error = ' + _addImageController.fileFullPath.path.toString());
+      log('error = ' + e.toString());
     }
   }
 }

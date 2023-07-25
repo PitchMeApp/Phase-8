@@ -10,8 +10,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:swipable_stack/swipable_stack.dart';
 import 'package:video_viewer/domain/bloc/controller.dart';
 
-import '../../utils/widgets/Navigation/custom_navigation.dart';
-
 class HomePageWidget extends StatefulWidget {
   const HomePageWidget({
     Key? key,
@@ -91,6 +89,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
             stackClipBehaviour: Clip.none,
             onSwipeCompleted: (index, direction) {
               if (checkGuestType == 'null') {
+                controller.label =
+                    direction == SwipeDirection.right ? 'Saved' : 'Seen';
                 var i = swipeCount + 1;
                 print('guest = ' + i.toString());
                 setState(() {
@@ -146,7 +146,8 @@ class _HomePageWidgetState extends State<HomePageWidget>
               if (this.mounted) {
                 controller.updateProgressOfCard(properties.swipeProgress);
                 controller.updateDirectionOfCard(
-                    checkGuestType == 'null' ? null : properties.direction);
+                    //checkGuestType == 'null' ? null :
+                    properties.direction);
               }
               return Stack(
                 children: [
@@ -177,41 +178,40 @@ class _HomePageWidgetState extends State<HomePageWidget>
                       height: 1,
                     ),
                     child: Text(
-                      controller.direction == null
-                          ? ''
-                          : controller.direction == SwipeDirection.left
-                              ? 'Seen'
-                              : 'Saved',
+                      // controller.direction == null
+                      //     ? ''
+                      //     :
+                      controller.direction == SwipeDirection.left
+                          ? 'Seen'
+                          : 'Saved',
                     ),
                   )),
         Align(
           alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: EdgeInsets.only(
-                bottom: SizeConfig.getSize5(context: context), right: 8),
-            child: GestureDetector(
-              onTap: () {
-                widget.controller.nextPage(
-                    duration: Duration(milliseconds: 200),
-                    curve: Curves.linear);
-              },
-              child: Container(
-                height: SizeConfig.getSize35(context: context),
-                width: SizeConfig.getSize35(context: context),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: Color.fromARGB(71, 60, 60, 60).withOpacity(0.2),
-                        blurRadius: 20,
-                        offset: Offset(
-                          0,
-                          0,
-                        ))
-                  ],
-                ),
-                child: Image.asset(
-                    "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png"),
+          child: GestureDetector(
+            onTap: () {
+              widget.controller.nextPage(
+                  duration: Duration(milliseconds: 200), curve: Curves.linear);
+            },
+            child: Container(
+              height: SizeConfig.getSize35(context: context),
+              width: SizeConfig.getSize35(context: context),
+              margin: EdgeInsets.only(
+                  bottom: SizeConfig.getSize60(context: context) +
+                      SizeConfig.getSize15(context: context)),
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Color.fromARGB(71, 60, 60, 60).withOpacity(0.2),
+                      blurRadius: 20,
+                      offset: Offset(
+                        0,
+                        0,
+                      ))
+                ],
               ),
+              child: Image.asset(
+                  "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png"),
             ),
           ),
         ),

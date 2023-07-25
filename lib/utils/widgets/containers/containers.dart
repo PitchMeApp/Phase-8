@@ -10,7 +10,7 @@ import 'package:pitch_me_app/utils/styles/styles.dart';
 
 Widget appLogoImage({double? height, double? width, bool isDark = true}) {
   return Image.asset(
-    isDark ? Assets.appLogoDarkBluePng : Assets.appLogoPng,
+    Assets.appLogoPng,
     height: height,
     width: width,
     fit: BoxFit.fitWidth,
@@ -75,17 +75,21 @@ class buttonContainer extends StatefulWidget {
   Widget child;
   bool? fromAppBar = false;
   double? cornerRadius = 10;
+  int? singleSelectColor;
+  int? isSingleSelect;
   Function() onTap;
 
-  buttonContainer(
-      {Key? key,
-      this.height,
-      this.width,
-      required this.child,
-      this.fromAppBar,
-      required this.onTap,
-      this.cornerRadius})
-      : super(key: key);
+  buttonContainer({
+    Key? key,
+    this.height,
+    this.width,
+    required this.child,
+    this.fromAppBar,
+    required this.onTap,
+    this.cornerRadius,
+    this.singleSelectColor,
+    this.isSingleSelect,
+  }) : super(key: key);
 
   @override
   State<buttonContainer> createState() => _buttonContainerState();
@@ -103,81 +107,35 @@ class _buttonContainerState extends State<buttonContainer> {
       widget.fromAppBar = false;
     }
     return InkWell(
-      onTap: () {
-        isPressed = !isPressed;
-        setState(() {});
-        Future.delayed(Duration(milliseconds: 300)).then((value) {
-          widget.onTap();
+        onTap: () {
           isPressed = !isPressed;
           setState(() {});
-        });
-      },
-      child: Stack(
-        children: [
-          Container(
-            width: widget.width,
-            height: widget.height,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(widget.cornerRadius!),
-              color: const Color(0xff377eb4),
-              boxShadow: [
-                if (!isPressed)
-                  BoxShadow(
-                    color: const Color(0x80000000),
-                    offset: Offset(10, 10),
-                    blurRadius: 20,
-                  ),
-              ],
-            ),
-          ),
-          Container(
-            width: widget.width,
-            height: widget.height,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(widget.cornerRadius!),
-              color: const Color(0xff377eb4),
-              boxShadow: isPressed
-                  ? [
-                      BoxShadow(
-                        blurRadius: 10,
-                        color: Colors.black.withOpacity(0.3),
-                        offset: Offset(5, 5),
-                        spreadRadius: 2,
-                        inset: true,
-                      ),
-                      BoxShadow(
-                        blurRadius: 10,
-                        spreadRadius: 1,
-                        color: Colors.black.withOpacity(0.3),
-                        offset: -Offset(5, 5),
-                        inset: true,
-                      ),
-                    ]
-                  : [
-                      BoxShadow(
-                        color: DynamicColor.blue,
-                        offset: Offset(5, 5),
-                        blurRadius: 20,
-                      ),
-                      BoxShadow(
-                        color: DynamicColor.blue,
-                        offset: Offset(-5, -5),
-                        blurRadius: 10,
-                      ),
-                      if (!widget.fromAppBar!)
-                        BoxShadow(
-                          blurRadius: 20,
-                          spreadRadius: 0.5,
-                          color: colors.white.withOpacity(0.3),
-                          offset: Offset(-8, -8),
-                        )
-                    ],
-            ),
-            child: widget.child,
-          ),
-        ],
-      ),
-    );
+          Future.delayed(Duration(milliseconds: 300)).then((value) {
+            widget.onTap();
+            isPressed = !isPressed;
+            setState(() {});
+          });
+        },
+        child: Card(
+          elevation: 5,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          child: Container(
+              height: widget.height,
+              width: widget.width,
+              decoration: BoxDecoration(
+                  gradient: widget.singleSelectColor == widget.isSingleSelect
+                      ? null
+                      : DynamicColor.gradientColorChange,
+                  color: widget.singleSelectColor == widget.isSingleSelect
+                      ? DynamicColor.white
+                      : null,
+                  borderRadius: BorderRadius.circular(10),
+                  border: widget.singleSelectColor == widget.isSingleSelect
+                      ? Border.all(color: DynamicColor.gredient2)
+                      : null),
+              child: widget.child),
+        ));
   }
 }
 
@@ -186,12 +144,16 @@ class NewButtonContainer extends StatefulWidget {
   String subTitle;
   int heroTage;
   VoidCallback onTap;
+  int? singleSelectColor;
+  int? isSingleSelect;
   NewButtonContainer({
     super.key,
     required this.onTap,
     required this.title,
     required this.subTitle,
     required this.heroTage,
+    this.singleSelectColor,
+    this.isSingleSelect,
   });
 
   @override
@@ -203,18 +165,39 @@ class _NewButtonContainerState extends State<NewButtonContainer> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: 50,
-          width: MediaQuery.of(context).size.width - 40,
-          child: FloatingActionButton.extended(
-              heroTag: widget.heroTage,
-              backgroundColor: DynamicColor.white,
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-              onPressed: widget.onTap,
-              label: Text(
-                widget.title,
-                style: blue17,
+        InkWell(
+          onTap: widget.onTap,
+          child: SizedBox(
+              height: 50,
+              width: MediaQuery.of(context).size.width - 40,
+              child: Card(
+                elevation: 5,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10)),
+                child: Container(
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                      gradient:
+                          widget.singleSelectColor == widget.isSingleSelect
+                              ? null
+                              : DynamicColor.gradientColorOnBegin,
+                      color: widget.singleSelectColor == widget.isSingleSelect
+                          ? DynamicColor.white
+                          : null,
+                      borderRadius: BorderRadius.circular(10),
+                      border: widget.singleSelectColor == widget.isSingleSelect
+                          ? Border.all(color: DynamicColor.gredient2)
+                          : null),
+                  // decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(10),
+                  //     gradient: DynamicColor.gradientColorOnBegin),
+                  child: Text(
+                    widget.title,
+                    style: widget.singleSelectColor == widget.isSingleSelect
+                        ? gredient116bold
+                        : white16bold,
+                  ),
+                ),
               )),
         ),
         SizedBox(
@@ -223,7 +206,7 @@ class _NewButtonContainerState extends State<NewButtonContainer> {
             padding: const EdgeInsets.only(top: 5, bottom: 5),
             child: Text(
               widget.subTitle,
-              style: white13TextStyle,
+              style: black14w5,
               textAlign: TextAlign.center,
             ),
           ),
@@ -278,12 +261,12 @@ class _BottomMenuContainerState extends State<BottomMenuContainer> {
           boxShadow: isPressed
               ? [
                   BoxShadow(
-                      color: colors.black.withOpacity(0.6),
+                      color: DynamicColor.black.withOpacity(0.6),
                       offset: Offset(2, 2),
                       blurRadius: 7,
                       inset: true),
                   BoxShadow(
-                      color: colors.black.withOpacity(0.6),
+                      color: DynamicColor.black.withOpacity(0.6),
                       offset: Offset(-2, -2),
                       blurRadius: 7,
                       inset: true),
@@ -311,16 +294,18 @@ class AppBarIconContainer extends StatefulWidget {
   final double? width;
   final Widget child;
   double cornerRadius;
-  Animation? colorTween;
+  Color? color;
   VoidCallback? onTap;
+  BorderRadius? borderRadius;
   AppBarIconContainer({
     Key? key,
     this.height,
     this.width,
     required this.child,
     this.cornerRadius = 10,
-    required this.colorTween,
+    this.color,
     this.onTap,
+    this.borderRadius,
   }) : super(key: key);
 
   @override
@@ -332,39 +317,24 @@ class _AppBarIconContainerState extends State<AppBarIconContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: widget.colorTween!,
-        builder: (context, child) {
-          return InkWell(
-            onTap: widget.onTap,
-            child: Container(
-              height: widget.height,
-              width: widget.width,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(widget.cornerRadius),
-                  color: widget.colorTween!.value,
-                  boxShadow: isPressed
-                      ? [
-                          BoxShadow(
-                            blurRadius: 10,
-                            color: Colors.black.withOpacity(0.3),
-                            offset: Offset(5, 5),
-                            spreadRadius: 2,
-                            inset: true,
-                          ),
-                          BoxShadow(
-                            blurRadius: 10,
-                            spreadRadius: 1,
-                            color: Colors.black.withOpacity(0.3),
-                            offset: -Offset(5, 5),
-                            inset: true,
-                          ),
-                        ]
-                      : []),
-              child: widget.child,
-            ),
-          );
-        });
+    return InkWell(
+      onTap: widget.onTap,
+      child: Container(
+        height: widget.height,
+        width: widget.width,
+        decoration: BoxDecoration(
+          borderRadius: widget.borderRadius == null
+              ? BorderRadius.only(
+                  topLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10))
+              : widget.borderRadius!,
+          gradient:
+              widget.color == null ? DynamicColor.gradientColorChange : null,
+          color: (widget.color == null) ? null : widget.color,
+        ),
+        child: widget.child,
+      ),
+    );
   }
   // dev
 }
@@ -403,7 +373,7 @@ class CircleBox extends StatelessWidget {
                         color: DynamicColor.white,
                         borderRadius: BorderRadius.circular(100)),
                     child: Padding(
-                      padding: const EdgeInsets.all(7),
+                      padding: const EdgeInsets.all(5),
                       child: isHttp != null
                           ? imageType.contains('pdf')
                               ? Container(
@@ -419,7 +389,7 @@ class CircleBox extends StatelessWidget {
                                 )
                               : imageType.contains('https://api')
                                   ? CircleAvatar(
-                                      radius: 30,
+                                      radius: 35,
                                       backgroundColor: DynamicColor.white,
                                       backgroundImage: NetworkImage(imageType),
                                     )
@@ -502,7 +472,7 @@ class CircleBox extends StatelessWidget {
                       padding: EdgeInsets.all(2),
                       alignment: Alignment.center,
                       decoration: BoxDecoration(
-                          color: DynamicColor.blue,
+                          color: DynamicColor.green,
                           borderRadius: BorderRadius.circular(50)),
                       child: Icon(
                         Icons.check,
@@ -577,7 +547,7 @@ class CircleBox extends StatelessWidget {
                           ),
                         )
                       : CircleAvatar(
-                          radius: 30,
+                          radius: 33,
                           backgroundColor: DynamicColor.white,
                           backgroundImage: FileImage(File(imageType)),
                         ),
@@ -612,69 +582,47 @@ class HomeCircleBox extends StatelessWidget {
         InkWell(
           //onTap: onPressad,
           child: Container(
-              height: SizeConfig.getSize60(context: context),
-              width: SizeConfig.getSize60(context: context),
-              alignment: Alignment.center,
-              decoration: BoxDecoration(
-                  color: DynamicColor.white,
-                  borderRadius: BorderRadius.circular(100)),
-              child: Padding(
-                  padding: const EdgeInsets.all(7),
-                  child:
-                      // isHttp != null
-                      //     ?
-                      Container(
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        color: checkApprove == 2
-                            ? DynamicColor.blue
-                            : DynamicColor.darkBlue,
-                        borderRadius: BorderRadius.circular(100)),
-                    child: Text(
-                      checkApprove == 2
-                          ? 'Verified'
-                          : checkApprove == 3
-                              ? 'Not Verified'
-                              : 'Pending',
-                      style: TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12,
-                          color: DynamicColor.white),
+            height: SizeConfig.getSize60(context: context),
+            width: SizeConfig.getSize60(context: context),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: DynamicColor.white,
+                borderRadius: BorderRadius.circular(100)),
+            child: Padding(
+              padding: const EdgeInsets.all(7),
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                    color: Color(0xffE6E6E6),
+                    borderRadius: BorderRadius.circular(100)),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      title,
+                      style: textStyle,
                       textAlign: TextAlign.center,
                     ),
-                  )
-                  // : Container(
-                  //     alignment: Alignment.center,
-                  //     decoration: BoxDecoration(
-                  //         color: Color(0xffE6E6E6),
-                  //         borderRadius: BorderRadius.circular(100)),
-                  //     child: Column(
-                  //       mainAxisAlignment: MainAxisAlignment.center,
-                  //       crossAxisAlignment: CrossAxisAlignment.center,
-                  //       children: [
-                  //         Text(
-                  //           title,
-                  //           style: textStyle,
-                  //           textAlign: TextAlign.center,
-                  //         ),
-                  //         title2.isEmpty
-                  //             ? Container()
-                  //             : Text(
-                  //                 title2,
-                  //                 style: textStyle,
-                  //                 textAlign: TextAlign.center,
-                  //               ),
-                  //  ],
-                  //),
-                  //),
-                  )),
+                    title2.isEmpty
+                        ? Container()
+                        : Text(
+                            title2,
+                            style: textStyle,
+                            textAlign: TextAlign.center,
+                          ),
+                  ],
+                ),
+              ),
+            ),
+          ),
         ),
         checkApprove == 2
             ? Container(
                 padding: EdgeInsets.all(2),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
-                    color: DynamicColor.blue,
+                    color: DynamicColor.green,
                     borderRadius: BorderRadius.circular(50)),
                 child: Icon(
                   Icons.check,
@@ -745,6 +693,7 @@ class CustomBioFields extends StatelessWidget {
       child: InkWell(
         onTap: onTap,
         child: Card(
+          elevation: 5,
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
           child: Row(
@@ -756,7 +705,7 @@ class CustomBioFields extends StatelessWidget {
                 alignment: Alignment.center,
                 margin: EdgeInsets.only(top: 5, bottom: 5, left: 10),
                 decoration: BoxDecoration(
-                    color: DynamicColor.blue,
+                    gradient: DynamicColor.gradientColorChange,
                     borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(10),
                         bottomRight: Radius.circular(10))),
@@ -769,7 +718,7 @@ class CustomBioFields extends StatelessWidget {
                 title,
                 style: TextStyle(
                     color: isHttp != null
-                        ? DynamicColor.blue
+                        ? DynamicColor.black
                         : DynamicColor.lightwhite,
                     fontSize: 16),
               ),

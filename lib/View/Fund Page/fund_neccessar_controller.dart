@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class FundNacessaryController extends GetxController {
-  final scrollController = FixedExtentScrollController();
+  final scrollController = FixedExtentScrollController(initialItem: 3);
 
   dynamic industryList;
   RxList checkItem = RxList([].obs);
   RxList getValueList = RxList([].obs);
 
-  RxInt chengeIndexColor = 0.obs;
+  RxInt chengeIndexColor = 3.obs;
 
   RxString selectedValue = ''.obs;
   List data = [

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:pitch_me_app/View/Custom%20header%20view/custom_header_view.dart';
 import 'package:pitch_me_app/View/success%20page/controller.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
-import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
+import 'package:pitch_me_app/utils/widgets/extras/backgroundWidget.dart';
 import 'package:pitch_me_app/utils/widgets/extras/banner.dart';
+import 'package:sizer/sizer.dart';
+
+import '../../utils/extras/extras.dart';
+import '../../utils/strings/images.dart';
+import '../../utils/styles/styles.dart';
 
 class ConfirmationPost extends StatefulWidget {
   const ConfirmationPost({super.key});
@@ -17,104 +20,190 @@ class ConfirmationPost extends StatefulWidget {
 
 class _ConfirmationPostState extends State<ConfirmationPost> {
   final SuccessPageController _controller = Get.put(SuccessPageController());
+  int isCheck = 0;
   @override
   Widget build(BuildContext context) {
+    final sizeH = MediaQuery.of(context).size.height;
+    final sizeW = MediaQuery.of(context).size.width;
     return Scaffold(
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: BannerWidget(onPressad: () {
+      bottomNavigationBar: BannerWidget(onPressad: () {
         print('object');
       }),
-      body: Stack(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: SizeConfig.getSize100(context: context) +
-                    SizeConfig.getSize55(context: context),
+      body: BackGroundWidget(
+        backgroundImage: Assets.backgroundImage,
+        fit: BoxFit.fill,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: sizeH * 0.08,
+            ),
+            Padding(
+              padding:
+                  EdgeInsets.only(left: SizeConfig.getSize15(context: context)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    "assets/imagess/Group.png",
+                    height: sizeH * 0.09,
+                  ),
+                  Image.asset(
+                    "assets/imagess/Group 2.png",
+                    height: sizeH * 0.09,
+                  ),
+                ],
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 5),
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width - 40,
-                  child: Text(
-                    "Are you sure you want to send this Sales Pitch for Approval?",
-                    style: TextStyle(
-                        fontSize: MediaQuery.of(context).size.height * 0.025,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 0.5,
-                        color: Color(0xff377EB4)),
-                    textAlign: TextAlign.center,
+            ),
+            SizedBox(
+              height: sizeH * 0.05,
+            ),
+            Padding(
+              padding: EdgeInsets.only(left: 0),
+              child: Image.asset(
+                "assets/imagess/Pitch me Logo.png",
+                height: sizeH * 0.17,
+              ),
+            ),
+            spaceHeight(SizeConfig.getSize20(context: context)),
+            Padding(
+              padding:
+                  EdgeInsets.only(left: SizeConfig.getSize15(context: context)),
+              child: Image.asset(
+                'assets/imagess/Are you.png',
+                height: SizeConfig.getSizeHeightBy(context: context, by: 0.14),
+              ),
+            ),
+            //spaceHeight(SizeConfig.getSize30(context: context)),
+            SizedBox(
+                child: Column(children: [
+              Text(
+                'You want to send this',
+                style: TextStyle(
+                  fontSize: sizeH * 0.025,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.6,
+                  color: DynamicColor.textColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                'Seles Pitch for',
+                style: TextStyle(
+                  fontSize: sizeH * 0.025,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.6,
+                  color: DynamicColor.textColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                'Approval?',
+                style: TextStyle(
+                  fontSize: sizeH * 0.025,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 0.6,
+                  color: DynamicColor.textColor,
+                ),
+                textAlign: TextAlign.center,
+              ),
+            ])),
+            Container(
+              height: sizeH * 0.05,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Card(
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        isCheck = 1;
+                      });
+                      _controller.postSalesPitch(context);
+                    },
+                    child: Container(
+                      height: 5.h,
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(10),
+                              bottomLeft: Radius.circular(10)),
+                          color: isCheck == 1 ? DynamicColor.white : null,
+                          border: isCheck == 1
+                              ? Border.all(color: DynamicColor.gredient2)
+                              : null,
+                          gradient: isCheck == 1
+                              ? null
+                              : DynamicColor.gradientColorChange),
+                      child: Text(
+                        "Yes",
+                        style: isCheck == 1 ? gredient216bold : white16bold,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.24,
-                padding: EdgeInsets.only(bottom: 20),
+                Card(
+                  elevation: 10,
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  margin: EdgeInsets.zero,
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        isCheck = 2;
+                      });
+                      Navigator.of(context).pop();
+                    },
+                    child: Container(
+                      height: 5.h,
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(10),
+                              bottomRight: Radius.circular(10)),
+                          color: isCheck == 2 ? DynamicColor.white : null,
+                          border: isCheck == 2
+                              ? Border.all(color: DynamicColor.gredient2)
+                              : null,
+                          gradient: isCheck == 2
+                              ? null
+                              : DynamicColor.gradientColorChange),
+                      child: Text(
+                        "Return",
+                        style: isCheck == 2 ? gredient216bold : white16bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Padding(
+                padding: EdgeInsets.only(top: 25),
                 child: Obx(() {
                   return _controller.isLoading.value == true
                       ? Center(
                           child: CircularProgressIndicator(
-                              color: DynamicColor.blue),
+                              color: DynamicColor.gredient1),
                         )
                       : Container(
                           height: 36,
                         );
                 }),
-              )
-            ],
-          ),
-          Container(
-            alignment: Alignment.topCenter,
-            margin:
-                EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.13),
-            child: whiteBorderContainer(
-                child: Image.asset('assets/image/Group 12261.png'),
-                color: Colors.transparent,
-                height: SizeConfig.getSizeHeightBy(context: context, by: 0.15),
-                width: SizeConfig.getSizeHeightBy(context: context, by: 0.15),
-                cornerRadius: 25),
-          ),
-          CustomHeaderView(
-            title: '',
-            icon: '',
-            subTitle: '',
-            progressPersent: 1,
-            padding: 0,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              BackArrow(
-                  alignment: Alignment.centerLeft,
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: Icons.arrow_back_ios),
-              Obx(() {
-                return _controller.isLoading.value == true
-                    ? Container()
-                    : Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: EdgeInsets.only(left: 5, right: 5),
-                          child: InkWell(
-                            onTap: () {
-                              _controller.postSalesPitch(context);
-                            },
-                            child: Icon(
-                              Icons.arrow_forward_ios,
-                              size: 30,
-                              color: DynamicColor.blue,
-                            ),
-                          ),
-                        ),
-                      );
-              })
-            ],
-          )
-        ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

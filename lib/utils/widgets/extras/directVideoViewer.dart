@@ -93,7 +93,7 @@ class _DirectVideoViewerState extends State<DirectVideoViewer> {
             ),
             thumbnail: Image.network(''),
             loading: CircularProgressIndicator(
-              color: Colors.blue,
+              color: DynamicColor.gredient1,
             )),
         source: {
           "Source": VideoSource(

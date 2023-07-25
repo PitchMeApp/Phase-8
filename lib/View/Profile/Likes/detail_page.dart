@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/extras/extras.dart';
-import 'package:pitch_me_app/utils/widgets/Arrow%20Button/back_arrow.dart';
+import 'package:pitch_me_app/utils/styles/styles.dart';
 import 'package:video_viewer/video_viewer.dart';
+
+import '../../../utils/sizeConfig/sizeConfig.dart';
+import '../../../utils/widgets/Arrow Button/back_arrow.dart';
 
 class ShowFullVideoPage extends StatefulWidget {
   String url;
@@ -63,38 +66,74 @@ class _ShowFullVideoPageState extends State<ShowFullVideoPage> {
                   ),
                   thumbnail: Image.network(''),
                   loading: CircularProgressIndicator(
-                    color: Colors.blue,
+                    color: DynamicColor.gredient1,
                   )),
               source: {
                 "Source": VideoSource(
-                  video: VideoPlayerController.network(Uri.encodeFull(widget.url
-                      .replaceAll('https://api.salespitchapp.com',
-                          'http://191.101.229.245:9070'))),
+                  video: widget.url.contains('https://api.salespitchapp.com')
+                      ? VideoPlayerController.network(Uri.encodeFull(widget.url
+                          .replaceAll('https://api.salespitchapp.com',
+                              'http://191.101.229.245:9070')))
+                      : VideoPlayerController.network(widget.url),
                 )
               },
             ),
           ),
-          BackArrow(
+          Padding(
+            padding: EdgeInsets.only(
+              top: SizeConfig.getSize30(context: context) +
+                  MediaQuery.of(context).size.height * 0.021,
+              left: SizeConfig.getFontSize25(context: context),
+            ),
+            child: BackArrow(
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              alignment: Alignment.centerLeft,
-              icon: Icons.arrow_back_ios),
+              direction: 1,
+              alignment: Alignment.topLeft,
+            ),
+          ),
+          // Align(
+          //   alignment: Alignment.centerLeft,
+          //   child: InkWell(
+          //     onTap: () {
+          //       Navigator.of(context).pop();
+          //     },
+          //     child: Padding(
+          //       padding: EdgeInsets.all(8.0),
+          //       child: RotatedBox(
+          //         quarterTurns: 1,
+          //         child: Image.asset(
+          //           "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
+          //           height: 30,
+          //           width: 30,
+          //         ),
+          //       ),
+          //     ),
+          //   ),
+          // ),
           widget.arrowCheck != null
               ? Align(
                   alignment: Alignment.bottomCenter,
-                  child: GestureDetector(
-                    onTap: widget.onPressad,
-                    child: Padding(
-                        padding: EdgeInsets.only(bottom: 10, right: 7),
-                        child: RotatedBox(
-                          quarterTurns: 3,
-                          child: Icon(
-                            Icons.arrow_back_ios,
-                            color: DynamicColor.blue,
-                            size: 30,
-                          ),
-                        )),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('Pitch details', style: gredient116bold),
+                      GestureDetector(
+                        onTap: widget.onPressad,
+                        child: Padding(
+                            padding: EdgeInsets.only(bottom: 5, right: 7),
+                            child: RotatedBox(
+                              quarterTurns: 4,
+                              child: Image.asset(
+                                "assets/Phase 2 icons/ic_keyboard_arrow_down_24px.png",
+                                height: 30,
+                                width: 30,
+                              ),
+                            )),
+                      ),
+                    ],
                   ),
                 )
               : Container()

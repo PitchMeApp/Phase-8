@@ -5,7 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:pitch_me_app/View/Custom%20header%20view/appbar.dart';
+import 'package:pitch_me_app/View/Custom%20header%20view/appbar_with_white_bg.dart';
 import 'package:pitch_me_app/View/Manu/manu.dart';
 import 'package:pitch_me_app/main.dart';
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/Model/chat_room_model.dart';
@@ -14,8 +14,10 @@ import 'package:pitch_me_app/screens/businessIdeas/home%20biography/Chat/control
 import 'package:pitch_me_app/screens/businessIdeas/home%20biography/home_page_biography.dart';
 import 'package:pitch_me_app/utils/colors/colors.dart';
 import 'package:pitch_me_app/utils/sizeConfig/sizeConfig.dart';
+import 'package:pitch_me_app/utils/strings/images.dart';
 import 'package:pitch_me_app/utils/widgets/Navigation/custom_navigation.dart';
 import 'package:pitch_me_app/utils/widgets/containers/containers.dart';
+import 'package:pitch_me_app/utils/widgets/extras/backgroundWidget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
@@ -121,232 +123,239 @@ class _ChatPageState extends State<ChatPage>
   Widget build(BuildContext context) {
     return Scaffold(
         // resizeToAvoidBottomInset: false,
-        body: Stack(
-      children: [
-        SizedBox(
-          child: Image.asset(
-            'assets/images/17580.png',
-            height: MediaQuery.of(context).size.height,
-            width: MediaQuery.of(context).size.width,
-            fit: BoxFit.cover,
-          ),
-        ),
-        Column(
-          children: [
-            ClipPath(
-              clipper: CurveClipper(),
-              child: Container(
-                color: DynamicColor.blue,
-                height: MediaQuery.of(context).size.height * 0.235,
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    Column(
-                      children: [
-                        SizedBox(
-                          height: SizeConfig.getSize60(context: context) +
-                              SizeConfig.getSize20(context: context),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                              top: 10,
-                              left: SizeConfig.getFontSize25(context: context),
-                              right:
-                                  SizeConfig.getFontSize25(context: context)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              AppBarIconContainer(
-                                onTap: () {
-                                  if (widget.back != null) {
-                                    Navigator.of(context).pop();
-                                  } else {
-                                    PageNavigateScreen().normalpushReplesh(
-                                        context, ChatListPage());
-                                  }
-                                },
-                                height: SizeConfig.getSize50(context: context),
-                                width: SizeConfig.getSize50(context: context),
-                                colorTween: _colorTween,
-                                child: Padding(
-                                  padding: EdgeInsets.only(left: 0),
-                                  child: Icon(
-                                    Icons.forum,
-                                    color: DynamicColor.blue,
-                                    size: 28,
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: 50,
-                              )
-                            ],
+        body: BackGroundWidget(
+      backgroundImage: Assets.backgroundImage,
+      bannerRequired: false,
+      fit: BoxFit.fill,
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              ClipPath(
+                clipper: CurveClipper(),
+                child: Container(
+                  decoration:
+                      BoxDecoration(gradient: DynamicColor.gradientColorChange),
+                  height: MediaQuery.of(context).size.height * 0.27,
+                  child: Stack(
+                    alignment: Alignment.bottomCenter,
+                    children: [
+                      Column(
+                        children: [
+                          SizedBox(
+                            height: SizeConfig.getSize60(context: context) +
+                                SizeConfig.getSize20(context: context),
                           ),
-                        )
-                      ],
-                    ),
-                    Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        widget.name == null
-                            ? Container()
-                            : Text(
-                                widget.name,
-                                style: TextStyle(
-                                    color: DynamicColor.white,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                        widget.img == null
-                            ? Container()
-                            : InkWell(
-                                onTap: () {
-                                  PageNavigateScreen().push(
-                                      context,
-                                      HomeBiographyPage(
-                                        type: 'back',
-                                        userID: widget.userID,
-                                        notifyID: '',
-                                      ));
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      top: 10, bottom: 10),
-                                  child: CachedNetworkImage(
-                                    // height: 10.h,
-                                    // width: 10.w,
-                                    imageUrl: widget.img,
-                                    imageBuilder: (context, imageProvider) =>
-                                        CircleAvatar(
-                                            radius: 25,
-                                            backgroundColor: DynamicColor.white,
-                                            backgroundImage: imageProvider),
-                                    placeholder: (context, url) => const Center(
-                                        child: CircularProgressIndicator(
-                                      color: DynamicColor.white,
-                                    )),
-                                    errorWidget: (context, url, error) =>
-                                        const CircleAvatar(
-                                      radius: 25,
-                                      backgroundColor: DynamicColor.white,
-                                      child: Icon(
-                                        Icons.person,
-                                        size: 28,
-                                        color: DynamicColor.blue,
-                                      ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: 10,
+                                left:
+                                    SizeConfig.getFontSize25(context: context),
+                                right:
+                                    SizeConfig.getFontSize25(context: context)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                AppBarIconContainer(
+                                  onTap: () {
+                                    if (widget.back != null) {
+                                      Navigator.of(context).pop();
+                                    } else {
+                                      PageNavigateScreen().normalpushReplesh(
+                                          context, ChatListPage());
+                                    }
+                                  },
+                                  height:
+                                      SizeConfig.getSize38(context: context),
+                                  width: SizeConfig.getSize38(context: context),
+                                  borderRadius: BorderRadius.only(
+                                      topRight: Radius.circular(10),
+                                      bottomLeft: Radius.circular(10)),
+                                  color: DynamicColor.white,
+                                  child: Padding(
+                                    padding: EdgeInsets.only(left: 0),
+                                    child: Icon(
+                                      Icons.forum,
+                                      color: DynamicColor.gredient1,
+                                      size: 28,
                                     ),
                                   ),
                                 ),
-                              )
-                      ],
-                    ),
-                  ],
+                                Container(
+                                  width: 50,
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          widget.name == null
+                              ? Container()
+                              : Text(
+                                  widget.name,
+                                  style: TextStyle(
+                                      color: DynamicColor.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                          widget.img == null
+                              ? Container()
+                              : InkWell(
+                                  onTap: () {
+                                    PageNavigateScreen().push(
+                                        context,
+                                        HomeBiographyPage(
+                                          type: 'back',
+                                          userID: widget.userID,
+                                          notifyID: '',
+                                        ));
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 10, bottom: 10),
+                                    child: CachedNetworkImage(
+                                      // height: 10.h,
+                                      // width: 10.w,
+                                      imageUrl: widget.img,
+                                      imageBuilder: (context, imageProvider) =>
+                                          CircleAvatar(
+                                              radius: 25,
+                                              backgroundColor:
+                                                  DynamicColor.white,
+                                              backgroundImage: imageProvider),
+                                      placeholder: (context, url) =>
+                                          const Center(
+                                              child: CircularProgressIndicator(
+                                        color: DynamicColor.white,
+                                      )),
+                                      errorWidget: (context, url, error) =>
+                                          const CircleAvatar(
+                                        radius: 25,
+                                        backgroundColor: DynamicColor.white,
+                                        child: Icon(
+                                          Icons.person,
+                                          size: 28,
+                                          color: DynamicColor.gredient1,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-                flex: 6,
-                child: StreamBuilder<List<RoomMessage>>(
-                    stream: streamController.stream,
-                    builder: (context, snapshot) {
-                      switch (snapshot.connectionState) {
-                        case ConnectionState.waiting:
-                          return Padding(
-                            padding: EdgeInsets.only(
-                                bottom: SizeConfig.getSize60(context: context)),
-                            child: const Center(
-                                child: CircularProgressIndicator(
-                              color: DynamicColor.blue,
-                            )),
-                          );
-                        default:
-                          if (snapshot.hasError) {
-                            log(snapshot.error.toString());
+              Expanded(
+                  flex: 6,
+                  child: StreamBuilder<List<RoomMessage>>(
+                      stream: streamController.stream,
+                      builder: (context, snapshot) {
+                        switch (snapshot.connectionState) {
+                          case ConnectionState.waiting:
                             return Padding(
-                                padding: EdgeInsets.only(
-                                    bottom:
-                                        SizeConfig.getSize60(context: context)),
-                                child: const Center(
-                                    child: Text('No chat available')));
-                          } else if (snapshot.data!.isEmpty) {
-                            return Padding(
-                                padding: EdgeInsets.only(
-                                    bottom:
-                                        SizeConfig.getSize60(context: context)),
-                                child: const Center(
-                                    child: Text('Start new chat')));
-                          } else {
-                            return
-                                // chatController.isloading.value != false
-                                //     ?
-                                listData(snapshot.data!);
-                            // : Center(
-                            //     child: SizedBox(
-                            //     height: 170,
-                            //     width: 200,
-                            //     child: AlertDialog(
-                            //       backgroundColor: DynamicColor.lightGrey,
-                            //       shape: RoundedRectangleBorder(
-                            //           borderRadius:
-                            //               BorderRadius.circular(10)),
-                            //       alignment: Alignment.center,
+                              padding: EdgeInsets.only(
+                                  bottom:
+                                      SizeConfig.getSize60(context: context)),
+                              child: const Center(
+                                  child: CircularProgressIndicator(
+                                color: DynamicColor.gredient1,
+                              )),
+                            );
+                          default:
+                            if (snapshot.hasError) {
+                              log(snapshot.error.toString());
+                              return Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: SizeConfig.getSize60(
+                                          context: context)),
+                                  child: const Center(
+                                      child: Text('No chat available')));
+                            } else if (snapshot.data!.isEmpty) {
+                              return Padding(
+                                  padding: EdgeInsets.only(
+                                      bottom: SizeConfig.getSize60(
+                                          context: context)),
+                                  child: const Center(
+                                      child: Text('Start new chat')));
+                            } else {
+                              return
+                                  // chatController.isloading.value != false
+                                  //     ?
+                                  listData(snapshot.data!);
+                              // : Center(
+                              //     child: SizedBox(
+                              //     height: 170,
+                              //     width: 200,
+                              //     child: AlertDialog(
+                              //       backgroundColor: DynamicColor.lightGrey,
+                              //       shape: RoundedRectangleBorder(
+                              //           borderRadius:
+                              //               BorderRadius.circular(10)),
+                              //       alignment: Alignment.center,
 
-                            //       content: Column(
-                            //         mainAxisAlignment:
-                            //             MainAxisAlignment.center,
-                            //         crossAxisAlignment:
-                            //             CrossAxisAlignment.center,
-                            //         children: [
-                            //           CircularProgressIndicator(
-                            //               color: DynamicColor.blue),
-                            //           SizedBox(height: 20),
-                            //           Text(
-                            //             'Sending',
-                            //             style: blue15,
-                            //           ),
-                            //         ],
-                            //       ),
-                            //       // child: Column(
-                            //       // mainAxisAlignment: MainAxisAlignment.center,
-                            //       // crossAxisAlignment:
-                            //       //     CrossAxisAlignment.center,
-                            //       // children: [
-                            //       //   CircularProgressIndicator(
-                            //       //       color: DynamicColor.blue),
-                            //       //   SizedBox(height: 20),
-                            //       //   Text(
-                            //       //     'Sending',
-                            //       //     style: blue15,
-                            //       //   ),
-                            //       // ],
-                            //       //                                 ),
-                            //     ),
-                            //   ));
-                          }
-                      }
-                    })),
+                              //       content: Column(
+                              //         mainAxisAlignment:
+                              //             MainAxisAlignment.center,
+                              //         crossAxisAlignment:
+                              //             CrossAxisAlignment.center,
+                              //         children: [
+                              //           CircularProgressIndicator(
+                              //               color: DynamicColor.blue),
+                              //           SizedBox(height: 20),
+                              //           Text(
+                              //             'Sending',
+                              //             style: blue15,
+                              //           ),
+                              //         ],
+                              //       ),
+                              //       // child: Column(
+                              //       // mainAxisAlignment: MainAxisAlignment.center,
+                              //       // crossAxisAlignment:
+                              //       //     CrossAxisAlignment.center,
+                              //       // children: [
+                              //       //   CircularProgressIndicator(
+                              //       //       color: DynamicColor.blue),
+                              //       //   SizedBox(height: 20),
+                              //       //   Text(
+                              //       //     'Sending',
+                              //       //     style: blue15,
+                              //       //   ),
+                              //       // ],
+                              //       //                                 ),
+                              //     ),
+                              //   ));
+                            }
+                        }
+                      })),
 
-            // inputBox()
+              // inputBox()
 
-            chatController.isRecorder.value ? voiceRecord() : Container(),
+              chatController.isRecorder.value ? voiceRecord() : Container(),
 
-            chatController.isKeyboardOpen.value ? textBox() : audioMagAndImage()
-          ],
-        ),
-        CustomAppbar(
-          title: 'CHAT',
-          colorTween: 'BIOGRAPHY',
-          onPressad: () {
-            PageNavigateScreen().push(
-                context,
-                ManuPage(
-                  title: 'CHAT',
-                  pageIndex: 4,
-                  isManu: 'Manu',
-                ));
-          },
-          onPressadForNotify: () {},
-        ),
-      ],
+              chatController.isKeyboardOpen.value
+                  ? textBox()
+                  : audioMagAndImage()
+            ],
+          ),
+          CustomAppbarWithWhiteBg(
+            title: 'CHAT',
+            colorTween: 'BIOGRAPHY',
+            onPressad: () {
+              PageNavigateScreen().push(
+                  context,
+                  ManuPage(
+                    title: 'CHAT',
+                    pageIndex: 4,
+                    isManu: 'Manu',
+                  ));
+            },
+          ),
+        ],
+      ),
     ));
   }
 
@@ -373,6 +382,7 @@ class _ChatPageState extends State<ChatPage>
               },
               child: Image.asset(
                 'assets/images/_1527726586400.png',
+                color: DynamicColor.gredient2,
                 height: 25,
               ),
             ),
@@ -413,7 +423,9 @@ class _ChatPageState extends State<ChatPage>
               // },
               child: Icon(
                 Icons.mic,
-                color: changeColore ? DynamicColor.redColor : DynamicColor.blue,
+                color: changeColore
+                    ? DynamicColor.redColor
+                    : DynamicColor.gredient2,
                 size: 30,
               ),
             ),
@@ -435,7 +447,7 @@ class _ChatPageState extends State<ChatPage>
               },
               child: Icon(
                 Icons.perm_media,
-                color: DynamicColor.blue,
+                color: DynamicColor.gredient2,
               ),
             ),
           )
@@ -458,14 +470,15 @@ class _ChatPageState extends State<ChatPage>
             decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: DynamicColor.white,
-                border: Border.all(color: DynamicColor.blue)),
+                border: Border.all(color: DynamicColor.gredient1)),
             child: InkWell(
               onTap: () {
                 setState(() {
                   chatController.isKeyboardOpen.value = false;
                 });
               },
-              child: const Icon(Icons.arrow_back_ios, color: DynamicColor.blue),
+              child: const Icon(Icons.arrow_back_ios,
+                  color: DynamicColor.gredient2),
             ),
           ),
           const SizedBox(width: 10),
@@ -487,16 +500,23 @@ class _ChatPageState extends State<ChatPage>
                   filled: true,
                   fillColor: Colors.grey[100],
                   labelText: 'Type new message',
-                  labelStyle: TextStyle(color: DynamicColor.blue),
+                  labelStyle: TextStyle(color: DynamicColor.gredient2),
                   contentPadding: const EdgeInsets.all(10),
                   border: OutlineInputBorder(
-                    borderSide: const BorderSide(width: 0),
+                    borderSide: const BorderSide(
+                        width: 2, color: DynamicColor.gredient1),
                     gapPadding: 10,
                     borderRadius: BorderRadius.circular(25),
                   ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(
+                        width: 1, color: DynamicColor.gredient1),
+                    gapPadding: 0,
+                    borderRadius: BorderRadius.circular(25),
+                  ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide:
-                        const BorderSide(width: 2, color: DynamicColor.blue),
+                    borderSide: const BorderSide(
+                        width: 2, color: DynamicColor.gredient1),
                     gapPadding: 0,
                     borderRadius: BorderRadius.circular(25),
                   ),
@@ -532,8 +552,8 @@ class _ChatPageState extends State<ChatPage>
               decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: DynamicColor.white,
-                  border: Border.all(color: DynamicColor.blue)),
-              child: const Icon(Icons.send, color: DynamicColor.blue),
+                  border: Border.all(color: DynamicColor.gredient1)),
+              child: const Icon(Icons.send, color: DynamicColor.gredient2),
             ),
           ),
         ],
@@ -562,13 +582,13 @@ class _ChatPageState extends State<ChatPage>
       // contactCircleColor: Colors.transparent,
       audioSrc: msg,
       meBgColor: DynamicColor.lightGrey,
-      contactBgColor: DynamicColor.blue,
-      contactCircleColor: DynamicColor.blue,
-      contactFgColor: DynamicColor.blue,
+      contactBgColor: DynamicColor.gredient2,
+      contactCircleColor: DynamicColor.gredient2,
+      contactFgColor: DynamicColor.gredient2,
       contactPlayIconColor: DynamicColor.white,
       mePlayIconColor: DynamicColor.white,
-      contactPlayIconBgColor: DynamicColor.blue,
-      meFgColor: DynamicColor.blue,
+      contactPlayIconBgColor: DynamicColor.gredient2,
+      meFgColor: DynamicColor.gredient2,
 
       played: false,
       me: true,
@@ -653,7 +673,7 @@ class _ChatPageState extends State<ChatPage>
                                             const Center(
                                                 child:
                                                     CircularProgressIndicator(
-                                          color: DynamicColor.blue,
+                                          color: DynamicColor.gredient2,
                                         )),
                                         errorWidget: (context, url, error) =>
                                             Container(
@@ -667,7 +687,8 @@ class _ChatPageState extends State<ChatPage>
                                 message.message != ''
                                     ? Text(message.message,
                                         style: const TextStyle(
-                                            color: Colors.black, fontSize: 16))
+                                            color: DynamicColor.black,
+                                            fontSize: 16))
                                     : Container(
                                         height: 0,
                                         width: 0,
@@ -741,7 +762,7 @@ class _ChatPageState extends State<ChatPage>
                                             const Center(
                                                 child:
                                                     CircularProgressIndicator(
-                                          color: DynamicColor.blue,
+                                          color: DynamicColor.gredient2,
                                         )),
                                         errorWidget: (context, url, error) =>
                                             Container(
@@ -755,7 +776,8 @@ class _ChatPageState extends State<ChatPage>
                                 message.message != ''
                                     ? Text(message.message,
                                         style: const TextStyle(
-                                            color: Colors.black, fontSize: 16))
+                                            color: DynamicColor.black,
+                                            fontSize: 16))
                                     : Container(
                                         height: 0,
                                         width: 0,
